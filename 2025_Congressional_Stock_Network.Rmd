@@ -3765,6 +3765,12 @@ body.embed-mode .stock-detail-drawer {
   z-index: 9000;
 }
 
+/* The embedded portfolio page should keep visitors on the portfolio.
+   Deep-link copying remains available in the standalone network. */
+body.embed-mode #detailCopyLink {
+  display: none !important;
+}
+
 /* In the portfolio embed, Explore behaves like a fixed app canvas rather
    than a document page. About and Methodology can still scroll normally. */
 body.embed-mode.explore-locked {
@@ -6160,7 +6166,7 @@ page <- tags$div(
         tags$li("Committee and subcommittee inspectors do not use the main graph's ≥2 display filter. They use the full 2025 snapshot-history roster, but a purchase is attributed to an institution only when the politician appears on that institution in the snapshot selected for the transaction date."),
         tags$li("When you click a committee or subcommittee, the drawer starts with stocks purchased by at least two time-matched members, then shows members with matched 2025 purchases, followed by other people who appeared on that institution in at least one available 2025 snapshot."),
         tags$li("Use the graph search box to jump to a politician, ticker/company, committee, or subcommittee. Recenter fits the current graph back on screen; Reset layout restores the original stabilized node positions."),
-        tags$li("The drawer's Copy link button stores the active graph view and drill-down path in the page URL. Committee/subcommittee selections can also be exported as a member-by-ticker CSV summary, including roster members with no accepted 2025 public-stock purchase."),
+        tags$li("In the standalone network, the drawer can copy a deep link to the active graph view and drill-down path. The portfolio embed hides that control so visitors stay on the portfolio. Committee/subcommittee selections can still be exported as a member-by-ticker CSV summary, including roster members with no accepted 2025 public-stock purchase."),
         tags$li("In the committee view, dashed lines connect politicians to full House committees."),
         tags$li("In the subcommittee view, additional dashed lines connect politicians to House subcommittees, and each subcommittee is also linked to its parent committee."),
         tags$li("Committee and subcommittee edges do not change or infer anything about the stock-purchase edges.")
