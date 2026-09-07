@@ -3835,23 +3835,6 @@ body.embed-mode .stock-detail-drawer {
   letter-spacing: -0.02em;
 }
 
-.brand-home {
-  display: block;
-  max-width: 100%;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  color: #17191c;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-
-.brand-home:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 .brand-subtitle {
   margin-top: 2px;
   max-width: 760px;
@@ -4499,29 +4482,6 @@ body.network-focus-mode .stock-detail-drawer {
   background: #eef1f4;
   padding: 2px 6px;
   border-radius: 5px;
-}
-
-.class-report-badge {
-  display: inline-block;
-  margin-top: 6px;
-  border: 1px solid #d7dce1;
-  border-radius: 999px;
-  padding: 4px 8px;
-  background: #f5f6f7;
-  color: #626870;
-  font-size: 10px;
-  font-weight: 700;
-}
-
-.class-output-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  margin: 10px 0 18px;
-}
-
-.class-report-wrap {
-  padding-bottom: 70px;
 }
 
 .code-wrap {
@@ -5200,10 +5160,6 @@ body.network-focus-mode .stock-detail-drawer {
 }
 
 @media (max-width: 850px) {
-  .class-output-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .coverage-grid {
     grid-template-columns: 1fr;
   }
@@ -5369,10 +5325,8 @@ page <- tags$div(
     class = "topbar",
     tags$div(
       class = "brand-block",
-      tags$button(
-        id = "navExplore",
-        class = "brand brand-home",
-        type = "button",
+      tags$div(
+        class = "brand",
         "2025 Congressional Stock Trading Networks"
       ),
       tags$div(
@@ -5382,9 +5336,9 @@ page <- tags$div(
     ),
     tags$div(
       class = "nav-actions",
+      tags$button(id = "navExplore", class = "nav-button active", "Explore"),
       tags$button(id = "navAbout", class = "nav-button", "About"),
-      tags$button(id = "navCode", class = "nav-button", "Methodology"),
-      tags$button(id = "navClass", class = "nav-button", "Class Report")
+      tags$button(id = "navCode", class = "nav-button", "Methodology")
     )
   ),
 
@@ -5877,7 +5831,7 @@ page <- tags$div(
     style = "display:none;",
     tags$div(
       class = "code-wrap",
-      tags$h1("Method + R code"),
+      tags$h1("Methodology"),
       tags$div(
         class = "report-meta",
         HTML(
@@ -5890,7 +5844,7 @@ page <- tags$div(
       ),
 
       tags$p(
-        "This section follows the R Markdown reporting format used for the course: explain the step, show the R commands, and then show or describe the resulting output. The Stocks + committees + subcommittees view is the default visualization on the Explore page. Committee data come from the original unitedstates/congress-legislators dataset, were accessed during development through the StrokeOfLuck fork, and use 15 exact pinned 2025 snapshots documented in the packaged snapshot index and plain-language reference note."
+        "This combined Methodology page also serves as the course-format analysis report: explain the step, show the R commands, and then show or describe the resulting output. The Stocks + committees + subcommittees view is the default visualization on the Explore page. Committee data come from the original unitedstates/congress-legislators dataset, were accessed during development through the StrokeOfLuck fork, and use 15 exact pinned 2025 snapshots documented in the packaged snapshot index and plain-language reference note."
       ),
 
       tags$h2("1. Filter the PTR records"),
@@ -6183,310 +6137,6 @@ visPhysics(
   ),
 
 
-  tags$div(
-    id = "classPage",
-    class = "page",
-    style = "display:none;",
-    tags$div(
-      class = "code-wrap class-report-wrap",
-
-      tags$h1("2025 Congressional Stock Trading Network"),
-      tags$div(
-        class = "report-meta",
-        HTML(
-          paste0(
-            "<b>Sean Ryan</b><br>",
-            format(Sys.Date(), "%B %d, %Y"),
-            "<br><span class='class-report-badge'>Course-format analysis report</span>"
-          )
-        )
-      ),
-
-      tags$p(
-        "This page presents the project in a standard narrated R-analysis format: explain the step, show the R commands, and show the resulting output. The interactive visualization remains under Explore."
-      ),
-
-      tags$h2("1. Define the accepted 2025 stock-purchase dataset"),
-      tags$p(
-        "The analysis begins with House PTR records whose transaction date is in 2025. It keeps purchases of public stocks and requires an accepted cleaned ticker."
-      ),
-      tags$pre(
-        class = "r-code-block",
-        tags$code(
-"purchases_2025_all <- ptr %>%
-  mutate(
-    transaction_date_parsed = parse_ptr_date(transaction_date),
-    ticker = toupper(trimws(ticker_v8_2_cleaned))
-  ) %>%
-  filter(
-    format(transaction_date_parsed, \"%Y\") == \"2025\",
-    transaction_type == \"P\",
-    asset_type == \"ST\",
-    ticker_parse_status == \"accepted\",
-    !is.na(ticker),
-    ticker != \"\"
-  )"
-        )
-      ),
-      tags$div(
-        class = "output-box",
-        HTML(
-          paste0(
-            "<strong>Output:</strong> ",
-            format(summary_values$raw_2025_stock_purchases, big.mark = ","),
-            " accepted purchase records, ",
-            summary_values$raw_2025_politicians,
-            " politicians, and ",
-            format(summary_values$raw_2025_tickers, big.mark = ","),
-            " accepted tickers."
-          )
-        )
-      ),
-
-      tags$h2("2. Apply the shared-stock display filter"),
-      tags$p(
-        "The opening network is designed to answer who bought the same stocks. A ticker therefore appears in the main graph only if at least two different politicians purchased it. This is a display rule, not a rule for deleting valid purchase records."
-      ),
-      tags$pre(
-        class = "r-code-block",
-        tags$code(
-"shared_stocks <- purchases_2025_all %>%
-  distinct(politician_clean, ticker) %>%
-  count(ticker, name = \"politician_count\") %>%
-  filter(politician_count >= 2)
-
-purchases_network <- purchases_2025_all %>%
-  semi_join(shared_stocks, by = \"ticker\")"
-        )
-      ),
-      tags$div(
-        class = "output-box",
-        HTML(
-          paste0(
-            "<strong>Output:</strong> ",
-            summary_values$shown_politicians,
-            " politicians and ",
-            summary_values$shown_tickers,
-            " shared-stock nodes appear in the opening graph. ",
-            summary_values$house_coverage_outside,
-            " accepted purchasers are outside the graph only because none of their tickers pass the 2+ politician display rule."
-          )
-        )
-      ),
-
-      tags$h2("3. Match PTR names to the 119th-Congress roster"),
-      tags$p(
-        "PTR disclosure names are matched to the House roster using normalized names plus a small alias table. Two unusually formatted disclosure names require explicit aliases."
-      ),
-      tags$pre(
-        class = "r-code-block",
-        tags$code(
-"committee_match_alias <- function(x) {
-  dplyr::case_when(
-    x == \"Neal Patrick MD, Facs Dunn\" ~ \"Neal P. Dunn\",
-    x == \"Peter Allen Stauber\" ~ \"Pete Stauber\",
-    TRUE ~ x
-  )
-}"
-        )
-      ),
-      tags$div(
-        class = "output-box",
-        HTML(
-          paste0(
-            "<strong>Output:</strong> ",
-            summary_values$accepted_purchaser_total -
-              summary_values$unmatched_ptr_politicians,
-            " of ",
-            summary_values$accepted_purchaser_total,
-            " accepted purchasers match the 119th-Congress House roster."
-          )
-        )
-      ),
-
-      tags$h2("4. Use Congress-aware committee snapshots"),
-      tags$p(
-        "Committee membership is not represented by one roster for the whole year. The project uses exact pinned source snapshots and assigns a snapshot according to the transaction date."
-      ),
-      tags$pre(
-        class = "r-code-block",
-        tags$code(
-"# Date rule:
-# Jan. 1-2  -> Dec. 17, 2024 (118th Congress)
-# Jan. 3-20 -> Jan. 21, 2025 (first usable 119th House snapshot)
-# Jan. 21+  -> latest available snapshot on/before transaction date
-
-if (transaction_date <= as.Date(\"2025-01-02\")) {
-  snapshot_date <- as.Date(\"2024-12-17\")
-} else if (transaction_date < as.Date(\"2025-01-21\")) {
-  snapshot_date <- as.Date(\"2025-01-21\")
-} else {
-  snapshot_date <- max(
-    available_snapshot_dates[
-      available_snapshot_dates <= transaction_date
-    ]
-  )
-}"
-        )
-      ),
-      tags$div(
-        class = "output-box",
-        HTML(
-          paste0(
-            "<strong>Output:</strong> ",
-            summary_values$committee_snapshot_count,
-            " pinned source snapshots are available in the project index. ",
-            "The Jan. 17 repository state is not used for House matching because it contains no House committee membership rows."
-          )
-        )
-      ),
-
-      tags$h2("5. Add committee relationships without filtering stock purchases"),
-      tags$p(
-        "The accepted stock table is created before committee matching. Committee membership is added afterward. A purchase that has no institution match remains a valid stock-purchase record; it simply receives no committee or subcommittee edge."
-      ),
-      tags$pre(
-        class = "r-code-block",
-        tags$code(
-"purchase_membership_matches <- purchases_2025_all %>%
-  filter(!is.na(bioguide)) %>%
-  inner_join(
-    membership_history,
-    by = c(
-      \"bioguide\",
-      \"committee_snapshot_date\" = \"snapshot_date\"
-    )
-  )
-
-# No semi_join() or filter() is applied back to purchases_2025_all.
-# Committee matching only builds additional institutional relationships."
-        )
-      ),
-      tags$div(
-        class = "output-box",
-        HTML(
-          paste0(
-            "<strong>Output:</strong> ",
-            summary_values$institution_unmatched_purchase_count,
-            " accepted purchase record",
-            ifelse(
-              summary_values$institution_unmatched_purchase_count == 1,
-              "",
-              "s"
-            ),
-            " from ",
-            summary_values$institution_unmatched_politician_count,
-            " politician",
-            ifelse(
-              summary_values$institution_unmatched_politician_count == 1,
-              "",
-              "s"
-            ),
-            " currently have no institutional match. Those purchases remain in the stock data."
-          )
-        )
-      ),
-
-      tags$h2("6. Measure House coverage"),
-      tags$p(
-        "The coverage denominator uses House members and delegates whose terms overlap Jan. 3 through Dec. 31, 2025, the 119th-Congress portion of the year. People are separated into the main graph, accepted purchasers outside the graph, and roster members with no accepted public-stock purchase found."
-      ),
-      tags$pre(
-        class = "r-code-block",
-        tags$code(
-"coverage_status = case_when(
-  bioguide %in% main_network_bioguides ~
-    \"In main shared-stock network\",
-  accepted_purchase_records > 0 ~
-    \"Accepted purchases, outside main graph\",
-  TRUE ~
-    \"No accepted 2025 public-stock purchase found\"
-)"
-        )
-      ),
-      tags$div(
-        class = "class-output-grid",
-        tags$div(
-          class = "stat-card",
-          tags$div(class = "stat-number", summary_values$house_coverage_total),
-          tags$div(class = "stat-label", "119th-Congress House roster")
-        ),
-        tags$div(
-          class = "stat-card",
-          tags$div(class = "stat-number", summary_values$house_coverage_main),
-          tags$div(class = "stat-label", "In main network")
-        ),
-        tags$div(
-          class = "stat-card",
-          tags$div(class = "stat-number", summary_values$house_coverage_outside),
-          tags$div(class = "stat-label", "Accepted purchases outside graph")
-        ),
-        tags$div(
-          class = "stat-card",
-          tags$div(class = "stat-number", summary_values$house_coverage_no_purchase),
-          tags$div(class = "stat-label", "No accepted purchase found")
-        )
-      ),
-      tags$div(
-        class = "method-note",
-        "No accepted purchase found is a coverage-review category, not proof that the member did not trade. It can reflect no qualifying purchase, sales only, other assets, unresolved ticker parsing, no qualifying filing, or remaining source/scrape gaps."
-      ),
-
-      tags$h2("7. Build the force-directed network"),
-      tags$p(
-        "Politicians, shared stocks, committees, and subcommittees are represented as nodes. Purchase edges inherit party color, while institutional edges are intentionally muted so the stock relationships remain visually dominant."
-      ),
-      tags$pre(
-        class = "r-code-block",
-        tags$code(
-"visPhysics(
-  solver = \"forceAtlas2Based\",
-  forceAtlas2Based = list(
-    gravitationalConstant = -85,
-    centralGravity = 0.008,
-    springLength = 260,
-    springConstant = 0.025,
-    damping = 0.45,
-    avoidOverlap = 1
-  )
-)"
-        )
-      ),
-      tags$div(
-        class = "output-box",
-        HTML(
-          paste0(
-            "<strong>Output:</strong> ",
-            format(summary_values$shown_purchase_edges, big.mark = ","),
-            " unique politician-to-stock links are drawn in the main shared-stock network before institutional edges are added."
-          )
-        )
-      ),
-
-      tags$h2("8. Interpretation"),
-      tags$p(
-        "The visualization is exploratory. A stock purchase and a committee assignment appearing together do not establish misconduct, influence, coordination, or causation. The network is intended to identify relationships worth checking against original PTR filings and official committee records."
-      ),
-
-      tags$div(
-        class = "method-note",
-        HTML(
-          paste0(
-            "<b>One HTML, two purposes:</b> Explore is the interactive portfolio-style visualization. ",
-            "This Class Report tab provides the title/name/date, narration, visible R commands, and resulting outputs in the same rendered HTML."
-          )
-        )
-      ),
-
-      tags$button(
-        id = "backToNetworkFromClass",
-        class = "nav-button active",
-        style = "margin-top:30px;",
-        "← Back to network"
-      )
-    )
-  ),
-
   tags$script(
     HTML(
       paste0(
@@ -6516,14 +6166,11 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
         const explorePage = document.getElementById('explorePage');
         const aboutPage = document.getElementById('aboutPage');
         const codePage = document.getElementById('codePage');
-        const classPage = document.getElementById('classPage');
         const navExplore = document.getElementById('navExplore');
         const navAbout = document.getElementById('navAbout');
         const navCode = document.getElementById('navCode');
-        const navClass = document.getElementById('navClass');
         const backToNetwork = document.getElementById('backToNetwork');
         const backToNetworkFromCode = document.getElementById('backToNetworkFromCode');
-        const backToNetworkFromClass = document.getElementById('backToNetworkFromClass');
 
         const stockOnlyBtn = document.getElementById('stockOnlyBtn');
         const committeeBtn = document.getElementById('committeeBtn');
@@ -6870,11 +6517,9 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
           explorePage.style.display = 'block';
           aboutPage.style.display = 'none';
           codePage.style.display = 'none';
-          classPage.style.display = 'none';
           navExplore.classList.add('active');
           navAbout.classList.remove('active');
           navCode.classList.remove('active');
-          navClass.classList.remove('active');
           window.scrollTo({top: 0, behavior: 'smooth'});
           fireResize();
         }
@@ -6883,11 +6528,9 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
           explorePage.style.display = 'none';
           aboutPage.style.display = 'block';
           codePage.style.display = 'none';
-          classPage.style.display = 'none';
           navAbout.classList.add('active');
           navExplore.classList.remove('active');
           navCode.classList.remove('active');
-          navClass.classList.remove('active');
           window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
@@ -6895,23 +6538,9 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
           explorePage.style.display = 'none';
           aboutPage.style.display = 'none';
           codePage.style.display = 'block';
-          classPage.style.display = 'none';
           navCode.classList.add('active');
           navExplore.classList.remove('active');
           navAbout.classList.remove('active');
-          navClass.classList.remove('active');
-          window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
-        function showClass() {
-          explorePage.style.display = 'none';
-          aboutPage.style.display = 'none';
-          codePage.style.display = 'none';
-          classPage.style.display = 'block';
-          navClass.classList.add('active');
-          navExplore.classList.remove('active');
-          navAbout.classList.remove('active');
-          navCode.classList.remove('active');
           window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
@@ -7540,10 +7169,8 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
         navExplore.addEventListener('click', showExplore);
         navAbout.addEventListener('click', showAbout);
         navCode.addEventListener('click', showCode);
-        navClass.addEventListener('click', showClass);
         backToNetwork.addEventListener('click', showExplore);
         backToNetworkFromCode.addEventListener('click', showExplore);
-        backToNetworkFromClass.addEventListener('click', showExplore);
 
         stockOnlyBtn.addEventListener('click', function() {
           showStock(false);
@@ -7816,8 +7443,6 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
               showAbout();
             } else if (event.data.page === 'methodology') {
               showCode();
-            } else if (event.data.page === 'class') {
-              showClass();
             }
           });
 
