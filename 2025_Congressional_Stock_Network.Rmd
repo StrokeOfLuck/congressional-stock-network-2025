@@ -3445,8 +3445,9 @@ make_network <- function(
       "window.setTimeout(function() {",
         "try {",
           "var container = network.body && network.body.container;",
-          "if (container && container.clientWidth > 0 && container.clientHeight > 0) {",
-            "network.setSize(container.clientWidth + 'px', container.clientHeight + 'px');",
+          "var host = container ? (container.closest('.network-view') || container.parentElement) : null;",
+          "if (host && host.clientWidth > 0 && host.clientHeight > 0) {",
+            "network.setSize(host.clientWidth + 'px', host.clientHeight + 'px');",
             "network.redraw();",
             "network.fit({animation:false});",
           "}",
@@ -5631,7 +5632,7 @@ body.network-focus-mode .stock-detail-drawer {
 
 body.embed-mode .network-toolbar.graph-search-panel,
 body.network-focus-mode .network-toolbar.graph-search-panel {
-  top: 14px;
+  top: 22px;
   left: 14px;
   right: auto;
   width: min(520px, calc(100% - 28px));
@@ -5640,14 +5641,14 @@ body.network-focus-mode .network-toolbar.graph-search-panel {
 
 body.embed-mode .graph-layer-panel,
 body.network-focus-mode .graph-layer-panel {
-  top: 14px;
+  top: 22px;
   left: auto;
   right: 14px;
 }
 
 body.embed-mode .graph-legend,
 body.network-focus-mode .graph-legend {
-  top: 88px;
+  top: 96px;
   left: 14px;
   bottom: auto;
   max-width: 245px;
@@ -5656,7 +5657,7 @@ body.network-focus-mode .graph-legend {
 body.embed-mode .network-tool-actions.graph-tool-panel,
 body.network-focus-mode .network-tool-actions.graph-tool-panel {
   right: 14px;
-  bottom: 14px;
+  bottom: 22px;
 }
 
 @media (max-width: 1100px) {
@@ -7089,17 +7090,21 @@ visPhysics(
         function syncNetworkCanvasSize(network) {
           try {
             const container = network.body && network.body.container;
+            const host = container
+              ? (container.closest('.network-view') || container.parentElement)
+              : null;
+
             if (
-              !container ||
-              container.clientWidth <= 0 ||
-              container.clientHeight <= 0
+              !host ||
+              host.clientWidth <= 0 ||
+              host.clientHeight <= 0
             ) {
               return false;
             }
 
             network.setSize(
-              container.clientWidth + 'px',
-              container.clientHeight + 'px'
+              host.clientWidth + 'px',
+              host.clientHeight + 'px'
             );
             return true;
           } catch (error) {
