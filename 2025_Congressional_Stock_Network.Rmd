@@ -3561,7 +3561,7 @@ make_network <- function(
       )
     ) %>%
     visEdges(
-      smooth = list(enabled = TRUE, type = "continuous", roundness = 0.12),
+      smooth = FALSE,
       hoverWidth = 1.15,
       selectionWidth = 1.35
     ) %>%
@@ -6555,7 +6555,7 @@ buyers <- matched_purchase_rows %>%
 
       tags$h2("10. Use a collision-aware force-directed layout"),
       tags$p(
-        "ForceAtlas2 keeps the exploratory spaghetti behavior while avoidOverlap reduces circle-on-circle collisions. Stabilization is capped at 500 iterations, and dragging no longer restarts whole-network physics. While the viewer is actively panning or zooming, the graph keeps the same curved-edge appearance while hover hit-testing pauses briefly; hover returns as soon as movement stops. The lower label draw threshold is unchanged so names stay visible farther out while zooming."
+        "ForceAtlas2 keeps the exploratory network shape while avoidOverlap reduces circle-on-circle collisions. Stabilization is capped at 500 iterations, and dragging no longer restarts whole-network physics. Edges are drawn as straight lines to reduce visual tangling and lower redraw cost during pan and zoom; hover hit-testing still pauses briefly while the viewer is moving. The lower label draw threshold is unchanged so names stay visible farther out while zooming."
       ),
       tags$pre(
         class = "r-code-block",
