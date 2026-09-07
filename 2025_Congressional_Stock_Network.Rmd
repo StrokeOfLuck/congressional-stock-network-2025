@@ -2992,10 +2992,10 @@ build_person_coverage_html <- function(bioguide_value) {
   } else {
     paste0(
       "<div class='network-status shared'>",
-      "Included in the main shared-stock network",
+      "Has a stock bought by 2+ politicians",
       "</div>",
       "<div class='network-status-note'>",
-      "This politician bought at least one stock that was also bought by another politician in the main graph.",
+      "At least one of this politician's accepted 2025 stock purchases was also reported by another politician, so that ticker appears in the main shared-stock graph.",
       "</div>"
     )
   }
@@ -3027,15 +3027,16 @@ build_person_coverage_html <- function(bioguide_value) {
       ),
     "</div>",
     "<div class='person-color-key'>",
-      "<div class='person-color-key-title'>Color key</div>",
+      "<div class='person-color-key-title'>What the labels mean</div>",
       "<div class='person-color-key-items'>",
         "<span class='person-key-item'><span class='party-dot dem'></span>Democrat</span>",
         "<span class='person-key-item'><span class='party-dot rep'></span>Republican</span>",
-        "<span class='person-key-item'><span class='person-key-pill stock'></span>Stock purchase</span>",
+        "<span class='person-key-item'><span class='person-key-pill stock'></span>Stock bought by 2+ politicians</span>",
+        "<span class='person-key-item'><span class='person-key-pill stock-outside'></span>Stock bought only by this politician</span>",
         "<span class='person-key-item'><span class='person-key-pill committee'></span>Committee</span>",
         "<span class='person-key-item'><span class='person-key-pill subcommittee'></span>Subcommittee</span>",
       "</div>",
-      "<div class='person-color-key-note'>A dashed gold ticker is an accepted purchase that is hidden from the main graph because that ticker did not pass the 2+ politician display filter.</div>",
+      "<div class='person-color-key-note'>These yellow ticker styles are used only in this detail panel. Solid yellow means the ticker also appears in the main shared-stock graph; dashed yellow means this politician is the only accepted 2025 purchaser of that ticker in the dataset, so it is not shown in the main graph.</div>",
     "</div>",
     "<div class='detail-stat-grid institution-stat-grid'>",
       "<div class='detail-stat'><b>",
@@ -5057,6 +5058,11 @@ body.network-focus-mode .stock-detail-drawer {
 .person-key-pill.stock {
   border: 1px solid #c4a936;
   background: #fff3b2;
+}
+
+.person-key-pill.stock-outside {
+  border: 1px dashed #c4a936;
+  background: #ffffff;
 }
 
 .person-key-pill.committee {
