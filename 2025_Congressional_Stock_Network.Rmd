@@ -6911,10 +6911,19 @@ visPhysics(
 
               const x = (box.left + box.right) / 2;
               const y = (box.top + box.bottom) / 2;
-              const radius = Math.max(
-                box.right - box.left,
-                box.bottom - box.top
-              ) / 2;
+
+              const dataSet =
+                network.body &&
+                network.body.data &&
+                network.body.data.nodes;
+              const node = dataSet && dataSet.get(nodeId);
+
+              // Use the stock node's actual configured size. The bounding box
+              // also includes its ticker label, which made the repaint larger
+              // than the original node.
+              const radius = node
+                ? Number(node.size)
+                : NaN;
 
               if (
                 !Number.isFinite(x) ||
