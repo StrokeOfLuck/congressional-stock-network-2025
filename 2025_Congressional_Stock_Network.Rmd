@@ -4387,14 +4387,13 @@ body.embed-mode .stock-detail-drawer {
 }
 
 /* Graph focus mode keeps the controls and detail drawer, but removes the
-   surrounding intro/coverage content so the network can use the whole screen. */
+   surrounding intro content so the network can use the whole screen. */
 body.network-focus-mode {
   overflow: hidden;
 }
 
 body.network-focus-mode .topbar,
-body.network-focus-mode .hero-row,
-body.network-focus-mode .coverage-card {
+body.network-focus-mode .hero-row {
   display: none !important;
 }
 
@@ -5869,6 +5868,112 @@ page <- tags$div(
       ),
 
       tags$div(
+        id = "stockDetailDrawer",
+        class = "stock-detail-drawer",
+        tags$div(
+          class = "stock-detail-header",
+          tags$div(
+            class = "stock-detail-header-left",
+            tags$button(
+              id = "detailDrawerBack",
+              class = "stock-detail-back",
+              `aria-label` = "Go back to previous details",
+              HTML("&#8592;&nbsp; Back")
+            ),
+            tags$span(
+              id = "detailDrawerLabel",
+              class = "stock-detail-header-label",
+              "Selected node"
+            )
+          ),
+          tags$button(
+            id = "stockDetailClose",
+            class = "stock-detail-close",
+            `aria-label` = "Close details",
+            HTML("&times;")
+          )
+        ),
+        tags$div(
+          class = "detail-actionbar",
+          tags$div(
+            id = "detailDrawerPath",
+            class = "detail-path",
+            "Selection"
+          ),
+          tags$div(
+            class = "detail-action-buttons",
+            tags$button(
+              id = "detailCopyLink",
+              class = "detail-action-button",
+              type = "button",
+              "Copy link"
+            ),
+            tags$button(
+              id = "detailExportCsv",
+              class = "detail-action-button",
+              type = "button",
+              "Export CSV"
+            )
+          )
+        ),
+        tags$div(id = "stockDetailBody", class = "stock-detail-body")
+      )
+    )
+  ),
+
+  tags$div(
+    id = "aboutPage",
+    class = "page",
+    style = "display:none;",
+    tags$div(
+      class = "about-wrap",
+      tags$h1("About this analysis"),
+      tags$p(
+        "This interactive network turns House Periodic Transaction Report records into relationships between politicians and the public stocks they reported purchasing during 2025. The Stocks + committees + subcommittees view loads first. Committee and subcommittee relationships are matched using the closest available 2025 membership snapshot on or before each transaction date, while the other buttons remove subcommittees or remove the institutional layer entirely."
+      ),
+      tags$p(
+        "Click any gold stock node to open a stock inspector with the cleaned company name, party split, transaction-date range, summed disclosure bounds, individual 2025 purchase records, and links to the original House PTR PDFs. Click a committee or subcommittee node and the drawer first shows stocks purchased by at least two included matched members of that selected institution, including the member names and each politician's purchase-record count under the ticker. Below that it shows every accepted 2025 public-stock purchase matched to the included members, including one-person stocks intentionally hidden from the main graph. Every ticker is clickable and opens the same stock inspector. When you drill from a committee or subcommittee into a stock, the drawer shows a Back button that returns to the previous panel and restores its scroll position. Notification dates are not used in the inspector because the source CSV contains some rows already flagged for implausible notification dates."
+      ),
+
+      tags$h2("Why I built it"),
+      tags$p(
+        "I wanted a way to move beyond a flat disclosure table and explore how reported stock purchases intersect with congressional institutions. The result combines public-records cleaning, network visualization, historical committee metadata, and reproducibility checks in one interactive project."
+      ),
+      tags$p(
+        HTML(
+          paste0(
+            "The analysis and interactive build live in a standalone repository so the portfolio stays lightweight and the project's code and deployment history remain separate from the website. ",
+            "<a href='https://github.com/StrokeOfLuck/congressional-stock-network-2025' target='_blank' rel='noopener'>Source repository</a> · ",
+            "<a href='https://strokeofluck.github.io/sean-data-portfolio/projects/stock-disclosures.html' target='_blank' rel='noopener'>Underlying disclosure project</a>"
+          )
+        )
+      ),
+
+      tags$div(
+        class = "stat-grid",
+        tags$div(
+          class = "stat-card",
+          tags$div(class = "stat-number", format(summary_values$raw_2025_stock_purchases, big.mark = ",")),
+          tags$div(class = "stat-label", "2025 accepted stock purchases before display filtering")
+        ),
+        tags$div(
+          class = "stat-card",
+          tags$div(class = "stat-number", summary_values$raw_2025_politicians),
+          tags$div(class = "stat-label", "Politicians before display filtering")
+        ),
+        tags$div(
+          class = "stat-card",
+          tags$div(class = "stat-number", format(summary_values$raw_2025_tickers, big.mark = ",")),
+          tags$div(class = "stat-label", "Tickers before display filtering")
+        ),
+        tags$div(
+          class = "stat-card",
+          tags$div(class = "stat-number", summary_values$shown_tickers),
+          tags$div(class = "stat-label", "Shared stock nodes in the full network")
+        )
+      ),
+
+      tags$div(
         class = "coverage-card",
         tags$div(
           class = "coverage-header",
@@ -5973,112 +6078,6 @@ page <- tags$div(
             )
           )
         ),
-      ),
-
-      tags$div(
-        id = "stockDetailDrawer",
-        class = "stock-detail-drawer",
-        tags$div(
-          class = "stock-detail-header",
-          tags$div(
-            class = "stock-detail-header-left",
-            tags$button(
-              id = "detailDrawerBack",
-              class = "stock-detail-back",
-              `aria-label` = "Go back to previous details",
-              HTML("&#8592;&nbsp; Back")
-            ),
-            tags$span(
-              id = "detailDrawerLabel",
-              class = "stock-detail-header-label",
-              "Selected node"
-            )
-          ),
-          tags$button(
-            id = "stockDetailClose",
-            class = "stock-detail-close",
-            `aria-label` = "Close details",
-            HTML("&times;")
-          )
-        ),
-        tags$div(
-          class = "detail-actionbar",
-          tags$div(
-            id = "detailDrawerPath",
-            class = "detail-path",
-            "Selection"
-          ),
-          tags$div(
-            class = "detail-action-buttons",
-            tags$button(
-              id = "detailCopyLink",
-              class = "detail-action-button",
-              type = "button",
-              "Copy link"
-            ),
-            tags$button(
-              id = "detailExportCsv",
-              class = "detail-action-button",
-              type = "button",
-              "Export CSV"
-            )
-          )
-        ),
-        tags$div(id = "stockDetailBody", class = "stock-detail-body")
-      )
-    )
-  ),
-
-  tags$div(
-    id = "aboutPage",
-    class = "page",
-    style = "display:none;",
-    tags$div(
-      class = "about-wrap",
-      tags$h1("About this analysis"),
-      tags$p(
-        "This interactive network turns House Periodic Transaction Report records into relationships between politicians and the public stocks they reported purchasing during 2025. The Stocks + committees + subcommittees view loads first. Committee and subcommittee relationships are matched using the closest available 2025 membership snapshot on or before each transaction date, while the other buttons remove subcommittees or remove the institutional layer entirely."
-      ),
-      tags$p(
-        "Click any gold stock node to open a stock inspector with the cleaned company name, party split, transaction-date range, summed disclosure bounds, individual 2025 purchase records, and links to the original House PTR PDFs. Click a committee or subcommittee node and the drawer first shows stocks purchased by at least two included matched members of that selected institution, including the member names and each politician's purchase-record count under the ticker. Below that it shows every accepted 2025 public-stock purchase matched to the included members, including one-person stocks intentionally hidden from the main graph. Every ticker is clickable and opens the same stock inspector. When you drill from a committee or subcommittee into a stock, the drawer shows a Back button that returns to the previous panel and restores its scroll position. Notification dates are not used in the inspector because the source CSV contains some rows already flagged for implausible notification dates."
-      ),
-
-      tags$h2("Why I built it"),
-      tags$p(
-        "I wanted a way to move beyond a flat disclosure table and explore how reported stock purchases intersect with congressional institutions. The result combines public-records cleaning, network visualization, historical committee metadata, and reproducibility checks in one interactive project."
-      ),
-      tags$p(
-        HTML(
-          paste0(
-            "The analysis and interactive build live in a standalone repository so the portfolio stays lightweight and the project's code and deployment history remain separate from the website. ",
-            "<a href='https://github.com/StrokeOfLuck/congressional-stock-network-2025' target='_blank' rel='noopener'>Source repository</a> · ",
-            "<a href='https://strokeofluck.github.io/sean-data-portfolio/projects/stock-disclosures.html' target='_blank' rel='noopener'>Underlying disclosure project</a>"
-          )
-        )
-      ),
-
-      tags$div(
-        class = "stat-grid",
-        tags$div(
-          class = "stat-card",
-          tags$div(class = "stat-number", format(summary_values$raw_2025_stock_purchases, big.mark = ",")),
-          tags$div(class = "stat-label", "2025 accepted stock purchases before display filtering")
-        ),
-        tags$div(
-          class = "stat-card",
-          tags$div(class = "stat-number", summary_values$raw_2025_politicians),
-          tags$div(class = "stat-label", "Politicians before display filtering")
-        ),
-        tags$div(
-          class = "stat-card",
-          tags$div(class = "stat-number", format(summary_values$raw_2025_tickers, big.mark = ",")),
-          tags$div(class = "stat-label", "Tickers before display filtering")
-        ),
-        tags$div(
-          class = "stat-card",
-          tags$div(class = "stat-number", summary_values$shown_tickers),
-          tags$div(class = "stat-label", "Shared stock nodes in the full network")
-        )
       ),
 
       tags$h2("What the network shows"),
@@ -6780,6 +6779,8 @@ visPhysics(
         window.showCoveragePerson = function(
           bioguide
         ) {
+          showExplore();
+
           const rosterSearchItem = searchIndex.find(
             function(item) {
               return (
