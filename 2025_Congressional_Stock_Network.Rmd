@@ -3446,6 +3446,7 @@ make_network <- function(
         "try {",
           "var container = network.body && network.body.container;",
           "if (container && container.offsetWidth > 0 && container.offsetHeight > 0) {",
+            "network.setSize('100%', '100%');",
             "network.redraw();",
             "network.fit({animation:false});",
           "}",
@@ -7123,6 +7124,7 @@ visPhysics(
         function recenterActiveNetwork() {
           withActiveNetwork(function(network) {
             try {
+              network.setSize('100%', '100%');
               network.redraw();
               network.fit({
                 animation: {
@@ -7143,6 +7145,7 @@ visPhysics(
 
             withActiveNetwork(function(network) {
               try {
+                network.setSize('100%', '100%');
                 network.redraw();
                 network.fit({animation: false});
               } catch (error) {}
@@ -7169,6 +7172,7 @@ visPhysics(
 
             try {
               network.setOptions({physics: false});
+              network.setSize('100%', '100%');
               network.unselectAll();
 
               if (saved) {
