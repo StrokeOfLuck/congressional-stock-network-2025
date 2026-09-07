@@ -3671,22 +3671,6 @@ body.embed-mode .explore-wrap {
   padding: 18px 20px 34px;
 }
 
-body.embed-mode .hero-row {
-  max-width: none;
-  width: 100%;
-  margin: 0 0 16px;
-}
-
-body.embed-mode .hero-copy h1 {
-  font-size: clamp(30px, 3.2vw, 46px);
-}
-
-body.embed-mode .hero-copy p {
-  max-width: 820px;
-  font-size: 15px;
-  line-height: 1.5;
-}
-
 body.embed-mode .network-view-toggle {
   max-width: none;
 }
@@ -3725,8 +3709,8 @@ body.embed-mode .network-note {
 /* The graph is the main event: give it most of the first viewport.
    The coverage card then follows naturally below when the reader scrolls. */
 body.embed-mode .network-view .visNetwork {
-  height: calc(100vh - 255px) !important;
-  min-height: 620px !important;
+  height: calc(100vh - 165px) !important;
+  min-height: 660px !important;
 }
 
 body.embed-mode .coverage-card {
@@ -3787,14 +3771,6 @@ body.embed-mode .stock-detail-drawer {
 @media (max-width: 700px) {
   body.embed-mode .explore-wrap {
     padding: 12px 10px 26px;
-  }
-
-  body.embed-mode .hero-copy h1 {
-    font-size: 32px;
-  }
-
-  body.embed-mode .hero-copy p {
-    font-size: 14px;
   }
 
   body.embed-mode .network-toolbar {
@@ -3887,7 +3863,7 @@ body.embed-mode .stock-detail-drawer {
 }
 
 .explore-wrap {
-  padding: 24px 28px 34px 28px;
+  padding: 16px 28px 34px 28px;
 }
 
 .hero-row {
@@ -5371,21 +5347,6 @@ page <- tags$div(
     class = "page",
     tags$div(
       class = "explore-wrap",
-
-      tags$div(
-        class = "hero-row",
-        tags$div(
-          class = "hero-copy",
-          tags$h1(paste0(analysis_year, " Congressional Stock Trading Networks")),
-          tags$p(
-            paste0(
-              "Explore reported House stock purchases dated ",
-              analysis_year,
-              " across politicians, companies, committees, and subcommittees. The first view shows stocks + committees + subcommittees; use the other buttons to remove subcommittees or remove the institutional layer entirely."
-            )
-          )
-        )
-      ),
 
       tags$div(
         class = "network-card",
