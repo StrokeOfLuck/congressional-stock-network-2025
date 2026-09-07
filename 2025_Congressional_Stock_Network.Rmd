@@ -2330,7 +2330,7 @@ build_committee_detail_html <- function(committee_id_value) {
     "<div class='shared-stock-explainer'>",
       "A purchase appears here only when this member appeared on the committee in the membership snapshot selected for that transaction date. ",
       "Jan. 1-2 transactions use the Dec. 17, 2024 118th-Congress snapshot; Jan. 3-20 use the Jan. 21, 2025 first usable 119th-Congress House snapshot; Jan. 21 onward uses the latest available snapshot on or before the transaction date. ",
-      "Member names are sorted by purchase-record count for the ticker.",
+      "Member names are sorted by purchase-record count for the ticker. These shared stocks are also highlighted in the graph while this committee or subcommittee is selected.",
     "</div>",
     "<div class='shared-stock-list'>",
       shared_within_committee_html,
@@ -2538,7 +2538,7 @@ build_subcommittee_detail_html <- function(subcommittee_id_value) {
     "<div class='shared-stock-explainer'>",
       "A purchase appears here only when this member appeared on the subcommittee in the membership snapshot selected for that transaction date. ",
       "Jan. 1-2 transactions use the Dec. 17, 2024 118th-Congress snapshot; Jan. 3-20 use the Jan. 21, 2025 first usable 119th-Congress House snapshot; Jan. 21 onward uses the latest available snapshot on or before the transaction date. ",
-      "Member names are sorted by purchase-record count for the ticker.",
+      "Member names are sorted by purchase-record count for the ticker. These shared stocks are also highlighted in the graph while this committee or subcommittee is selected.",
     "</div>",
     "<div class='shared-stock-list'>",
       shared_within_committee_html,
@@ -3610,12 +3610,12 @@ make_network <- function(
       # then stop continuous physics calculations for better performance.
       stabilizationIterationsDone = stabilization_event,
 
-      # Keep every edge visible while moving the canvas, but temporarily draw
-      # straight edges and disable hover hit-testing. This is much cheaper than
-      # redrawing thousands of curved edges on every drag/zoom frame.
-      dragStart = "function(params) { if (!this.__fastMotion) { this.__fastMotion = true; this.setOptions({edges:{smooth:false}, interaction:{hover:false}}); } }",
-      dragEnd = "function(params) { var network = this; window.clearTimeout(network.__fastMotionTimer); network.__fastMotionTimer = window.setTimeout(function() { network.__fastMotion = false; network.setOptions({edges:{smooth:{enabled:true,type:'continuous',roundness:0.12}}, interaction:{hover:true}}); }, 70); }",
-      zoom = "function(params) { var network = this; if (!network.__fastMotion) { network.__fastMotion = true; network.setOptions({edges:{smooth:false}, interaction:{hover:false}}); } window.clearTimeout(network.__fastMotionTimer); network.__fastMotionTimer = window.setTimeout(function() { network.__fastMotion = false; network.setOptions({edges:{smooth:{enabled:true,type:'continuous',roundness:0.12}}, interaction:{hover:true}}); }, 110); }",
+      # Keep the graph visually unchanged while moving it. Hover hit-testing
+      # pauses during pan/zoom because it is expensive on this many objects,
+      # then resumes as soon as movement stops.
+      dragStart = "function(params) { if (!this.__fastMotion) { this.__fastMotion = true; this.setOptions({interaction:{hover:false}}); } }",
+      dragEnd = "function(params) { var network = this; window.clearTimeout(network.__fastMotionTimer); network.__fastMotionTimer = window.setTimeout(function() { network.__fastMotion = false; network.setOptions({interaction:{hover:true}}); }, 70); }",
+      zoom = "function(params) { var network = this; if (!network.__fastMotion) { network.__fastMotion = true; network.setOptions({interaction:{hover:false}}); } window.clearTimeout(network.__fastMotionTimer); network.__fastMotionTimer = window.setTimeout(function() { network.__fastMotion = false; network.setOptions({interaction:{hover:true}}); }, 110); }",
 
       selectNode = "function(params) { var id = params.nodes[0]; if (typeof id !== 'string') return; if (id.indexOf('STOCK_') === 0 && window.showStockDetail) { window.showStockDetail(id.replace('STOCK_', '')); } else if (id.indexOf('COMMITTEE_') === 0 && window.showCommitteeDetail) { window.showCommitteeDetail(id.replace('COMMITTEE_', '')); } else if (id.indexOf('SUBCOMMITTEE_') === 0 && window.showSubcommitteeDetail) { window.showSubcommitteeDetail(id.replace('SUBCOMMITTEE_', '')); } else if (id.indexOf('POL_') === 0 && window.showPoliticianNodeDetail) { window.showPoliticianNodeDetail(id); } }"
     )
@@ -6555,7 +6555,7 @@ buyers <- matched_purchase_rows %>%
 
       tags$h2("10. Use a collision-aware force-directed layout"),
       tags$p(
-        "ForceAtlas2 keeps the exploratory spaghetti behavior while avoidOverlap reduces circle-on-circle collisions. Stabilization is capped at 500 iterations, and dragging no longer restarts whole-network physics. While the viewer is actively panning or zooming, edges stay visible but temporarily render as straight lines and hover hit-testing pauses; curved edges and hover return as soon as movement stops. The lower label draw threshold is unchanged so names stay visible farther out while zooming."
+        "ForceAtlas2 keeps the exploratory spaghetti behavior while avoidOverlap reduces circle-on-circle collisions. Stabilization is capped at 500 iterations, and dragging no longer restarts whole-network physics. While the viewer is actively panning or zooming, the graph keeps the same curved-edge appearance while hover hit-testing pauses briefly; hover returns as soon as movement stops. The lower label draw threshold is unchanged so names stay visible farther out while zooming."
       ),
       tags$pre(
         class = "r-code-block",
@@ -6835,6 +6835,42 @@ visPhysics(
           );
         };
 
+        function sharedInstitutionTickers(html) {
+          if (!html) return [];
+
+          const template = document.createElement('template');
+          template.innerHTML = html;
+
+          return Array.from(
+            template.content.querySelectorAll('.shared-stock-ticker')
+          )
+            .map(function(button) {
+              return String(button.textContent || '').trim();
+            })
+            .filter(Boolean);
+        }
+
+        function highlightInstitutionSharedStocks(type, id, html) {
+          const tickerNodeIds = sharedInstitutionTickers(html)
+            .map(function(ticker) {
+              return 'STOCK_' + ticker;
+            });
+
+          const institutionNodeId =
+            type === 'committee'
+              ? 'COMMITTEE_' + id
+              : 'SUBCOMMITTEE_' + id;
+
+          withActiveNetwork(function(network) {
+            try {
+              network.selectNodes(
+                [institutionNodeId].concat(tickerNodeIds),
+                false
+              );
+            } catch (error) {}
+          });
+        }
+
         window.showCommitteeDetail = function(
           committeeId,
           fromDrawer,
@@ -6855,6 +6891,12 @@ visPhysics(
             },
             fromDrawer === true,
             suppressUrl === true
+          );
+
+          highlightInstitutionSharedStocks(
+            'committee',
+            committeeId,
+            html
           );
         };
 
@@ -6878,6 +6920,12 @@ visPhysics(
             },
             fromDrawer === true,
             suppressUrl === true
+          );
+
+          highlightInstitutionSharedStocks(
+            'subcommittee',
+            subcommitteeId,
+            html
           );
         };
 
@@ -6980,6 +7028,12 @@ visPhysics(
           detailHistory = [];
           currentDetail = null;
           updateDetailChrome();
+
+          withActiveNetwork(function(network) {
+            try {
+              network.unselectAll();
+            } catch (error) {}
+          });
 
           window.setTimeout(recenterActiveNetwork, 120);
 
