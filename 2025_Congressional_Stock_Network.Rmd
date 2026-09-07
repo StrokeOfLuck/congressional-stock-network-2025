@@ -3322,11 +3322,14 @@ make_network <- function(
     "function() {",
       "window.networkInstances = window.networkInstances || {};",
       "window.networkInitialPositions = window.networkInitialPositions || {};",
+      "window.networkReadyViews = window.networkReadyViews || {};",
       "window.networkInstances[", view_key_json, "] = this;",
       "if (!window.networkInitialPositions[", view_key_json, "]) {",
         "window.networkInitialPositions[", view_key_json, "] = this.getPositions();",
       "}",
       "this.setOptions({physics:false});",
+      "window.networkReadyViews[", view_key_json, "] = true;",
+      "window.dispatchEvent(new CustomEvent('congress-network-ready-view', {detail:{view:", view_key_json, "}}));",
     "}"
   )
 
@@ -3588,8 +3591,45 @@ body.embed-mode .network-card {
   box-shadow: none;
 }
 
+body.embed-mode .network-toolbar {
+  padding: 15px 18px;
+}
+
+body.embed-mode .network-search-input {
+  font-size: 15px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+body.embed-mode .network-tool-button {
+  font-size: 13px;
+  padding: 9px 12px;
+}
+
+body.embed-mode .network-note {
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 14px 18px;
+}
+
 body.embed-mode .stock-detail-drawer {
   z-index: 9000;
+}
+
+@media (max-width: 700px) {
+  body.embed-mode .network-toolbar {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  body.embed-mode .network-search-input {
+    font-size: 16px;
+  }
+
+  body.embed-mode .network-note {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
 }
 
 .topbar {
@@ -7265,6 +7305,42 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
           window.setTimeout(function() {
             recenterActiveNetwork();
           }, 700);
+
+          let embedReadySent = false;
+
+          function announceEmbedReady() {
+            if (embedReadySent) return;
+            embedReadySent = true;
+
+            if (window.parent && window.parent !== window) {
+              window.parent.postMessage(
+                {
+                  type: 'congress-network-ready',
+                  view: window.defaultNetworkView
+                },
+                window.location.origin
+              );
+            }
+          }
+
+          if (
+            window.networkReadyViews &&
+            window.networkReadyViews[window.defaultNetworkView]
+          ) {
+            window.setTimeout(announceEmbedReady, 300);
+          } else {
+            window.addEventListener(
+              'congress-network-ready-view',
+              function(event) {
+                if (
+                  event.detail &&
+                  event.detail.view === window.defaultNetworkView
+                ) {
+                  window.setTimeout(announceEmbedReady, 300);
+                }
+              }
+            );
+          }
         }
       })();
       "
