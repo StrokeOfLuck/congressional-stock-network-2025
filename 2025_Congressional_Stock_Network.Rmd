@@ -3448,6 +3448,8 @@ make_network <- function(
           "if (container && container.offsetWidth > 0 && container.offsetHeight > 0) {",
             "network.redraw();",
             "network.fit({animation:false});",
+            "var fittedScale = network.getScale();",
+            "network.moveTo({scale:fittedScale * 1.025, animation:false});",
           "}",
         "} catch (error) {}",
       "}, 120);",
@@ -5521,9 +5523,10 @@ body.network-focus-mode .stock-detail-drawer {
   scrollbar-width: none;
   border: 1px solid rgba(205,210,216,.9);
   border-radius: 14px;
-  background: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.76);
   box-shadow: 0 7px 22px rgba(24,31,39,.11);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .graph-layer-panel::-webkit-scrollbar {
@@ -5534,18 +5537,18 @@ body.network-focus-mode .stock-detail-drawer {
   flex: 0 0 auto;
   padding: 7px 10px;
   font-size: 11px;
-  background: rgba(255,255,255,.78);
-  border-color: rgba(216,220,226,.9);
+  background: rgba(255,255,255,.54);
+  border-color: rgba(216,220,226,.78);
 }
 
 .graph-layer-panel .view-button:hover {
-  background: rgba(241,243,245,.88);
+  background: rgba(255,255,255,.72);
 }
 
 .graph-layer-panel .view-button.active {
-  background: #17191c;
+  background: rgba(23,25,28,.94);
   color: #ffffff;
-  border-color: #17191c;
+  border-color: rgba(23,25,28,.94);
 }
 
 .graph-legend {
@@ -5599,14 +5602,20 @@ body.network-focus-mode .stock-detail-drawer {
   flex-wrap: nowrap;
   border: 1px solid rgba(205,210,216,.9);
   border-radius: 999px;
-  background: rgba(255,255,255,.93);
+  background: rgba(255,255,255,.76);
   box-shadow: 0 7px 22px rgba(24,31,39,.12);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .graph-tool-panel .network-tool-button {
   padding: 7px 10px;
   font-size: 11px;
+  background: rgba(255,255,255,.12);
+}
+
+.graph-tool-panel .network-tool-button:hover {
+  background: rgba(255,255,255,.68);
 }
 
 .graph-tool-panel .graph-zoom-button {
@@ -7130,6 +7139,14 @@ visPhysics(
                   easingFunction: 'easeInOutQuad'
                 }
               });
+              window.setTimeout(function() {
+                try {
+                  network.moveTo({
+                    scale: network.getScale() * 1.025,
+                    animation: false
+                  });
+                } catch (error) {}
+              }, 470);
             } catch (error) {}
           });
         }
@@ -7145,6 +7162,10 @@ visPhysics(
               try {
                 network.redraw();
                 network.fit({animation: false});
+                network.moveTo({
+                  scale: network.getScale() * 1.025,
+                  animation: false
+                });
               } catch (error) {}
             });
           }, 140);
