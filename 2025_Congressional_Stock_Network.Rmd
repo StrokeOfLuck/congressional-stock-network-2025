@@ -3037,7 +3037,7 @@ build_person_coverage_html <- function(bioguide_value) {
       "</div>",
       "<div class='person-color-key-note'>A dashed gold ticker is an accepted purchase that is hidden from the main graph because that ticker did not pass the 2+ politician display filter.</div>",
     "</div>",
-    "<div class='detail-stat-grid institution-stat-grid'>
+    "<div class='detail-stat-grid institution-stat-grid'>",
       "<div class='detail-stat'><b>",
         p$accepted_purchase_records,
         "</b><span>accepted purchase records</span></div>",
