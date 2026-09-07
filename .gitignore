@@ -1,0 +1,19 @@
+# R / Posit
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+.posit/
+
+# Generated analysis caches
+committee-membership-2025-TRANSACTION_MATCHED.csv
+house-roster-119th-congress-2025.csv
+
+# Rendered site output
+index.html
+*_files/
+_site/
+
+# OS/editor
+.DS_Store
+Thumbs.db
