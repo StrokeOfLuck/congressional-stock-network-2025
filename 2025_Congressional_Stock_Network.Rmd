@@ -3572,27 +3572,50 @@ h1.title, h4.author, h4.date {
   min-height: 100vh;
 }
 
-/* Portfolio embed mode: show the fun network immediately without duplicating
-   the full project header/coverage explanation inside the portfolio iframe. */
-body.embed-mode .topbar,
-body.embed-mode .hero-row,
-body.embed-mode .coverage-card {
+/* Portfolio embed mode: keep the portfolio's own navbar, then present the
+   project itself in this order: explanation + view buttons, full network,
+   House coverage. */
+body.embed-mode .topbar {
   display: none !important;
 }
 
 body.embed-mode .explore-wrap {
-  padding: 0;
+  padding: 18px 20px 34px;
+}
+
+body.embed-mode .hero-row {
+  max-width: none;
+  width: 100%;
+  margin: 0 0 16px;
+  align-items: flex-end;
+}
+
+body.embed-mode .hero-copy h1 {
+  font-size: clamp(30px, 3.2vw, 46px);
+}
+
+body.embed-mode .hero-copy p {
+  max-width: 820px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+body.embed-mode .view-toggle {
+  max-width: 560px;
+}
+
+body.embed-mode .view-button {
+  font-size: 14px;
+  padding: 10px 16px;
 }
 
 body.embed-mode .network-card {
-  border-radius: 0;
-  border-left: 0;
-  border-right: 0;
-  box-shadow: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(20, 28, 38, 0.06);
 }
 
 body.embed-mode .network-toolbar {
-  padding: 15px 18px;
+  padding: 14px 16px;
 }
 
 body.embed-mode .network-search-input {
@@ -3609,14 +3632,75 @@ body.embed-mode .network-tool-button {
 body.embed-mode .network-note {
   font-size: 13px;
   line-height: 1.5;
-  padding: 14px 18px;
+  padding: 13px 16px;
+}
+
+/* The graph is the main event: give it most of the first viewport.
+   The coverage card then follows naturally below when the reader scrolls. */
+body.embed-mode .network-view .visNetwork {
+  height: calc(100vh - 255px) !important;
+  min-height: 620px !important;
+}
+
+body.embed-mode .coverage-card {
+  margin-top: 18px;
+}
+
+body.embed-mode .coverage-title {
+  font-size: 17px;
+}
+
+body.embed-mode .coverage-subtitle,
+body.embed-mode .coverage-group-note,
+body.embed-mode .coverage-filter-check {
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 body.embed-mode .stock-detail-drawer {
   z-index: 9000;
 }
 
+@media (max-width: 900px) {
+  body.embed-mode .hero-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  body.embed-mode .view-toggle {
+    max-width: none;
+    justify-content: flex-start;
+  }
+
+  body.embed-mode .network-view .visNetwork {
+    height: 72vh !important;
+    min-height: 560px !important;
+  }
+}
+
 @media (max-width: 700px) {
+  body.embed-mode .explore-wrap {
+    padding: 12px 10px 26px;
+  }
+
+  body.embed-mode .hero-copy h1 {
+    font-size: 32px;
+  }
+
+  body.embed-mode .hero-copy p {
+    font-size: 14px;
+  }
+
+  body.embed-mode .view-toggle {
+    gap: 6px;
+  }
+
+  body.embed-mode .view-button {
+    font-size: 13px;
+    padding: 9px 12px;
+  }
+
   body.embed-mode .network-toolbar {
     padding: 10px;
     gap: 8px;
@@ -3629,6 +3713,10 @@ body.embed-mode .stock-detail-drawer {
   body.embed-mode .network-note {
     font-size: 12px;
     padding: 10px 12px;
+  }
+
+  body.embed-mode .coverage-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -3685,9 +3773,12 @@ body.embed-mode .stock-detail-drawer {
 
 .explore-wrap {
   padding: 24px 28px 34px 28px;
+  display: flex;
+  flex-direction: column;
 }
 
 .hero-row {
+  order: 1;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -3867,6 +3958,7 @@ body.embed-mode .stock-detail-drawer {
 }
 
 .coverage-card {
+  order: 3;
   width: 100%;
   box-sizing: border-box;
   margin: 18px 0 0;
@@ -4036,6 +4128,7 @@ body.embed-mode .stock-detail-drawer {
 }
 
 .network-card {
+  order: 2;
   width: 100%;
   max-width: none;
   box-sizing: border-box;
