@@ -3581,7 +3581,7 @@ make_network <- function(
       ),
       stabilization = list(
         enabled = TRUE,
-        iterations = 1000,
+        iterations = 500,
         fit = TRUE
       )
     ) %>%
@@ -3591,6 +3591,7 @@ make_network <- function(
       zoomView = TRUE,
       dragView = TRUE,
       dragNodes = TRUE,
+      hideEdgesOnDrag = TRUE,
       hover = TRUE,
       multiselect = TRUE
     ) %>%
@@ -3610,8 +3611,6 @@ make_network <- function(
       # then stop continuous physics calculations for better performance.
       stabilizationIterationsDone = stabilization_event,
 
-      dragStart = "function(params) { if (params.nodes && params.nodes.length > 0) { this.setOptions({physics: true}); this.startSimulation(); } }",
-      dragEnd = "function(params) { var network = this; window.setTimeout(function() { network.setOptions({physics: false}); }, 900); }",
       selectNode = "function(params) { var id = params.nodes[0]; this.focus(id, {scale: 1.25, animation: true}); if (typeof id !== 'string') return; if (id.indexOf('STOCK_') === 0 && window.showStockDetail) { window.showStockDetail(id.replace('STOCK_', '')); } else if (id.indexOf('COMMITTEE_') === 0 && window.showCommitteeDetail) { window.showCommitteeDetail(id.replace('COMMITTEE_', '')); } else if (id.indexOf('SUBCOMMITTEE_') === 0 && window.showSubcommitteeDetail) { window.showSubcommitteeDetail(id.replace('SUBCOMMITTEE_', '')); } else if (id.indexOf('POL_') === 0 && window.showPoliticianNodeDetail) { window.showPoliticianNodeDetail(id); } }"
     )
 
@@ -6550,7 +6549,7 @@ buyers <- matched_purchase_rows %>%
 
       tags$h2("10. Use a collision-aware force-directed layout"),
       tags$p(
-        "ForceAtlas2 keeps the exploratory spaghetti behavior while avoidOverlap reduces circle-on-circle collisions. A lower label draw threshold keeps names visible farther out while zooming."
+        "ForceAtlas2 keeps the exploratory spaghetti behavior while avoidOverlap reduces circle-on-circle collisions. Stabilization is capped at 500 iterations, and dragging temporarily hides edges instead of restarting whole-network physics. The lower label draw threshold is unchanged so names stay visible farther out while zooming."
       ),
       tags$pre(
         class = "r-code-block",
@@ -6577,7 +6576,7 @@ visPhysics(
   ),
   stabilization = list(
     enabled = TRUE,
-    iterations = 1000,
+    iterations = 500,
     fit = TRUE
   )
 )"
