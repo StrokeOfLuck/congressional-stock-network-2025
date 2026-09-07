@@ -5522,8 +5522,8 @@ body.network-focus-mode .stock-detail-drawer {
   border: 1px solid rgba(205,210,216,.9);
   border-radius: 14px;
   background: rgba(255,255,255,.92);
-  box-shadow: 0 6px 18px rgba(24,31,39,.10);
-  backdrop-filter: blur(9px);
+  box-shadow: 0 7px 22px rgba(24,31,39,.11);
+  backdrop-filter: blur(10px);
 }
 
 .graph-layer-panel::-webkit-scrollbar {
@@ -5534,6 +5534,18 @@ body.network-focus-mode .stock-detail-drawer {
   flex: 0 0 auto;
   padding: 7px 10px;
   font-size: 11px;
+  background: rgba(255,255,255,.78);
+  border-color: rgba(216,220,226,.9);
+}
+
+.graph-layer-panel .view-button:hover {
+  background: rgba(241,243,245,.88);
+}
+
+.graph-layer-panel .view-button.active {
+  background: #17191c;
+  color: #ffffff;
+  border-color: #17191c;
 }
 
 .graph-legend {
