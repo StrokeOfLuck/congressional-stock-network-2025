@@ -3750,27 +3750,31 @@ body.embed-mode .stock-detail-drawer {
 
 @media (max-width: 1100px) {
   .network-toolbar {
-    flex-wrap: wrap;
-  }
-
-  .network-search-wrap {
-    flex: 1 1 calc(100% - 180px);
-  }
-
-  .network-view-toggle {
-    order: 3;
-    flex: 1 1 100%;
-    justify-content: flex-start;
+    flex-wrap: nowrap;
     overflow-x: auto;
-    padding-bottom: 2px;
     scrollbar-width: none;
   }
 
-  .network-view-toggle::-webkit-scrollbar {
+  .network-toolbar::-webkit-scrollbar {
     display: none;
   }
 
+  .network-search-wrap {
+    flex: 1 1 300px;
+    min-width: 240px;
+  }
+
+  .network-view-toggle {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
   .network-view-toggle .view-button {
+    flex: 0 0 auto;
+  }
+
+  .network-tool-actions {
     flex: 0 0 auto;
   }
 
@@ -3799,24 +3803,22 @@ body.embed-mode .stock-detail-drawer {
   }
 
   .network-search-wrap {
-    flex: 1 1 100%;
-    min-width: 0;
+    flex: 1 1 220px;
+    min-width: 200px;
   }
 
   .network-tool-actions {
-    order: 2;
-    margin-left: auto;
+    margin-left: 0;
   }
 
   .network-view-toggle {
-    order: 3;
-    flex: 1 1 100%;
-    gap: 6px;
+    flex: 0 0 auto;
+    gap: 5px;
   }
 
   body.embed-mode .network-view-toggle .view-button {
-    font-size: 12px;
-    padding: 8px 10px;
+    font-size: 11px;
+    padding: 7px 9px;
   }
 
   body.embed-mode .network-search-input {
@@ -4354,6 +4356,24 @@ body.network-focus-mode .network-card {
 body.network-focus-mode .network-toolbar,
 body.network-focus-mode .network-note {
   flex: 0 0 auto;
+}
+
+body.network-focus-mode .network-note {
+  padding: 8px 12px;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+body.network-focus-mode .network-note::-webkit-scrollbar {
+  display: none;
+}
+
+/* Keep the color legend + opening 2+ politician filter in full-screen mode.
+   Hide the longer drag/provenance notes so the graph gets the space. */
+body.network-focus-mode .network-note > span:nth-child(n+7) {
+  display: none;
 }
 
 body.network-focus-mode .network-view.active {
@@ -5177,17 +5197,31 @@ body.network-focus-mode .stock-detail-drawer {
 
 @media (max-width: 850px) {
   .network-toolbar {
-    align-items: stretch;
-    flex-direction: column;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
   }
 
   .network-search-wrap {
+    flex: 1 1 240px;
+    min-width: 210px;
     max-width: none;
-    flex-basis: auto;
+  }
+
+  .network-view-toggle {
+    flex: 0 0 auto;
   }
 
   .network-tool-actions {
+    flex: 0 0 auto;
     justify-content: flex-start;
+  }
+
+  .network-view-toggle .view-button,
+  .network-tool-button {
+    padding: 7px 9px;
+    font-size: 11px;
   }
 
   .detail-actionbar {
@@ -5210,15 +5244,6 @@ body.network-focus-mode .stock-detail-drawer {
 
   .explore-wrap {
     padding: 16px 10px 24px 10px;
-  }
-
-  .hero-row {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .view-toggle {
-    justify-content: flex-start;
   }
 
   .network-card {
@@ -5410,7 +5435,7 @@ page <- tags$div(
               id = "expandNetworkBtn",
               class = "network-tool-button",
               type = "button",
-              "Expand graph"
+              "Full screen graph"
             )
           )
         ),
@@ -7504,8 +7529,8 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
             explorePage.classList.contains('focus-fallback');
 
           expandNetworkBtn.textContent = active
-            ? 'Exit focus'
-            : 'Expand graph';
+            ? 'Exit full screen'
+            : 'Full screen graph';
         }
 
         function enterGraphFocus() {
