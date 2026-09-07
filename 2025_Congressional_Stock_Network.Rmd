@@ -3569,6 +3569,29 @@ h1.title, h4.author, h4.date {
   min-height: 100vh;
 }
 
+/* Portfolio embed mode: show the fun network immediately without duplicating
+   the full project header/coverage explanation inside the portfolio iframe. */
+body.embed-mode .topbar,
+body.embed-mode .hero-row,
+body.embed-mode .coverage-card {
+  display: none !important;
+}
+
+body.embed-mode .explore-wrap {
+  padding: 0;
+}
+
+body.embed-mode .network-card {
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  box-shadow: none;
+}
+
+body.embed-mode .stock-detail-drawer {
+  z-index: 9000;
+}
+
 .topbar {
   position: sticky;
   top: 0;
@@ -6057,6 +6080,13 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
     HTML(
       "
       (function() {
+        const embedMode =
+          new URLSearchParams(window.location.search).get('embed') === '1';
+
+        if (embedMode) {
+          document.body.classList.add('embed-mode');
+        }
+
         const explorePage = document.getElementById('explorePage');
         const aboutPage = document.getElementById('aboutPage');
         const codePage = document.getElementById('codePage');
@@ -7228,6 +7258,14 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
         );
 
         restoreSharedState();
+
+        if (embedMode) {
+          showExplore();
+
+          window.setTimeout(function() {
+            recenterActiveNetwork();
+          }, 700);
+        }
       })();
       "
     )
