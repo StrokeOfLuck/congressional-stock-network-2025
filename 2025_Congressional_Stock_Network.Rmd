@@ -2335,7 +2335,7 @@ build_committee_detail_html <- function(committee_id_value) {
     "<div class='shared-stock-explainer'>",
       "A purchase appears here only when this member appeared on the committee in the membership snapshot selected for that transaction date. ",
       "Jan. 1-2 transactions use the Dec. 17, 2024 118th-Congress snapshot; Jan. 3-20 use the Jan. 21, 2025 first usable 119th-Congress House snapshot; Jan. 21 onward uses the latest available snapshot on or before the transaction date. ",
-      "Member names are sorted by purchase-record count for the ticker. While this committee or subcommittee is selected, its matched members stay emphasized and stocks bought by 2+ matched members remain in their normal yellow stock style in the graph.",
+      "Member names are sorted by purchase-record count for the ticker. While this committee or subcommittee is selected, its matched members stay emphasized and stocks bought by 2+ matched members remain visible as normal yellow stock nodes in the graph.",
     "</div>",
     "<div class='shared-stock-list'>",
       shared_within_committee_html,
@@ -2543,7 +2543,7 @@ build_subcommittee_detail_html <- function(subcommittee_id_value) {
     "<div class='shared-stock-explainer'>",
       "A purchase appears here only when this member appeared on the subcommittee in the membership snapshot selected for that transaction date. ",
       "Jan. 1-2 transactions use the Dec. 17, 2024 118th-Congress snapshot; Jan. 3-20 use the Jan. 21, 2025 first usable 119th-Congress House snapshot; Jan. 21 onward uses the latest available snapshot on or before the transaction date. ",
-      "Member names are sorted by purchase-record count for the ticker. While this committee or subcommittee is selected, its matched members stay emphasized and stocks bought by 2+ matched members remain in their normal yellow stock style in the graph.",
+      "Member names are sorted by purchase-record count for the ticker. While this committee or subcommittee is selected, its matched members stay emphasized and stocks bought by 2+ matched members remain visible as normal yellow stock nodes in the graph.",
     "</div>",
     "<div class='shared-stock-list'>",
       shared_within_committee_html,
@@ -6894,37 +6894,39 @@ visPhysics(
 
           ctx.save();
 
+          // The committee fade can leave the canvas context partially
+          // transparent. Force these shared-stock nodes back to their ordinary
+          // fully opaque Stock appearance.
+          ctx.globalAlpha = 1;
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
+
           focus.tickerNodeIds.forEach(function(nodeId) {
             try {
-              const bodyNode =
-                network.body &&
-                network.body.nodes &&
-                network.body.nodes[nodeId];
+              // This is the same geometry lookup that made the earlier ring
+              // test line up correctly with the real stock nodes.
+              const box = network.getBoundingBox(nodeId);
+              if (!box) return;
 
-              if (!bodyNode) return;
-
-              const x = Number(bodyNode.x);
-              const y = Number(bodyNode.y);
-
-              if (!Number.isFinite(x) || !Number.isFinite(y)) return;
-
-              let radius = 8;
+              const x = (box.left + box.right) / 2;
+              const y = (box.top + box.bottom) / 2;
+              const radius = Math.max(
+                box.right - box.left,
+                box.bottom - box.top
+              ) / 2;
 
               if (
-                bodyNode.shape &&
-                Number.isFinite(Number(bodyNode.shape.width)) &&
-                Number(bodyNode.shape.width) > 0
+                !Number.isFinite(x) ||
+                !Number.isFinite(y) ||
+                !Number.isFinite(radius) ||
+                radius <= 0
               ) {
-                radius = Number(bodyNode.shape.width) / 2;
-              } else if (
-                bodyNode.options &&
-                Number.isFinite(Number(bodyNode.options.size))
-              ) {
-                radius = Number(bodyNode.options.size);
+                return;
               }
 
-              // Repaint the node exactly like an ordinary Stock node.
-              // No ring, glow, selection state, or extra edge behavior.
+              // No special effect: simply cover the faded stock node with the
+              // exact normal Stock fill and border.
               ctx.beginPath();
               ctx.arc(x, y, radius, 0, Math.PI * 2);
               ctx.fillStyle = '#D6B54A';
