@@ -2,77 +2,67 @@
 
 Interactive network analysis of reported 2025 U.S. House public-stock purchases.
 
-The project connects:
+This repository is intentionally separate from `sean-data-portfolio`. The portfolio repository contains only a lightweight project page and links here. Keeping the analysis, data extract, methodology, and deployment history in their own Git repository reduces coupling and keeps changes to this project from creating technical debt in the website repo.
 
-- House politicians
-- public-stock tickers
-- House committees
-- House subcommittees
+## Interactive project
 
-Committee relationships are matched using transaction-date-aware congressional
-membership snapshots rather than applying one roster to the entire year.
+The rendered page contains four internal sections:
 
-## What the interactive page includes
+- **Explore** — force-directed politician / stock / committee network
+- **About** — source definitions, provenance, and caveats
+- **Methodology** — design and analytical choices
+- **Class Report** — narrated R commands and outputs for course-format review
 
-The rendered HTML contains four internal sections:
+The interface also includes graph search, reset/recenter controls, institution drawers, original PTR links, shareable selections, CSV export, and House coverage diagnostics.
 
-- **Explore** — force-directed stock / politician / committee network
-- **About** — data definitions, caveats, and source provenance
-- **Methodology** — why the project is constructed the way it is
-- **Class Report** — narrated analysis with visible R commands and outputs
+## Analysis input
 
-Other features include search, reset/recenter controls, committee/subcommittee
-drawers, original PTR links, shareable selection state, CSV export, and House
-coverage diagnostics.
+This repository does **not** duplicate the full 2021–2026 scraper working dataset.
+
+Instead it contains a frozen, analysis-specific extract:
+
+`PTR_transactions_2025_ACCEPTED_STOCK_PURCHASES.csv`
+
+It contains **3,179 accepted 2025 public-stock purchase records** and only the source columns referenced by the visualization. The larger scraping/cleaning pipeline remains a separate data-engineering concern.
+
+This split is deliberate:
+
+- `house-ptr-scraper` owns extraction, parsing, cleaning, and ticker resolution.
+- `congressional-stock-network-2025` owns this analysis and visualization.
+- `sean-data-portfolio` owns only the portfolio presentation and links.
 
 ## Main graph rule
 
-The opening network includes a stock ticker only when at least two different
-politicians have accepted 2025 public-stock purchases for that ticker.
+A ticker enters the opening network only when at least two different politicians have accepted 2025 purchases for it.
 
-This is a display rule. Accepted purchases are not deleted just because a
-politician lacks a committee match or because their ticker is purchased by only
-one politician.
+That is a display rule. Purchases are not removed because a politician lacks a committee match or because their stock is not shared with another politician.
 
 ## Committee matching
 
-The matching rule is Congress-aware:
+Committee membership is transaction-date-aware and Congress-aware:
 
 - Jan. 1–2, 2025 → Dec. 17, 2024 snapshot (118th Congress)
-- Jan. 3–20, 2025 → Jan. 21, 2025, the first usable House snapshot of the 119th Congress
+- Jan. 3–20, 2025 → Jan. 21, 2025, the first usable 119th-Congress House snapshot
 - Jan. 21 onward → latest available snapshot on or before the transaction date
 
-Exact snapshot commits are listed in `committee-snapshot-index-2025.csv`.
+Exact source commits are listed in `committee-snapshot-index-2025.csv`.
 
-## Source data
+Original source:
 
-The project uses:
+https://github.com/unitedstates/congress-legislators
 
-- House Periodic Transaction Report data prepared for this project
-- `unitedstates/congress-legislators` for legislator and committee metadata
-- exact pinned Git commits for historical committee snapshots
+Development fork used during source work:
 
-The development fork used while building the committee source work is:
-
-`StrokeOfLuck/congress-legislators`
+https://github.com/StrokeOfLuck/congress-legislators
 
 ## Run locally
 
-Open:
+Open `2025_Congressional_Stock_Network.Rmd` in Positron / RStudio and render it.
 
-`2025_Congressional_Stock_Network.Rmd`
+The first render needs internet access because the Rmd downloads exact pinned historical committee and legislator source files. It then caches the flattened tables locally.
 
-and render it in Positron / RStudio.
-
-Required R packages are listed in `INSTALL_PACKAGES.R`.
-
-The first render needs internet access to retrieve pinned committee snapshots.
+Required packages are listed in `INSTALL_PACKAGES.R`.
 
 ## GitHub Pages
 
-This repository includes a GitHub Actions workflow that renders the R Markdown
-file and deploys the resulting `index.html` to GitHub Pages on pushes to `main`.
-
-Suggested repository name:
-
-`congressional-stock-network-2025`
+`.github/workflows/pages.yml` renders the Rmd to `index.html` and deploys it to GitHub Pages whenever `main` is updated.
