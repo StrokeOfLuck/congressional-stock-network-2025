@@ -5821,6 +5821,20 @@ page <- tags$div(
         "Click any gold stock node to open a stock inspector with the cleaned company name, party split, transaction-date range, summed disclosure bounds, individual 2025 purchase records, and links to the original House PTR PDFs. Click a committee or subcommittee node and the drawer first shows stocks purchased by at least two included matched members of that selected institution, including the member names and each politician's purchase-record count under the ticker. Below that it shows every accepted 2025 public-stock purchase matched to the included members, including one-person stocks intentionally hidden from the main graph. Every ticker is clickable and opens the same stock inspector. When you drill from a committee or subcommittee into a stock, the drawer shows a Back button that returns to the previous panel and restores its scroll position. Notification dates are not used in the inspector because the source CSV contains some rows already flagged for implausible notification dates."
       ),
 
+      tags$h2("Why I built it"),
+      tags$p(
+        "I wanted a way to move beyond a flat disclosure table and explore how reported stock purchases intersect with congressional institutions. The result combines public-records cleaning, network visualization, historical committee metadata, and reproducibility checks in one interactive project."
+      ),
+      tags$p(
+        HTML(
+          paste0(
+            "The analysis and interactive build live in a standalone repository so the portfolio stays lightweight and the project's code and deployment history remain separate from the website. ",
+            "<a href='https://github.com/StrokeOfLuck/congressional-stock-network-2025' target='_blank' rel='noopener'>Source repository</a> · ",
+            "<a href='https://strokeofluck.github.io/sean-data-portfolio/projects/stock-disclosures.html' target='_blank' rel='noopener'>Underlying disclosure project</a>"
+          )
+        )
+      ),
+
       tags$div(
         class = "stat-grid",
         tags$div(
