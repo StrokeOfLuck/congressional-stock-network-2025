@@ -3700,9 +3700,11 @@ body.embed-mode .network-card {
 }
 
 body.embed-mode .network-toolbar {
-  top: 10px;
-  left: 10px;
-  right: 10px;
+  top: 14px;
+  left: 50%;
+  right: auto;
+  width: min(1320px, calc(100% - 24px));
+  transform: translateX(-50%);
   padding: 8px 9px;
 }
 
@@ -3718,8 +3720,9 @@ body.embed-mode .network-tool-button {
 }
 
 body.embed-mode .graph-legend {
-  left: 10px;
-  bottom: 10px;
+  top: 72px;
+  left: max(12px, calc((100% - 1320px) / 2));
+  bottom: auto;
   max-width: calc(100% - 20px);
   font-size: 11px;
   line-height: 1.35;
@@ -3742,8 +3745,7 @@ body.embed-mode .coverage-title {
 }
 
 body.embed-mode .coverage-subtitle,
-body.embed-mode .coverage-group-note,
-body.embed-mode .coverage-filter-check {
+body.embed-mode .coverage-group-note {
   font-size: 12px;
   line-height: 1.5;
 }
@@ -3922,9 +3924,12 @@ body.embed-mode .stock-detail-drawer {
 
 .network-toolbar {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  right: 12px;
+  top: 16px;
+  left: 50%;
+  right: auto;
+  width: min(1320px, calc(100% - 32px));
+  box-sizing: border-box;
+  transform: translateX(-50%);
   z-index: 4200;
   display: flex;
   align-items: center;
@@ -3932,10 +3937,10 @@ body.embed-mode .stock-detail-drawer {
   padding: 9px 10px;
   border: 1px solid rgba(205, 210, 216, 0.90);
   border-radius: 14px;
-  background: rgba(255,255,255,0.93);
-  box-shadow: 0 7px 22px rgba(24, 31, 39, 0.11);
+  background: rgba(255,255,255,0.91);
+  box-shadow: 0 8px 24px rgba(24, 31, 39, 0.12);
   backdrop-filter: blur(10px);
-  opacity: 0.95;
+  opacity: 0.94;
   transition: opacity .16s ease, box-shadow .16s ease;
 }
 
@@ -3947,9 +3952,9 @@ body.embed-mode .stock-detail-drawer {
 
 .network-search-wrap {
   position: relative;
-  flex: 1 1 360px;
+  flex: 1 1 420px;
   min-width: 260px;
-  max-width: none;
+  max-width: 560px;
 }
 
 .network-view-toggle {
@@ -4312,8 +4317,9 @@ body.embed-mode .stock-detail-drawer {
 
 .graph-legend {
   position: absolute;
-  left: 12px;
-  bottom: 12px;
+  top: 76px;
+  left: max(16px, calc((100% - 1320px) / 2));
+  bottom: auto;
   z-index: 4100;
   display: flex;
   gap: 7px 12px;
@@ -4424,13 +4430,16 @@ body.network-focus-mode .network-card {
 
 body.network-focus-mode .network-toolbar {
   top: 12px;
-  left: 12px;
-  right: 12px;
+  left: 50%;
+  right: auto;
+  width: min(1320px, calc(100% - 24px));
+  transform: translateX(-50%);
 }
 
 body.network-focus-mode .graph-legend {
-  left: 12px;
-  bottom: 12px;
+  top: 70px;
+  left: max(12px, calc((100% - 1320px) / 2));
+  bottom: auto;
   padding: 8px 10px;
   font-size: 11px;
 }
@@ -5366,15 +5375,18 @@ body.network-focus-mode .stock-detail-drawer {
 @media (max-width: 700px) {
   .network-toolbar {
     top: 8px;
-    left: 8px;
-    right: 8px;
+    left: 50%;
+    right: auto;
+    width: calc(100% - 16px);
+    transform: translateX(-50%);
     gap: 6px;
     padding: 6px 7px;
   }
 
   .graph-legend {
+    top: 68px;
     left: 8px;
-    bottom: 8px;
+    bottom: auto;
     max-width: calc(100% - 16px);
     gap: 5px 8px;
     padding: 6px 8px;
@@ -5720,37 +5732,6 @@ page <- tags$div(
             )
           )
         ),
-        tags$div(
-          class = "coverage-filter-check",
-          HTML(
-            paste0(
-              "<b>Committee matching never removes stock purchases.</b> ",
-              summary_values$institution_unmatched_purchase_count,
-              " accepted purchase record",
-              ifelse(
-                summary_values$institution_unmatched_purchase_count == 1,
-                "",
-                "s"
-              ),
-              " from ",
-              summary_values$institution_unmatched_politician_count,
-              " politician",
-              ifelse(
-                summary_values$institution_unmatched_politician_count == 1,
-                "",
-                "s"
-              ),
-              " currently have no committee/subcommittee match in the selected transaction-date snapshot. ",
-              "Those purchases stay in the stock data and graph logic; they simply receive no institutional edge. ",
-              "PTR-to-roster name check: ",
-              summary_values$accepted_purchaser_total -
-                summary_values$unmatched_ptr_politicians,
-              "/",
-              summary_values$accepted_purchaser_total,
-              " accepted purchasers matched to the 119th-Congress roster."
-            )
-          )
-        )
       ),
 
       tags$div(
@@ -5873,82 +5854,12 @@ page <- tags$div(
         tags$li("Committee and subcommittee edges do not change or infer anything about the stock-purchase edges.")
       ),
 
-      tags$h2("Data choices"),
-      tags$p(
-        HTML(
-          paste0(
-            "PTR source loaded from <span class='file-note'>",
-            htmlEscape(ptr_file),
-            "</span>. The analysis uses <b>transaction date</b>, not filing year, to define 2025. It keeps purchase transactions (<span class='file-note'>transaction_type == P</span>), public stock records (<span class='file-note'>asset_type == ST</span>), and accepted cleaned tickers (<span class='file-note'>ticker_parse_status == accepted</span>)."
-          )
-        )
-      ),
-      tags$p(committee_status_html),
-      tags$p(
-        HTML(
-          paste0(
-            "Committee source: <a href='",
-            htmlEscape(committee_source_repo),
-            "' target='_blank' rel='noopener'>unitedstates/congress-legislators</a>, ",
-            "accessed during development through the user's <a href='",
-            htmlEscape(committee_fork_repo),
-            "' target='_blank' rel='noopener'>StrokeOfLuck fork</a>. ",
-            "The project uses <b>",
-            nrow(committee_snapshot_index),
-            " exact pinned source commits</b> from ",
-            format(first_source_snapshot_date, "%B %d, %Y"),
-            " through ",
-            format(last_committee_snapshot_date, "%B %d, %Y"),
-            ". At each commit it reads <span class='file-note'>committee-membership-current.yaml</span> and ",
-            "<span class='file-note'>committees-current.yaml</span>. ",
-            "The combined history is cached locally as <span class='file-note'>",
-            htmlEscape(committee_file_override),
-            "</span>. The exact dates, commit SHAs, original-source links, and fork links are saved in <span class='file-note'>",
-            htmlEscape(committee_snapshot_index_file),
-            "</span>. A plain-language explanation is packaged as <span class='file-note'>",
-            htmlEscape(committee_reference_file),
-            "</span>."
-          )
-        )
-      ),
-      tags$p(
-        "The committee layer is transaction-date-aware and Congress-aware. Jan. 1-2 transactions are still in the 118th Congress, so they use the latest usable prior-Congress snapshot from Dec. 17, 2024. The 119th Congress begins Jan. 3, but the Jan. 17 repository update contained no House committee rows, so Jan. 3-20 transactions use Jan. 21, the first usable 119th-Congress House snapshot. From Jan. 21 onward, each purchase uses the most recent available snapshot on or before its transaction date. Stock purchases are filtered before committee matching, so a missing committee match never deletes a trade."
-      ),
-
       tags$h2("How to read it"),
       tags$p(
-        "The Stocks + committees + subcommittees view loads first. It uses a live collision-aware force-directed layout with politicians, shared stocks, full committees, and subcommittees in one graph. Connected nodes pull toward one another while nodes repel each other and try not to overlap. Dragging a node disturbs the network and lets it settle again. Purchase lines inherit the politician's party color. The graph itself stays filtered to stocks shared by at least two politicians. When a committee or subcommittee is selected, its drawer identifies shared stocks among members, shows the members with accepted 2025 public-stock purchases, and then lists the remaining time-aware snapshot history members below them."
+        "The Stocks + committees + subcommittees view loads first. Politicians connect to reported stock purchases, purchase lines inherit the politician's party color, and the graph keeps shared stocks purchased by at least two politicians for readability. Committee and subcommittee relationships are transaction-date-aware. Dragging a node lets the force-directed network settle again; clicking any node opens the detail drawer."
       ),
-      tags$div(
-        class = "method-note",
-        HTML(
-          paste0(
-            "<b>Committee layer provenance:</b> the institutional edges use time-aware 2025 House membership snapshots from ",
-            "<a href='", htmlEscape(committee_source_repo),
-            "' target='_blank' rel='noopener'>unitedstates/congress-legislators</a>",
-            ", with ", nrow(committee_snapshot_index),
-            " pinned source snapshots from ",
-            format(first_source_snapshot_date, "%b %d, %Y"),
-            " through ",
-            format(last_committee_snapshot_date, "%b %d, %Y"),
-            "."
-          )
-        )
-      ),
-
-      tags$h2("How the committee date matching works"),
       tags$p(
-        HTML(
-          paste0(
-            "It uses <b>",
-            nrow(committee_snapshot_index),
-            " pinned source snapshots</b>. A Jan. 2 transaction uses Dec. 17, 2024 because Jan. 2 is still in the 118th Congress. A Jan. 10 transaction uses Jan. 21, 2025 because that is the first usable House snapshot of the 119th Congress. A July 10 transaction uses June 17, and an Oct. 5 transaction uses Sept. 11."
-          )
-        )
-      ),
-      tags$div(
-        class = "method-note",
-        "The matching rule makes the committee layer much closer to the transaction date, but it is still based on published snapshots rather than a day-by-day assignment history. If a committee change happens between two snapshots, the project can only see the change when a later snapshot records it."
+        "The exact PTR filters, pinned committee snapshots, transaction-date matching rule, source commits, and reproducibility checks are documented on the Methodology page."
       ),
 
       tags$h2("2025 House coverage"),
@@ -5974,19 +5885,6 @@ page <- tags$div(
       tags$div(
         class = "method-note",
         "A stock purchase and a committee or subcommittee assignment appearing in the same network are not evidence of misconduct, influence, or causation. The network is an exploratory tool for finding relationships worth checking against original PTR filings and official committee records. The institutional layer uses the closest available 2025 snapshot on or before each transaction date, which is more precise than one annual snapshot. It still should not be treated as proof of a day-by-day assignment because a change can occur between published snapshots. Two members can appear under the same shared stock even if their purchases occurred on different dates."
-      ),
-
-      tags$h2("Matching committee records"),
-      tags$p(
-        paste0(
-          "Of the ",
-          summary_values$shown_politicians,
-          " politicians in the displayed stock network, ",
-          committee_match_count,
-          " matched the committee roster and ",
-          committee_unmatched_count,
-          " did not. Name matching uses a normalized first-name/last-name key plus a small alias table near the top of the Rmd that you can expand when needed."
-        )
       ),
 
       tags$button(
@@ -6190,6 +6088,33 @@ committee_detail_purchases <- committee_purchase_rows %>%
 
 # Graph: shared tickers only.
 # Committee drawer: all time-matched accepted purchases."
+        )
+      ),
+      tags$div(
+        class = "output-box",
+        HTML(
+          paste0(
+            "<strong>Validation:</strong> committee matching never removes accepted stock purchases. ",
+            summary_values$institution_unmatched_purchase_count,
+            " accepted purchase record",
+            ifelse(summary_values$institution_unmatched_purchase_count == 1, "", "s"),
+            " from ",
+            summary_values$institution_unmatched_politician_count,
+            " politician",
+            ifelse(summary_values$institution_unmatched_politician_count == 1, "", "s"),
+            " currently have no committee/subcommittee match in the selected transaction-date snapshot; those purchases remain in the stock data and simply receive no institutional edge. ",
+            "PTR-to-roster name matching resolved ",
+            summary_values$accepted_purchaser_total - summary_values$unmatched_ptr_politicians,
+            "/",
+            summary_values$accepted_purchaser_total,
+            " accepted purchasers. Of the ",
+            summary_values$shown_politicians,
+            " politicians in the displayed network, ",
+            committee_match_count,
+            " matched the committee roster and ",
+            committee_unmatched_count,
+            " did not."
+          )
         )
       ),
 
