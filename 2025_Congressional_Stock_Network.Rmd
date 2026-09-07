@@ -3587,7 +3587,6 @@ body.embed-mode .hero-row {
   max-width: none;
   width: 100%;
   margin: 0 0 16px;
-  align-items: flex-end;
 }
 
 body.embed-mode .hero-copy h1 {
@@ -3600,13 +3599,13 @@ body.embed-mode .hero-copy p {
   line-height: 1.5;
 }
 
-body.embed-mode .view-toggle {
-  max-width: 560px;
+body.embed-mode .network-view-toggle {
+  max-width: none;
 }
 
-body.embed-mode .view-button {
-  font-size: 14px;
-  padding: 10px 16px;
+body.embed-mode .network-view-toggle .view-button {
+  font-size: 12px;
+  padding: 9px 12px;
 }
 
 body.embed-mode .network-card {
@@ -3661,16 +3660,30 @@ body.embed-mode .stock-detail-drawer {
   z-index: 9000;
 }
 
-@media (max-width: 900px) {
-  body.embed-mode .hero-row {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 14px;
+@media (max-width: 1100px) {
+  .network-toolbar {
+    flex-wrap: wrap;
   }
 
-  body.embed-mode .view-toggle {
-    max-width: none;
+  .network-search-wrap {
+    flex: 1 1 calc(100% - 180px);
+  }
+
+  .network-view-toggle {
+    order: 3;
+    flex: 1 1 100%;
     justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .network-view-toggle::-webkit-scrollbar {
+    display: none;
+  }
+
+  .network-view-toggle .view-button {
+    flex: 0 0 auto;
   }
 
   body.embed-mode .network-view .visNetwork {
@@ -3692,18 +3705,30 @@ body.embed-mode .stock-detail-drawer {
     font-size: 14px;
   }
 
-  body.embed-mode .view-toggle {
-    gap: 6px;
-  }
-
-  body.embed-mode .view-button {
-    font-size: 13px;
-    padding: 9px 12px;
-  }
-
   body.embed-mode .network-toolbar {
     padding: 10px;
     gap: 8px;
+  }
+
+  .network-search-wrap {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .network-tool-actions {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .network-view-toggle {
+    order: 3;
+    flex: 1 1 100%;
+    gap: 6px;
+  }
+
+  body.embed-mode .network-view-toggle .view-button {
+    font-size: 12px;
+    padding: 8px 10px;
   }
 
   body.embed-mode .network-search-input {
@@ -3776,10 +3801,7 @@ body.embed-mode .stock-detail-drawer {
 }
 
 .hero-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
+  display: block;
   max-width: 1500px;
   margin: 0 auto 16px auto;
 }
@@ -3808,8 +3830,7 @@ body.embed-mode .stock-detail-drawer {
 .network-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
   padding: 12px 14px;
   border-bottom: 1px solid #eceef1;
   background: #ffffff;
@@ -3817,8 +3838,25 @@ body.embed-mode .stock-detail-drawer {
 
 .network-search-wrap {
   position: relative;
-  flex: 1 1 520px;
-  max-width: 720px;
+  flex: 1 1 360px;
+  min-width: 260px;
+  max-width: none;
+}
+
+.network-view-toggle {
+  flex: 0 1 auto;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.network-view-toggle .view-button {
+  padding: 8px 11px;
+  font-size: 12px;
+}
+
+.network-tool-actions {
+  flex: 0 0 auto;
 }
 
 .network-search-input {
@@ -5099,35 +5137,6 @@ page <- tags$div(
               " across politicians, companies, committees, and subcommittees. The first view shows stocks + committees + subcommittees; use the other buttons to remove subcommittees or remove the institutional layer entirely."
             )
           )
-        ),
-        tags$div(
-          class = "view-toggle",
-          tags$button(
-            id = "subcommitteeBtn",
-            class = paste(
-              "view-button",
-              if (default_view == "full") "active" else ""
-            ),
-            disabled = if (!has_committee_file || nrow(subcommittee_edges) == 0) "disabled" else NULL,
-            "Stocks + committees + subcommittees"
-          ),
-          tags$button(
-            id = "committeeBtn",
-            class = paste(
-              "view-button",
-              if (default_view == "committee") "active" else ""
-            ),
-            disabled = if (!has_committee_file || nrow(committee_edges) == 0) "disabled" else NULL,
-            "Stocks + committees only"
-          ),
-          tags$button(
-            id = "stockOnlyBtn",
-            class = paste(
-              "view-button",
-              if (default_view == "stock") "active" else ""
-            ),
-            "Stocks only"
-          )
         )
       ),
 
@@ -5157,6 +5166,35 @@ page <- tags$div(
               id = "networkSearchResults",
               class = "network-search-results",
               `aria-live` = "polite"
+            )
+          ),
+          tags$div(
+            class = "view-toggle network-view-toggle",
+            tags$button(
+              id = "subcommitteeBtn",
+              class = paste(
+                "view-button",
+                if (default_view == "full") "active" else ""
+              ),
+              disabled = if (!has_committee_file || nrow(subcommittee_edges) == 0) "disabled" else NULL,
+              "Stocks + committees + subcommittees"
+            ),
+            tags$button(
+              id = "committeeBtn",
+              class = paste(
+                "view-button",
+                if (default_view == "committee") "active" else ""
+              ),
+              disabled = if (!has_committee_file || nrow(committee_edges) == 0) "disabled" else NULL,
+              "Stocks + committees only"
+            ),
+            tags$button(
+              id = "stockOnlyBtn",
+              class = paste(
+                "view-button",
+                if (default_view == "stock") "active" else ""
+              ),
+              "Stocks only"
             )
           ),
           tags$div(
