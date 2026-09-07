@@ -3447,7 +3447,8 @@ make_network <- function(
           "var container = network.body && network.body.container;",
           "var host = container ? (container.closest('.network-view') || container.parentElement) : null;",
           "if (host && host.clientWidth > 0 && host.clientHeight > 0) {",
-            "network.setSize(host.clientWidth + 'px', host.clientHeight + 'px');",
+            "var extraTop = document.body.classList.contains('embed-mode') ? 18 : 0;",
+            "network.setSize(host.clientWidth + 'px', (host.clientHeight + extraTop) + 'px');",
             "network.redraw();",
             "network.fit({animation:false});",
           "}",
@@ -3819,9 +3820,12 @@ body.embed-mode.explore-locked .network-view.active {
 }
 
 body.embed-mode.explore-locked .network-view.active .visNetwork {
+  position: absolute !important;
+  top: -18px !important;
+  left: 0 !important;
   display: block !important;
   width: 100% !important;
-  height: 100% !important;
+  height: calc(100% + 18px) !important;
   min-height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -7102,9 +7106,13 @@ visPhysics(
               return false;
             }
 
+            const extraTop = document.body.classList.contains('embed-mode')
+              ? 18
+              : 0;
+
             network.setSize(
               host.clientWidth + 'px',
-              host.clientHeight + 'px'
+              (host.clientHeight + extraTop) + 'px'
             );
             return true;
           } catch (error) {
