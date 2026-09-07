@@ -3610,6 +3610,7 @@ make_network <- function(
       # Save a reference to each network so the custom search/reset controls
       # can focus, recenter, and restore its original stabilized layout.
       beforeDrawing = register_network_event,
+      afterDrawing = "function(ctx) { if (window.drawInstitutionNativeStocks) { window.drawInstitutionNativeStocks(this, ctx); } }",
 
       # After the initial layout settles, store the exact starting positions,
       # then stop continuous physics calculations for better performance.
@@ -6867,36 +6868,6 @@ visPhysics(
         window.clearInstitutionFocusForNetwork = function(network) {
           if (!network || !network.__institutionFocus) return;
 
-          const previousFocus = network.__institutionFocus;
-          const dataSet =
-            network.body &&
-            network.body.data &&
-            network.body.data.nodes;
-
-          // Put previously forced-yellow stocks back under visNetwork's normal
-          // selection/fade styling before the next graph selection is handled.
-          (previousFocus.tickerNodeIds || []).forEach(function(nodeId) {
-            try {
-              const bodyNode =
-                network.body &&
-                network.body.nodes &&
-                network.body.nodes[nodeId];
-              const node = dataSet && dataSet.get(nodeId);
-
-              if (!bodyNode || !node) return;
-
-              if (node.color !== undefined) {
-                bodyNode.options.color = node.color;
-              }
-              if (node.font !== undefined) {
-                bodyNode.options.font = node.font;
-              }
-              if (node.label !== undefined) {
-                bodyNode.options.label = node.label;
-              }
-            } catch (error) {}
-          });
-
           network.__institutionFocus = null;
 
           try {
@@ -6904,59 +6875,68 @@ visPhysics(
           } catch (error) {}
         };
 
-        function forceNativeStockAppearance(network, nodeId) {
-          try {
-            const dataSet =
-              network.body &&
-              network.body.data &&
-              network.body.data.nodes;
+        window.drawInstitutionNativeStocks = function(network, ctx) {
+          const focus =
+            network && network.__institutionFocus;
 
-            const bodyNode =
-              network.body &&
-              network.body.nodes &&
-              network.body.nodes[nodeId];
+          if (
+            !focus ||
+            !focus.tickerNodeIds ||
+            focus.tickerNodeIds.length === 0
+          ) {
+            return;
+          }
 
-            if (!dataSet || !bodyNode) return;
+          const scale = Math.max(
+            0.05,
+            Number(network.getScale()) || 1
+          );
 
-            const node = dataSet.get(nodeId);
-            if (!node) return;
+          ctx.save();
 
-            // Do not select the stock node. Just make this one node look exactly
-            // like an ordinary Stock node while the rest of the graph remains
-            // under the committee selection's normal fade behavior.
-            bodyNode.options.color = {
-              background: '#D6B54A',
-              border: '#9A7B1D',
-              highlight: {
-                background: '#E4C65C',
-                border: '#5F4B12'
-              },
-              hover: {
-                background: '#DFC056',
-                border: '#7A6117'
+          focus.tickerNodeIds.forEach(function(nodeId) {
+            try {
+              const bodyNode =
+                network.body &&
+                network.body.nodes &&
+                network.body.nodes[nodeId];
+
+              if (!bodyNode) return;
+
+              const x = Number(bodyNode.x);
+              const y = Number(bodyNode.y);
+
+              if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+
+              let radius = 8;
+
+              if (
+                bodyNode.shape &&
+                Number.isFinite(Number(bodyNode.shape.width)) &&
+                Number(bodyNode.shape.width) > 0
+              ) {
+                radius = Number(bodyNode.shape.width) / 2;
+              } else if (
+                bodyNode.options &&
+                Number.isFinite(Number(bodyNode.options.size))
+              ) {
+                radius = Number(bodyNode.options.size);
               }
-            };
 
-            bodyNode.options.font = {
-              color: '#5F4B12',
-              face: 'Arial',
-              size: 13,
-              strokeWidth: 2,
-              strokeColor: '#FFFFFF'
-            };
+              // Repaint the node exactly like an ordinary Stock node.
+              // No ring, glow, selection state, or extra edge behavior.
+              ctx.beginPath();
+              ctx.arc(x, y, radius, 0, Math.PI * 2);
+              ctx.fillStyle = '#D6B54A';
+              ctx.fill();
+              ctx.lineWidth = 1.5 / scale;
+              ctx.strokeStyle = '#9A7B1D';
+              ctx.stroke();
+            } catch (error) {}
+          });
 
-            bodyNode.options.borderWidth = 1.5;
-
-            const nativeLabel =
-              node.hiddenLabel !== undefined
-                ? node.hiddenLabel
-                : node.label;
-
-            if (nativeLabel !== undefined) {
-              bodyNode.options.label = nativeLabel;
-            }
-          } catch (error) {}
-        }
+          ctx.restore();
+        };
 
         function highlightInstitutionSharedStocks(type, id, html) {
           const focus = institutionFocusFromHtml(html);
@@ -6979,13 +6959,9 @@ visPhysics(
 
               network.__institutionFocus = focus;
 
-              // Shared committee stocks simply retain their ordinary Stock
-              // styling: normal yellow node and normal label, no ring/glow and
-              // no extra selected-neighbor behavior.
-              focus.tickerNodeIds.forEach(function(nodeId) {
-                forceNativeStockAppearance(network, nodeId);
-              });
-
+              // Shared committee stocks are repainted after each draw using
+              // the ordinary Stock palette. They stay out of the selection set,
+              // so unrelated House-wide buyers remain faded.
               network.redraw();
             } catch (error) {}
           });
