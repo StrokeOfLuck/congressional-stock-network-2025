@@ -5469,9 +5469,10 @@ body.network-focus-mode .stock-detail-drawer {
   max-width: 245px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 7px;
-  padding: 10px 11px;
+  gap: 10px;
+  padding: 11px 12px;
   font-size: 10.5px;
+  line-height: 1.45;
 }
 
 .graph-legend-title {
@@ -5486,14 +5487,15 @@ body.network-focus-mode .stock-detail-drawer {
 .graph-legend > span {
   display: flex;
   align-items: center;
+  min-height: 14px;
 }
 
 .graph-legend .graph-filter-note {
   display: block;
-  margin-top: 3px;
-  padding-top: 7px;
+  margin-top: 2px;
+  padding-top: 9px;
   border-top: 1px solid #e4e7ea;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .network-tool-actions.graph-tool-panel {
@@ -5835,7 +5837,7 @@ page <- tags$div(
           tags$span(
             class = "graph-filter-note",
             paste0(
-              "Opening view: stocks purchased by ≥ ",
+              "Stocks purchased by ≥ ",
               min_politicians_per_stock,
               " politicians"
             )
