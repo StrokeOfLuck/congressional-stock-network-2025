@@ -2890,6 +2890,85 @@ build_person_coverage_html <- function(bioguide_value) {
     "<span class='no-stock-note'>No accepted 2025 public-stock purchase found after this project's filters.</span>"
   }
 
+  committee_assignments <- committee_roster_for_details %>%
+    filter(bioguide == bioguide_value) %>%
+    arrange(committee_name)
+
+  committee_html <- if (nrow(committee_assignments) > 0) {
+    paste(
+      vapply(
+        seq_len(nrow(committee_assignments)),
+        function(i) {
+          paste0(
+            "<button class='institution-chip committee' type='button' ",
+            "title='Seen in pinned snapshots from ",
+            format(committee_assignments$first_snapshot[i], "%b %d, %Y"),
+            " through ",
+            format(committee_assignments$last_snapshot[i], "%b %d, %Y"),
+            "' onclick=\"window.showCommitteeDetail('",
+            htmltools::htmlEscape(
+              committee_assignments$committee_id[i],
+              attribute = TRUE
+            ),
+            "', true)\">",
+            htmltools::htmlEscape(
+              short_committee_name(
+                committee_assignments$committee_name[i]
+              )
+            ),
+            "</button>"
+          )
+        },
+        character(1)
+      ),
+      collapse = ""
+    )
+  } else {
+    "<span class='no-stock-note'>No House committee assignment found in the pinned 2025 snapshots used by this project.</span>"
+  }
+
+  subcommittee_assignments <- subcommittee_roster_for_details %>%
+    filter(bioguide == bioguide_value) %>%
+    arrange(parent_committee_name, subcommittee_name)
+
+  subcommittee_html <- if (nrow(subcommittee_assignments) > 0) {
+    paste(
+      vapply(
+        seq_len(nrow(subcommittee_assignments)),
+        function(i) {
+          paste0(
+            "<button class='institution-chip subcommittee' type='button' ",
+            "title='",
+            htmltools::htmlEscape(
+              subcommittee_assignments$parent_committee_name[i],
+              attribute = TRUE
+            ),
+            " · seen in pinned snapshots from ",
+            format(subcommittee_assignments$first_snapshot[i], "%b %d, %Y"),
+            " through ",
+            format(subcommittee_assignments$last_snapshot[i], "%b %d, %Y"),
+            "' onclick=\"window.showSubcommitteeDetail('",
+            htmltools::htmlEscape(
+              subcommittee_assignments$subcommittee_id[i],
+              attribute = TRUE
+            ),
+            "', true)\">",
+            htmltools::htmlEscape(
+              short_subcommittee_name(
+                subcommittee_assignments$subcommittee_name[i]
+              )
+            ),
+            "</button>"
+          )
+        },
+        character(1)
+      ),
+      collapse = ""
+    )
+  } else {
+    "<span class='no-stock-note'>No House subcommittee assignment found in the pinned 2025 snapshots used by this project.</span>"
+  }
+
   explanation <- if (
     p$coverage_status ==
       "No accepted 2025 public-stock purchase found"
@@ -2968,7 +3047,15 @@ build_person_coverage_html <- function(bioguide_value) {
     "<div class='member-stock-chips coverage-stock-chips'>",
       ticker_html,
     "</div>",
-    "<div class='detail-footnote'>Coverage is based on the pinned 2025 House roster plus this project's accepted public-stock-purchase filters. Absence from the purchase data should be treated as a lead for checking, not as proof of no trading.</div>"
+    "<div class='detail-section-title person-institution-heading'>House committee assignments seen in 2025 snapshots</div>",
+    "<div class='institution-chip-group'>",
+      committee_html,
+    "</div>",
+    "<div class='detail-section-title person-institution-heading'>House subcommittee assignments seen in 2025 snapshots</div>",
+    "<div class='institution-chip-group'>",
+      subcommittee_html,
+    "</div>",
+    "<div class='detail-footnote'>Committee and subcommittee listings are snapshot-based. They show assignments observed in the pinned source snapshots used by this project; they are not a perfect day-by-day membership history. Coverage is based on the pinned 2025 House roster plus this project's accepted public-stock-purchase filters. Absence from the purchase data should be treated as a lead for checking, not as proof of no trading.</div>"
   )
 }
 
@@ -3077,7 +3164,8 @@ politician_nodes <- politician_nodes %>%
       "<b>", full_label, "</b>",
       "<br>Type: Politician",
       "<br>Party: ", party,
-      "<br>Stocks in displayed network: ", stock_connections
+      "<br>Stocks in displayed network: ", stock_connections,
+      "<br><i>Click for stocks + committee details</i>"
     )
   ) %>%
   select(id, label, group, size, title)
@@ -3486,7 +3574,7 @@ make_network <- function(
 
       dragStart = "function(params) { if (params.nodes && params.nodes.length > 0) { this.setOptions({physics: true}); this.startSimulation(); } }",
       dragEnd = "function(params) { var network = this; window.setTimeout(function() { network.setOptions({physics: false}); }, 900); }",
-      selectNode = "function(params) { var id = params.nodes[0]; this.focus(id, {scale: 1.25, animation: true}); if (typeof id !== 'string') return; if (id.indexOf('STOCK_') === 0 && window.showStockDetail) { window.showStockDetail(id.replace('STOCK_', '')); } else if (id.indexOf('COMMITTEE_') === 0 && window.showCommitteeDetail) { window.showCommitteeDetail(id.replace('COMMITTEE_', '')); } else if (id.indexOf('SUBCOMMITTEE_') === 0 && window.showSubcommitteeDetail) { window.showSubcommitteeDetail(id.replace('SUBCOMMITTEE_', '')); } }"
+      selectNode = "function(params) { var id = params.nodes[0]; this.focus(id, {scale: 1.25, animation: true}); if (typeof id !== 'string') return; if (id.indexOf('STOCK_') === 0 && window.showStockDetail) { window.showStockDetail(id.replace('STOCK_', '')); } else if (id.indexOf('COMMITTEE_') === 0 && window.showCommitteeDetail) { window.showCommitteeDetail(id.replace('COMMITTEE_', '')); } else if (id.indexOf('SUBCOMMITTEE_') === 0 && window.showSubcommitteeDetail) { window.showSubcommitteeDetail(id.replace('SUBCOMMITTEE_', '')); } else if (id.indexOf('POL_') === 0 && window.showPoliticianNodeDetail) { window.showPoliticianNodeDetail(id); } }"
     )
 
   widget
@@ -4944,6 +5032,49 @@ body.embed-mode .stock-detail-drawer {
 .stock-chip span {
   color: #8a7428;
   font-weight: 650;
+}
+
+.person-institution-heading {
+  margin-top: 18px;
+}
+
+.institution-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 4px;
+}
+
+.institution-chip {
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 10px;
+  line-height: 1.15;
+  font-weight: 750;
+  cursor: pointer;
+  text-align: left;
+}
+
+.institution-chip.committee {
+  color: #3f5449;
+  border: 1px solid #9fb0a7;
+  background: #eef3f0;
+}
+
+.institution-chip.committee:hover {
+  background: #e2ebe6;
+  border-color: #7f9689;
+}
+
+.institution-chip.subcommittee {
+  color: #52675c;
+  border: 1px solid #bdc9c2;
+  background: #f6f8f7;
+}
+
+.institution-chip.subcommittee:hover {
+  background: #ebf0ed;
+  border-color: #99aaa0;
 }
 
 .no-stock-note {
@@ -6513,7 +6644,7 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
 
           openDetailDrawer(
             {
-              label: '2025 House coverage',
+              label: 'Selected politician',
               html: html,
               type: 'person',
               id: bioguide,
@@ -6552,6 +6683,26 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
 
           window.showPersonDetail(
             bioguide,
+            false,
+            false
+          );
+        };
+
+        window.showPoliticianNodeDetail = function(nodeId) {
+          const rosterSearchItem = searchIndex.find(
+            function(item) {
+              return (
+                item.type === 'House member' &&
+                item.node_id === nodeId &&
+                item.detail_id
+              );
+            }
+          );
+
+          if (!rosterSearchItem) return;
+
+          window.showPersonDetail(
+            rosterSearchItem.detail_id,
             false,
             false
           );
