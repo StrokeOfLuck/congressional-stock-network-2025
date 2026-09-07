@@ -3422,14 +3422,24 @@ make_network <- function(
 
   stabilization_event <- paste0(
     "function() {",
+      "var network = this;",
       "window.networkInstances = window.networkInstances || {};",
       "window.networkInitialPositions = window.networkInitialPositions || {};",
       "window.networkReadyViews = window.networkReadyViews || {};",
-      "window.networkInstances[", view_key_json, "] = this;",
+      "window.networkInstances[", view_key_json, "] = network;",
       "if (!window.networkInitialPositions[", view_key_json, "]) {",
-        "window.networkInitialPositions[", view_key_json, "] = this.getPositions();",
+        "window.networkInitialPositions[", view_key_json, "] = network.getPositions();",
       "}",
-      "this.setOptions({physics:false});",
+      "network.setOptions({physics:false});",
+      "window.setTimeout(function() {",
+        "try {",
+          "var container = network.body && network.body.container;",
+          "if (container && container.offsetWidth > 0 && container.offsetHeight > 0) {",
+            "network.redraw();",
+            "network.fit({animation:false});",
+          "}",
+        "} catch (error) {}",
+      "}, 120);",
       "window.networkReadyViews[", view_key_json, "] = true;",
       "window.dispatchEvent(new CustomEvent('congress-network-ready-view', {detail:{view:", view_key_json, "}}));",
     "}"
@@ -6899,6 +6909,7 @@ visPhysics(
           subcommitteeBtn.classList.remove('active');
 
           fireResize();
+          window.setTimeout(recenterActiveNetwork, 180);
 
           if (!suppressUrl) updateShareUrl();
         }
@@ -6915,6 +6926,7 @@ visPhysics(
           subcommitteeBtn.classList.remove('active');
 
           fireResize();
+          window.setTimeout(recenterActiveNetwork, 180);
 
           if (!suppressUrl) updateShareUrl();
         }
@@ -6931,6 +6943,7 @@ visPhysics(
           committeeBtn.classList.remove('active');
 
           fireResize();
+          window.setTimeout(recenterActiveNetwork, 180);
 
           if (!suppressUrl) updateShareUrl();
         }
