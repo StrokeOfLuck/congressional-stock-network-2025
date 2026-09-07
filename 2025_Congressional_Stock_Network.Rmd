@@ -3773,12 +3773,9 @@ body.embed-mode .stock-detail-drawer {
 
 .explore-wrap {
   padding: 24px 28px 34px 28px;
-  display: flex;
-  flex-direction: column;
 }
 
 .hero-row {
-  order: 1;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -3958,7 +3955,6 @@ body.embed-mode .stock-detail-drawer {
 }
 
 .coverage-card {
-  order: 3;
   width: 100%;
   box-sizing: border-box;
   margin: 18px 0 0;
@@ -4128,7 +4124,6 @@ body.embed-mode .stock-detail-drawer {
 }
 
 .network-card {
-  order: 2;
   width: 100%;
   max-width: none;
   box-sizing: border-box;
@@ -5137,6 +5132,94 @@ page <- tags$div(
       ),
 
       tags$div(
+        class = "network-card",
+
+        tags$div(
+          class = "network-toolbar",
+          tags$div(
+            class = "network-search-wrap",
+            tags$input(
+              id = "networkSearchInput",
+              class = "network-search-input",
+              type = "search",
+              autocomplete = "off",
+              placeholder = "Search graph: politician, ticker, company, committee, subcommittee…",
+              `aria-label` = "Search the network"
+            ),
+            tags$button(
+              id = "networkSearchClear",
+              class = "network-search-clear",
+              type = "button",
+              `aria-label` = "Clear search",
+              HTML("&times;")
+            ),
+            tags$div(
+              id = "networkSearchResults",
+              class = "network-search-results",
+              `aria-live` = "polite"
+            )
+          ),
+          tags$div(
+            class = "network-tool-actions",
+            tags$button(
+              id = "recenterNetworkBtn",
+              class = "network-tool-button",
+              type = "button",
+              "Recenter"
+            ),
+            tags$button(
+              id = "resetNetworkBtn",
+              class = "network-tool-button",
+              type = "button",
+              "Reset layout"
+            )
+          )
+        ),
+
+        tags$div(
+          class = "network-note",
+          tags$span(HTML("<span class='legend-dot' style='background:#2F6FDB'></span>Democrat")),
+          tags$span(HTML("<span class='legend-dot' style='background:#D64B4B'></span>Republican")),
+          tags$span(HTML("<span class='legend-dot' style='background:#D9A928'></span>Stock")),
+          tags$span(HTML("<span class='legend-box' style='background:#667A70'></span>Committee")),
+          tags$span(HTML("<span class='legend-box-sub' style='background:#A8B7AE'></span>Subcommittee")),
+          tags$span(
+            paste0(
+              "Opening filter: stocks purchased by ≥ ",
+              min_politicians_per_stock,
+              " politicians"
+            )
+          ),
+          tags$span("Party-colored purchase lines: drag a node and watch the network re-settle"),
+          committee_status_html
+        ),
+        tags$div(
+          id = "stockView",
+          class = paste(
+            "network-view",
+            if (default_view == "stock") "active" else ""
+          ),
+          stock_widget
+        ),
+        tags$div(
+          id = "committeeView",
+          class = paste(
+            "network-view",
+            if (default_view == "committee") "active" else ""
+          ),
+          committee_view_content
+        ),
+        tags$div(
+          id = "subcommitteeView",
+          class = paste(
+            "network-view",
+            if (default_view == "full") "active" else ""
+          ),
+          subcommittee_view_content
+        )
+      ),
+
+      tags$div(
         class = "coverage-card",
         tags$div(
           class = "coverage-header",
@@ -5271,94 +5354,6 @@ page <- tags$div(
               " accepted purchasers matched to the 119th-Congress roster."
             )
           )
-        )
-      ),
-
-      tags$div(
-        class = "network-card",
-
-        tags$div(
-          class = "network-toolbar",
-          tags$div(
-            class = "network-search-wrap",
-            tags$input(
-              id = "networkSearchInput",
-              class = "network-search-input",
-              type = "search",
-              autocomplete = "off",
-              placeholder = "Search graph: politician, ticker, company, committee, subcommittee…",
-              `aria-label` = "Search the network"
-            ),
-            tags$button(
-              id = "networkSearchClear",
-              class = "network-search-clear",
-              type = "button",
-              `aria-label` = "Clear search",
-              HTML("&times;")
-            ),
-            tags$div(
-              id = "networkSearchResults",
-              class = "network-search-results",
-              `aria-live` = "polite"
-            )
-          ),
-          tags$div(
-            class = "network-tool-actions",
-            tags$button(
-              id = "recenterNetworkBtn",
-              class = "network-tool-button",
-              type = "button",
-              "Recenter"
-            ),
-            tags$button(
-              id = "resetNetworkBtn",
-              class = "network-tool-button",
-              type = "button",
-              "Reset layout"
-            )
-          )
-        ),
-
-        tags$div(
-          class = "network-note",
-          tags$span(HTML("<span class='legend-dot' style='background:#2F6FDB'></span>Democrat")),
-          tags$span(HTML("<span class='legend-dot' style='background:#D64B4B'></span>Republican")),
-          tags$span(HTML("<span class='legend-dot' style='background:#D9A928'></span>Stock")),
-          tags$span(HTML("<span class='legend-box' style='background:#667A70'></span>Committee")),
-          tags$span(HTML("<span class='legend-box-sub' style='background:#A8B7AE'></span>Subcommittee")),
-          tags$span(
-            paste0(
-              "Opening filter: stocks purchased by ≥ ",
-              min_politicians_per_stock,
-              " politicians"
-            )
-          ),
-          tags$span("Party-colored purchase lines: drag a node and watch the network re-settle"),
-          committee_status_html
-        ),
-        tags$div(
-          id = "stockView",
-          class = paste(
-            "network-view",
-            if (default_view == "stock") "active" else ""
-          ),
-          stock_widget
-        ),
-        tags$div(
-          id = "committeeView",
-          class = paste(
-            "network-view",
-            if (default_view == "committee") "active" else ""
-          ),
-          committee_view_content
-        ),
-        tags$div(
-          id = "subcommitteeView",
-          class = paste(
-            "network-view",
-            if (default_view == "full") "active" else ""
-          ),
-          subcommittee_view_content
         )
       ),
 
