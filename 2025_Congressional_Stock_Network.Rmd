@@ -66,9 +66,7 @@ min_politicians_per_stock <- 2
 
 # Optional manual filename overrides. Leave NA to auto-detect files
 # in the same folder as this Rmd.
-ptr_file_override <- "PTR_transactions_GEOMETRY_V8_2_2021_2026.csv"
-legislators_current_file_override <- "legislators-current.csv"
-legislators_historical_file_override <- "legislators-historical.csv"
+ptr_file_override <- "PTR_transactions_2025_ACCEPTED_STOCK_PURCHASES.csv"
 
 # Committee provenance and transaction-date matching for this project.
 #
@@ -649,7 +647,7 @@ if (!is.na(ptr_file_override)) {
     stop(
       paste0(
         "No PTR_transactions CSV was found in the same folder as this R Markdown file.\n",
-        "Put the V8.2 PTR CSV beside the Rmd, or set ptr_file_override near the top."
+        "Put the 2025 accepted-stock-purchase analysis extract beside the Rmd, or set ptr_file_override near the top."
       )
     )
   }
@@ -685,7 +683,7 @@ if (!is.na(ptr_file_override)) {
       paste0(
         "PTR CSV files were found, but none contains the V8.2 fields required by this project.",
         paste(candidate_report, collapse = ""),
-        "\n\nUse the V8.2 file (for example PTR_transactions_GEOMETRY_V8_2_...) ",
+        "\n\nUse the frozen 2025 accepted-stock-purchase analysis extract ",
         "or set ptr_file_override near the top of the Rmd."
       )
     )
@@ -743,32 +741,10 @@ if (!is.na(committee_file_override)) {
 
 has_committee_file <- !is.na(committee_file) && file.exists(committee_file)
 
-# Party colors come from the legislator rosters, NOT the committee file.
-# The committee-membership file's `party` column is majority/minority status.
-find_optional_csv <- function(override, pattern) {
-  if (!is.na(override)) {
-    if (!file.exists(override)) stop(paste("File not found:", override))
-    return(override)
-  }
-
-  matches <- list.files(pattern = pattern, ignore.case = TRUE)
-  if (length(matches) == 0) return(NA_character_)
-  matches[1]
-}
-
-legislators_current_file <- find_optional_csv(
-  legislators_current_file_override,
-  "^legislators-current.*\\.csv$"
-)
-
-legislators_historical_file <- find_optional_csv(
-  legislators_historical_file_override,
-  "^legislators-historical.*\\.csv$"
-)
-
-has_legislator_file <-
-  (!is.na(legislators_current_file) && file.exists(legislators_current_file)) ||
-  (!is.na(legislators_historical_file) && file.exists(legislators_historical_file))
+# Party colors come from the pinned 119th-Congress legislator roster,
+# NOT the committee-membership file. The committee source's `party` field
+# represents majority/minority status rather than Democrat/Republican.
+has_legislator_file <- file.exists(house_roster_2025_cache_file)
 
 # ============================================================
 # HELPERS
@@ -1013,57 +989,30 @@ committee_edges <- tibble(
 )
 
 # ============================================================
-# PARTY LOOKUP FROM LEGISLATOR ROSTERS
+# PARTY LOOKUP FROM PINNED 119TH-CONGRESS ROSTER
 # ============================================================
-# This is intentionally separate from committee membership. The
-# committee CSV labels members as majority/minority, not D/R.
-legislator_roster <- tibble(
-  full_name = character(),
-  bioguide_id = character(),
-  party = character(),
-  roster_priority = integer()
-)
-
-if (!is.na(legislators_current_file) && file.exists(legislators_current_file)) {
-  current_roster <- readr::read_csv(
-    legislators_current_file,
+# The setup section builds house_roster_2025_cache_file directly from exact
+# unitedstates/congress-legislators source files. Reusing that same pinned
+# roster here avoids maintaining duplicate legislator CSVs in this repository.
+legislator_roster <- if (file.exists(house_roster_2025_cache_file)) {
+  readr::read_csv(
+    house_roster_2025_cache_file,
     show_col_types = FALSE,
     progress = FALSE
-  )
-
-  if (all(c("full_name", "bioguide_id", "party") %in% names(current_roster))) {
-    legislator_roster <- bind_rows(
-      legislator_roster,
-      current_roster %>%
-        transmute(
-          full_name = as.character(full_name),
-          bioguide_id = as.character(bioguide_id),
-          party = normalize_party(party),
-          roster_priority = 1L
-        )
+  ) %>%
+    transmute(
+      full_name = as.character(full_name),
+      bioguide_id = as.character(bioguide),
+      party = normalize_party(party),
+      roster_priority = 1L
     )
-  }
-}
-
-if (!is.na(legislators_historical_file) && file.exists(legislators_historical_file)) {
-  historical_roster <- readr::read_csv(
-    legislators_historical_file,
-    show_col_types = FALSE,
-    progress = FALSE
+} else {
+  tibble(
+    full_name = character(),
+    bioguide_id = character(),
+    party = character(),
+    roster_priority = integer()
   )
-
-  if (all(c("full_name", "bioguide_id", "party") %in% names(historical_roster))) {
-    legislator_roster <- bind_rows(
-      legislator_roster,
-      historical_roster %>%
-        transmute(
-          full_name = as.character(full_name),
-          bioguide_id = as.character(bioguide_id),
-          party = normalize_party(party),
-          roster_priority = 2L
-        )
-    )
-  }
 }
 
 legislator_party_by_name <- legislator_roster %>%
