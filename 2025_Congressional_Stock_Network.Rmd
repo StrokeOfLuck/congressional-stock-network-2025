@@ -3788,6 +3788,9 @@ body.embed-mode.explore-locked .network-card {
 }
 
 body.embed-mode.explore-locked .network-view.active {
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 100%;
 }
 
@@ -5508,7 +5511,7 @@ body.network-focus-mode .stock-detail-drawer {
 }
 
 .graph-legend {
-  top: 76px;
+  top: 90px;
   left: 16px;
   right: auto;
   bottom: auto;
@@ -5598,7 +5601,7 @@ body.network-focus-mode .graph-layer-panel {
 
 body.embed-mode .graph-legend,
 body.network-focus-mode .graph-legend {
-  top: 74px;
+  top: 88px;
   left: 14px;
   bottom: auto;
   max-width: 245px;
@@ -5622,7 +5625,7 @@ body.network-focus-mode .network-tool-actions.graph-tool-panel {
   .graph-legend,
   body.embed-mode .graph-legend,
   body.network-focus-mode .graph-legend {
-    top: 128px;
+    top: 134px;
     left: 14px;
   }
 }
@@ -6922,6 +6925,8 @@ visPhysics(
           currentDetail = null;
           updateDetailChrome();
 
+          window.setTimeout(recenterActiveNetwork, 120);
+
           if (!suppressUrl) updateShareUrl();
         }
 
@@ -7080,6 +7085,7 @@ visPhysics(
         function recenterActiveNetwork() {
           withActiveNetwork(function(network) {
             try {
+              network.redraw();
               network.fit({
                 animation: {
                   duration: 450,
@@ -7089,6 +7095,22 @@ visPhysics(
             } catch (error) {}
           });
         }
+
+        let resizeFitTimer = null;
+
+        function fitNetworkAfterViewportResize() {
+          window.clearTimeout(resizeFitTimer);
+          resizeFitTimer = window.setTimeout(function() {
+            withActiveNetwork(function(network) {
+              try {
+                network.redraw();
+                network.fit({animation: false});
+              } catch (error) {}
+            });
+          }, 140);
+        }
+
+        window.addEventListener('resize', fitNetworkAfterViewportResize);
 
         function resetActiveNetwork() {
           const viewKey = getActiveViewKey();
