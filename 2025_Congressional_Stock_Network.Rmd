@@ -3562,7 +3562,7 @@ make_network <- function(
       )
     ) %>%
     visInteraction(
-      navigationButtons = TRUE,
+      navigationButtons = FALSE,
       keyboard = TRUE,
       zoomView = TRUE,
       dragView = TRUE,
@@ -5401,6 +5401,228 @@ body.network-focus-mode .stock-detail-drawer {
   }
 }
 
+/* Final graph-control layout:
+   search top-left, layer choices below it, vertical legend on the left,
+   and zoom/recenter/reset/full-screen controls at bottom-right. */
+.network-toolbar.graph-search-panel {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: auto;
+  width: min(520px, calc(100% - 32px));
+  transform: none;
+  z-index: 4300;
+  display: block;
+  padding: 8px;
+  overflow: visible;
+  border: 1px solid rgba(205,210,216,.9);
+  border-radius: 14px;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 7px 22px rgba(24,31,39,.11);
+  backdrop-filter: blur(10px);
+}
+
+.network-toolbar.graph-search-panel .network-search-wrap {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+.graph-layer-panel {
+  position: absolute;
+  top: 76px;
+  left: 16px;
+  z-index: 4250;
+  display: flex;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  box-sizing: border-box;
+  gap: 6px;
+  padding: 7px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border: 1px solid rgba(205,210,216,.9);
+  border-radius: 14px;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 6px 18px rgba(24,31,39,.10);
+  backdrop-filter: blur(9px);
+}
+
+.graph-layer-panel::-webkit-scrollbar {
+  display: none;
+}
+
+.graph-layer-panel .view-button {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  font-size: 11px;
+}
+
+.graph-legend {
+  top: 130px;
+  left: 16px;
+  right: auto;
+  bottom: auto;
+  display: flex;
+  width: auto;
+  max-width: 245px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 10px 11px;
+  font-size: 10.5px;
+}
+
+.graph-legend-title {
+  margin-bottom: 1px;
+  color: #3f454d;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.graph-legend > span {
+  display: flex;
+  align-items: center;
+}
+
+.graph-legend .graph-filter-note {
+  display: block;
+  margin-top: 3px;
+  padding-top: 7px;
+  border-top: 1px solid #e4e7ea;
+  line-height: 1.35;
+}
+
+.network-tool-actions.graph-tool-panel {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 4300;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  flex-wrap: nowrap;
+  border: 1px solid rgba(205,210,216,.9);
+  border-radius: 999px;
+  background: rgba(255,255,255,.93);
+  box-shadow: 0 7px 22px rgba(24,31,39,.12);
+  backdrop-filter: blur(10px);
+}
+
+.graph-tool-panel .network-tool-button {
+  padding: 7px 10px;
+  font-size: 11px;
+}
+
+.graph-tool-panel .graph-zoom-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 30px;
+  padding: 0;
+  font-size: 19px;
+  line-height: 1;
+  font-weight: 500;
+}
+
+body.embed-mode .network-toolbar.graph-search-panel,
+body.network-focus-mode .network-toolbar.graph-search-panel {
+  top: 14px;
+  left: 14px;
+  right: auto;
+  width: min(520px, calc(100% - 28px));
+  transform: none;
+}
+
+body.embed-mode .graph-layer-panel,
+body.network-focus-mode .graph-layer-panel {
+  top: 74px;
+  left: 14px;
+}
+
+body.embed-mode .graph-legend,
+body.network-focus-mode .graph-legend {
+  top: 128px;
+  left: 14px;
+  bottom: auto;
+  max-width: 245px;
+}
+
+body.embed-mode .network-tool-actions.graph-tool-panel,
+body.network-focus-mode .network-tool-actions.graph-tool-panel {
+  right: 14px;
+  bottom: 14px;
+}
+
+@media (max-width: 700px) {
+  .network-toolbar.graph-search-panel,
+  body.embed-mode .network-toolbar.graph-search-panel,
+  body.network-focus-mode .network-toolbar.graph-search-panel {
+    top: 8px;
+    left: 8px;
+    right: auto;
+    width: calc(100% - 16px);
+    transform: none;
+    padding: 6px;
+  }
+
+  .graph-layer-panel,
+  body.embed-mode .graph-layer-panel,
+  body.network-focus-mode .graph-layer-panel {
+    top: 66px;
+    left: 8px;
+    max-width: calc(100% - 16px);
+    padding: 5px;
+  }
+
+  .graph-layer-panel .view-button {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .graph-legend,
+  body.embed-mode .graph-legend,
+  body.network-focus-mode .graph-legend {
+    top: 114px;
+    left: 8px;
+    max-width: 205px;
+    padding: 8px 9px;
+    font-size: 9.5px;
+  }
+
+  .network-tool-actions.graph-tool-panel,
+  body.embed-mode .network-tool-actions.graph-tool-panel,
+  body.network-focus-mode .network-tool-actions.graph-tool-panel {
+    right: 8px;
+    bottom: 8px;
+    max-width: calc(100% - 16px);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .network-tool-actions.graph-tool-panel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .graph-tool-panel .network-tool-button {
+    flex: 0 0 auto;
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .graph-tool-panel .graph-zoom-button {
+    width: 29px;
+    height: 28px;
+    font-size: 18px;
+  }
+}
+
 </style>
 
 ```{r app, echo=FALSE}
@@ -5509,7 +5731,7 @@ page <- tags$div(
         class = "network-card",
 
         tags$div(
-          class = "network-toolbar",
+          class = "network-toolbar graph-search-panel",
           tags$div(
             class = "network-search-wrap",
             tags$input(
@@ -5532,61 +5754,80 @@ page <- tags$div(
               class = "network-search-results",
               `aria-live` = "polite"
             )
+          )
+        ),
+
+        tags$div(
+          class = "view-toggle network-view-toggle graph-layer-panel",
+          tags$button(
+            id = "subcommitteeBtn",
+            class = paste(
+              "view-button",
+              if (default_view == "full") "active" else ""
+            ),
+            disabled = if (!has_committee_file || nrow(subcommittee_edges) == 0) "disabled" else NULL,
+            "Stocks + committees + subcommittees"
           ),
-          tags$div(
-            class = "view-toggle network-view-toggle",
-            tags$button(
-              id = "subcommitteeBtn",
-              class = paste(
-                "view-button",
-                if (default_view == "full") "active" else ""
-              ),
-              disabled = if (!has_committee_file || nrow(subcommittee_edges) == 0) "disabled" else NULL,
-              "Stocks + committees + subcommittees"
+          tags$button(
+            id = "committeeBtn",
+            class = paste(
+              "view-button",
+              if (default_view == "committee") "active" else ""
             ),
-            tags$button(
-              id = "committeeBtn",
-              class = paste(
-                "view-button",
-                if (default_view == "committee") "active" else ""
-              ),
-              disabled = if (!has_committee_file || nrow(committee_edges) == 0) "disabled" else NULL,
-              "Stocks + committees only"
-            ),
-            tags$button(
-              id = "stockOnlyBtn",
-              class = paste(
-                "view-button",
-                if (default_view == "stock") "active" else ""
-              ),
-              "Stocks only"
-            )
+            disabled = if (!has_committee_file || nrow(committee_edges) == 0) "disabled" else NULL,
+            "Stocks + committees only"
           ),
-          tags$div(
-            class = "network-tool-actions",
-            tags$button(
-              id = "recenterNetworkBtn",
-              class = "network-tool-button",
-              type = "button",
-              "Recenter"
+          tags$button(
+            id = "stockOnlyBtn",
+            class = paste(
+              "view-button",
+              if (default_view == "stock") "active" else ""
             ),
-            tags$button(
-              id = "resetNetworkBtn",
-              class = "network-tool-button",
-              type = "button",
-              "Reset"
-            ),
-            tags$button(
-              id = "expandNetworkBtn",
-              class = "network-tool-button",
-              type = "button",
-              "Full screen"
-            )
+            "Stocks only"
+          )
+        ),
+
+        tags$div(
+          class = "network-tool-actions graph-tool-panel",
+          tags$button(
+            id = "zoomOutNetworkBtn",
+            class = "network-tool-button graph-zoom-button",
+            type = "button",
+            `aria-label` = "Zoom out",
+            title = "Zoom out",
+            HTML("&minus;")
+          ),
+          tags$button(
+            id = "zoomInNetworkBtn",
+            class = "network-tool-button graph-zoom-button",
+            type = "button",
+            `aria-label` = "Zoom in",
+            title = "Zoom in",
+            "+"
+          ),
+          tags$button(
+            id = "recenterNetworkBtn",
+            class = "network-tool-button",
+            type = "button",
+            "Recenter"
+          ),
+          tags$button(
+            id = "resetNetworkBtn",
+            class = "network-tool-button",
+            type = "button",
+            "Reset"
+          ),
+          tags$button(
+            id = "expandNetworkBtn",
+            class = "network-tool-button",
+            type = "button",
+            "Full screen"
           )
         ),
 
         tags$div(
           class = "graph-legend",
+          tags$div(class = "graph-legend-title", "Legend"),
           tags$span(HTML("<span class='legend-dot' style='background:#2F6FDB'></span>Democrat")),
           tags$span(HTML("<span class='legend-dot' style='background:#D64B4B'></span>Republican")),
           tags$span(HTML("<span class='legend-dot' style='background:#D9A928'></span>Stock")),
@@ -6282,6 +6523,8 @@ visPhysics(
         const networkSearchInput = document.getElementById('networkSearchInput');
         const networkSearchClear = document.getElementById('networkSearchClear');
         const networkSearchResults = document.getElementById('networkSearchResults');
+        const zoomOutNetworkBtn = document.getElementById('zoomOutNetworkBtn');
+        const zoomInNetworkBtn = document.getElementById('zoomInNetworkBtn');
         const recenterNetworkBtn = document.getElementById('recenterNetworkBtn');
         const resetNetworkBtn = document.getElementById('resetNetworkBtn');
         const expandNetworkBtn = document.getElementById('expandNetworkBtn');
@@ -6732,6 +6975,28 @@ visPhysics(
             } catch (error) {
               // Search still opens the detail drawer even if focusing fails.
             }
+          });
+        }
+
+        function zoomActiveNetwork(multiplier) {
+          withActiveNetwork(function(network) {
+            try {
+              const currentScale = network.getScale();
+              const currentPosition = network.getViewPosition();
+              const nextScale = Math.max(
+                0.08,
+                Math.min(5, currentScale * multiplier)
+              );
+
+              network.moveTo({
+                position: currentPosition,
+                scale: nextScale,
+                animation: {
+                  duration: 180,
+                  easingFunction: 'easeInOutQuad'
+                }
+              });
+            } catch (error) {}
           });
         }
 
@@ -7373,6 +7638,20 @@ visPhysics(
         document.addEventListener(
           'webkitfullscreenchange',
           syncGraphFocusState
+        );
+
+        zoomOutNetworkBtn.addEventListener(
+          'click',
+          function() {
+            zoomActiveNetwork(0.8);
+          }
+        );
+
+        zoomInNetworkBtn.addEventListener(
+          'click',
+          function() {
+            zoomActiveNetwork(1.25);
+          }
         );
 
         recenterNetworkBtn.addEventListener(
