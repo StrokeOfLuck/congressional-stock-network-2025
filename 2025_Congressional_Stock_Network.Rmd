@@ -6867,6 +6867,36 @@ visPhysics(
         window.clearInstitutionFocusForNetwork = function(network) {
           if (!network || !network.__institutionFocus) return;
 
+          const previousFocus = network.__institutionFocus;
+          const dataSet =
+            network.body &&
+            network.body.data &&
+            network.body.data.nodes;
+
+          // Put previously forced-yellow stocks back under visNetwork's normal
+          // selection/fade styling before the next graph selection is handled.
+          (previousFocus.tickerNodeIds || []).forEach(function(nodeId) {
+            try {
+              const bodyNode =
+                network.body &&
+                network.body.nodes &&
+                network.body.nodes[nodeId];
+              const node = dataSet && dataSet.get(nodeId);
+
+              if (!bodyNode || !node) return;
+
+              if (node.color !== undefined) {
+                bodyNode.options.color = node.color;
+              }
+              if (node.font !== undefined) {
+                bodyNode.options.font = node.font;
+              }
+              if (node.label !== undefined) {
+                bodyNode.options.label = node.label;
+              }
+            } catch (error) {}
+          });
+
           network.__institutionFocus = null;
 
           try {
@@ -6874,7 +6904,7 @@ visPhysics(
           } catch (error) {}
         };
 
-        function restoreNativeStockAppearance(network, nodeId) {
+        function forceNativeStockAppearance(network, nodeId) {
           try {
             const dataSet =
               network.body &&
@@ -6891,27 +6921,40 @@ visPhysics(
             const node = dataSet.get(nodeId);
             if (!node) return;
 
-            // visNetwork's nearest-neighbor highlight temporarily stores the
-            // node's real color/label before fading it. Restore only this stock
-            // node to its native yellow appearance without selecting it.
-            if (node.bodyHiddenColor !== undefined) {
-              bodyNode.options.color = node.bodyHiddenColor;
-            }
+            // Do not select the stock node. Just make this one node look exactly
+            // like an ordinary Stock node while the rest of the graph remains
+            // under the committee selection's normal fade behavior.
+            bodyNode.options.color = {
+              background: '#D6B54A',
+              border: '#9A7B1D',
+              highlight: {
+                background: '#E4C65C',
+                border: '#5F4B12'
+              },
+              hover: {
+                background: '#DFC056',
+                border: '#7A6117'
+              }
+            };
 
-            if (node.hiddenColor !== undefined) {
-              node.color = node.hiddenColor;
-              node.hiddenColor = undefined;
-            } else if (node.group !== undefined) {
-              node.color = undefined;
-            }
+            bodyNode.options.font = {
+              color: '#5F4B12',
+              face: 'Arial',
+              size: 13,
+              strokeWidth: 2,
+              strokeColor: '#FFFFFF'
+            };
 
-            if (node.hiddenLabel !== undefined) {
-              node.label = node.hiddenLabel;
-              node.hiddenLabel = undefined;
-            }
+            bodyNode.options.borderWidth = 1.5;
 
-            node.isHardToRead = false;
-            dataSet.update(node);
+            const nativeLabel =
+              node.hiddenLabel !== undefined
+                ? node.hiddenLabel
+                : node.label;
+
+            if (nativeLabel !== undefined) {
+              bodyNode.options.label = nativeLabel;
+            }
           } catch (error) {}
         }
 
@@ -6940,7 +6983,7 @@ visPhysics(
               // styling: normal yellow node and normal label, no ring/glow and
               // no extra selected-neighbor behavior.
               focus.tickerNodeIds.forEach(function(nodeId) {
-                restoreNativeStockAppearance(network, nodeId);
+                forceNativeStockAppearance(network, nodeId);
               });
 
               network.redraw();
