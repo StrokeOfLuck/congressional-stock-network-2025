@@ -2335,7 +2335,7 @@ build_committee_detail_html <- function(committee_id_value) {
     "<div class='shared-stock-explainer'>",
       "A purchase appears here only when this member appeared on the committee in the membership snapshot selected for that transaction date. ",
       "Jan. 1-2 transactions use the Dec. 17, 2024 118th-Congress snapshot; Jan. 3-20 use the Jan. 21, 2025 first usable 119th-Congress House snapshot; Jan. 21 onward uses the latest available snapshot on or before the transaction date. ",
-      "Member names are sorted by purchase-record count for the ticker. While this committee or subcommittee is selected, its matched members stay emphasized and stocks bought by 2+ matched members are marked with a bright yellow ring in the graph.",
+      "Member names are sorted by purchase-record count for the ticker. While this committee or subcommittee is selected, its matched members stay emphasized and stocks bought by 2+ matched members remain in their normal yellow stock style in the graph.",
     "</div>",
     "<div class='shared-stock-list'>",
       shared_within_committee_html,
@@ -2543,7 +2543,7 @@ build_subcommittee_detail_html <- function(subcommittee_id_value) {
     "<div class='shared-stock-explainer'>",
       "A purchase appears here only when this member appeared on the subcommittee in the membership snapshot selected for that transaction date. ",
       "Jan. 1-2 transactions use the Dec. 17, 2024 118th-Congress snapshot; Jan. 3-20 use the Jan. 21, 2025 first usable 119th-Congress House snapshot; Jan. 21 onward uses the latest available snapshot on or before the transaction date. ",
-      "Member names are sorted by purchase-record count for the ticker. While this committee or subcommittee is selected, its matched members stay emphasized and stocks bought by 2+ matched members are marked with a bright yellow ring in the graph.",
+      "Member names are sorted by purchase-record count for the ticker. While this committee or subcommittee is selected, its matched members stay emphasized and stocks bought by 2+ matched members remain in their normal yellow stock style in the graph.",
     "</div>",
     "<div class='shared-stock-list'>",
       shared_within_committee_html,
@@ -3610,7 +3610,6 @@ make_network <- function(
       # Save a reference to each network so the custom search/reset controls
       # can focus, recenter, and restore its original stabilized layout.
       beforeDrawing = register_network_event,
-      afterDrawing = "function(ctx) { if (window.drawInstitutionStockHighlights) { window.drawInstitutionStockHighlights(this, ctx); } }",
 
       # After the initial layout settles, store the exact starting positions,
       # then stop continuous physics calculations for better performance.
@@ -6875,56 +6874,46 @@ visPhysics(
           } catch (error) {}
         };
 
-        window.drawInstitutionStockHighlights = function(network, ctx) {
-          const focus =
-            network && network.__institutionFocus;
+        function restoreNativeStockAppearance(network, nodeId) {
+          try {
+            const dataSet =
+              network.body &&
+              network.body.data &&
+              network.body.data.nodes;
 
-          if (
-            !focus ||
-            !focus.tickerNodeIds ||
-            focus.tickerNodeIds.length === 0
-          ) {
-            return;
-          }
+            const bodyNode =
+              network.body &&
+              network.body.nodes &&
+              network.body.nodes[nodeId];
 
-          const scale = Math.max(
-            0.05,
-            Number(network.getScale()) || 1
-          );
+            if (!dataSet || !bodyNode) return;
 
-          ctx.save();
-          ctx.strokeStyle = '#F0C94A';
-          ctx.lineWidth = 4 / scale;
-          ctx.shadowColor = 'rgba(214, 181, 74, 0.55)';
-          ctx.shadowBlur = 10 / scale;
+            const node = dataSet.get(nodeId);
+            if (!node) return;
 
-          focus.tickerNodeIds.forEach(function(nodeId) {
-            try {
-              const box = network.getBoundingBox(nodeId);
+            // visNetwork's nearest-neighbor highlight temporarily stores the
+            // node's real color/label before fading it. Restore only this stock
+            // node to its native yellow appearance without selecting it.
+            if (node.bodyHiddenColor !== undefined) {
+              bodyNode.options.color = node.bodyHiddenColor;
+            }
 
-              if (!box) return;
+            if (node.hiddenColor !== undefined) {
+              node.color = node.hiddenColor;
+              node.hiddenColor = undefined;
+            } else if (node.group !== undefined) {
+              node.color = undefined;
+            }
 
-              const x = (box.left + box.right) / 2;
-              const y = (box.top + box.bottom) / 2;
-              const radius = Math.max(
-                box.right - box.left,
-                box.bottom - box.top
-              ) / 2 + (5 / scale);
+            if (node.hiddenLabel !== undefined) {
+              node.label = node.hiddenLabel;
+              node.hiddenLabel = undefined;
+            }
 
-              ctx.beginPath();
-              ctx.arc(
-                x,
-                y,
-                radius,
-                0,
-                Math.PI * 2
-              );
-              ctx.stroke();
-            } catch (error) {}
-          });
-
-          ctx.restore();
-        };
+            node.isHardToRead = false;
+            dataSet.update(node);
+          } catch (error) {}
+        }
 
         function highlightInstitutionSharedStocks(type, id, html) {
           const focus = institutionFocusFromHtml(html);
@@ -6938,9 +6927,8 @@ visPhysics(
             try {
               window.clearInstitutionFocusForNetwork(network);
 
-              // Select ONLY the committee/subcommittee. This keeps the normal
-              // nearest-neighbor fade scoped to its members instead of
-              // expanding through shared stock nodes to unrelated buyers.
+              // Select ONLY the committee/subcommittee so unrelated House-wide
+              // buyers stay faded.
               network.selectNodes(
                 [institutionNodeId],
                 false
@@ -6948,9 +6936,13 @@ visPhysics(
 
               network.__institutionFocus = focus;
 
-              // Shared stocks stay OUT of the selection set so unrelated
-              // House-wide buyers remain faded. A dedicated yellow ring is
-              // drawn around the committee-specific shared stock nodes.
+              // Shared committee stocks simply retain their ordinary Stock
+              // styling: normal yellow node and normal label, no ring/glow and
+              // no extra selected-neighbor behavior.
+              focus.tickerNodeIds.forEach(function(nodeId) {
+                restoreNativeStockAppearance(network, nodeId);
+              });
+
               network.redraw();
             } catch (error) {}
           });
