@@ -3717,7 +3717,7 @@ body.embed-mode .network-tool-button {
   padding: 9px 12px;
 }
 
-body.embed-mode .network-note {
+body.embed-mode .graph-legend {
   left: 10px;
   bottom: 10px;
   max-width: calc(100% - 20px);
@@ -3819,11 +3819,6 @@ body.embed-mode .stock-detail-drawer {
 
   body.embed-mode .network-search-input {
     font-size: 16px;
-  }
-
-  body.embed-mode .network-note {
-    font-size: 12px;
-    padding: 10px 12px;
   }
 
   body.embed-mode .coverage-grid {
@@ -4315,7 +4310,7 @@ body.embed-mode .stock-detail-drawer {
   overflow: hidden;
 }
 
-.network-note {
+.graph-legend {
   position: absolute;
   left: 12px;
   bottom: 12px;
@@ -4340,15 +4335,13 @@ body.embed-mode .stock-detail-drawer {
   transition: opacity .16s ease;
 }
 
-.network-note:hover {
+.graph-legend:hover {
   opacity: 1;
 }
 
-/* Keep only the actual visual key plus the opening 2+ politician display rule
-   in the floating legend. Long provenance/interaction notes remain documented
-   in About and Methodology instead of covering the network. */
-.network-note > span:nth-child(n+7) {
-  display: none;
+.graph-filter-note {
+  font-weight: 700;
+  color: #4f565f;
 }
 
 .legend-dot {
@@ -4435,23 +4428,11 @@ body.network-focus-mode .network-toolbar {
   right: 12px;
 }
 
-body.network-focus-mode .network-note {
+body.network-focus-mode .graph-legend {
   left: 12px;
   bottom: 12px;
   padding: 8px 10px;
   font-size: 11px;
-  white-space: normal;
-  overflow: visible;
-}
-
-body.network-focus-mode .network-note::-webkit-scrollbar {
-  display: none;
-}
-
-/* Keep the color legend + opening 2+ politician filter in full-screen mode.
-   Hide the longer drag/provenance notes so the graph gets the space. */
-body.network-focus-mode .network-note > span:nth-child(n+7) {
-  display: none;
 }
 
 body.network-focus-mode .network-view.active {
@@ -5391,7 +5372,7 @@ body.network-focus-mode .stock-detail-drawer {
     padding: 6px 7px;
   }
 
-  .network-note {
+  .graph-legend {
     left: 8px;
     bottom: 8px;
     max-width: calc(100% - 16px);
@@ -5400,9 +5381,9 @@ body.network-focus-mode .stock-detail-drawer {
     font-size: 9.5px;
   }
 
-  .network-note .legend-dot,
-  .network-note .legend-box,
-  .network-note .legend-box-sub {
+  .graph-legend .legend-dot,
+  .graph-legend .legend-box,
+  .graph-legend .legend-box-sub {
     transform: scale(.88);
     transform-origin: center;
   }
@@ -5593,21 +5574,20 @@ page <- tags$div(
         ),
 
         tags$div(
-          class = "network-note",
+          class = "graph-legend",
           tags$span(HTML("<span class='legend-dot' style='background:#2F6FDB'></span>Democrat")),
           tags$span(HTML("<span class='legend-dot' style='background:#D64B4B'></span>Republican")),
           tags$span(HTML("<span class='legend-dot' style='background:#D9A928'></span>Stock")),
           tags$span(HTML("<span class='legend-box' style='background:#667A70'></span>Committee")),
           tags$span(HTML("<span class='legend-box-sub' style='background:#A8B7AE'></span>Subcommittee")),
           tags$span(
+            class = "graph-filter-note",
             paste0(
               "Opening view: stocks purchased by ≥ ",
               min_politicians_per_stock,
               " politicians"
             )
-          ),
-          tags$span("Party-colored purchase lines: drag a node and watch the network re-settle"),
-          committee_status_html
+          )
         ),
         tags$div(
           id = "stockView",
@@ -5923,7 +5903,23 @@ page <- tags$div(
 
       tags$h2("How to read it"),
       tags$p(
-        "The Stocks + committees + subcommittees view loads first. It uses a live collision-aware force-directed layout with politicians, shared stocks, full committees, and subcommittees in one graph. Connected nodes pull toward one another while nodes repel each other and try not to overlap. Dragging a node disturbs the network and lets it settle again. The graph itself stays filtered to stocks shared by at least two politicians. When a committee or subcommittee is selected, its drawer identifies shared stocks among members, shows the members with accepted 2025 public-stock purchases, and then lists the remaining time-aware snapshot history members below them."
+        "The Stocks + committees + subcommittees view loads first. It uses a live collision-aware force-directed layout with politicians, shared stocks, full committees, and subcommittees in one graph. Connected nodes pull toward one another while nodes repel each other and try not to overlap. Dragging a node disturbs the network and lets it settle again. Purchase lines inherit the politician's party color. The graph itself stays filtered to stocks shared by at least two politicians. When a committee or subcommittee is selected, its drawer identifies shared stocks among members, shows the members with accepted 2025 public-stock purchases, and then lists the remaining time-aware snapshot history members below them."
+      ),
+      tags$div(
+        class = "method-note",
+        HTML(
+          paste0(
+            "<b>Committee layer provenance:</b> the institutional edges use time-aware 2025 House membership snapshots from ",
+            "<a href='", htmlEscape(committee_source_repo),
+            "' target='_blank' rel='noopener'>unitedstates/congress-legislators</a>",
+            ", with ", nrow(committee_snapshot_index),
+            " pinned source snapshots from ",
+            format(first_source_snapshot_date, "%b %d, %Y"),
+            " through ",
+            format(last_committee_snapshot_date, "%b %d, %Y"),
+            "."
+          )
+        )
       ),
 
       tags$h2("How the committee date matching works"),
