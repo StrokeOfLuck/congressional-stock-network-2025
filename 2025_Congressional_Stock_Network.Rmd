@@ -7395,6 +7395,21 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
         if (embedMode) {
           showExplore();
 
+          window.addEventListener('message', function(event) {
+            if (event.origin !== window.location.origin) return;
+            if (!event.data || event.data.type !== 'congress-network-navigate') return;
+
+            if (event.data.page === 'explore') {
+              showExplore();
+            } else if (event.data.page === 'about') {
+              showAbout();
+            } else if (event.data.page === 'methodology') {
+              showCode();
+            } else if (event.data.page === 'class') {
+              showClass();
+            }
+          });
+
           window.setTimeout(function() {
             recenterActiveNetwork();
           }, 700);
