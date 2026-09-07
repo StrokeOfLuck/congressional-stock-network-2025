@@ -3815,20 +3815,49 @@ body.embed-mode .stock-detail-drawer {
   position: sticky;
   top: 0;
   z-index: 1000;
-  height: 66px;
+  min-height: 66px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 30px;
+  padding: 10px 30px;
   background: rgba(255,255,255,0.96);
   border-bottom: 1px solid #e1e4e8;
   backdrop-filter: blur(10px);
+}
+
+.brand-block {
+  min-width: 0;
 }
 
 .brand {
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.02em;
+}
+
+.brand-home {
+  display: block;
+  max-width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #17191c;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.brand-home:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.brand-subtitle {
+  margin-top: 2px;
+  max-width: 760px;
+  color: #6b7178;
+  font-size: 11px;
+  line-height: 1.35;
 }
 
 .nav-actions {
@@ -5238,11 +5267,17 @@ body.network-focus-mode .stock-detail-drawer {
   }
 
   .topbar {
-    padding: 0 15px;
+    padding: 10px 15px;
+    gap: 12px;
   }
 
   .brand {
     font-size: 14px;
+  }
+
+  .brand-subtitle {
+    max-width: 460px;
+    font-size: 10px;
   }
 
   .explore-wrap {
@@ -5332,10 +5367,21 @@ page <- tags$div(
 
   tags$div(
     class = "topbar",
-    tags$div(class = "brand", "2025 Congressional Stock Trading Networks"),
+    tags$div(
+      class = "brand-block",
+      tags$button(
+        id = "navExplore",
+        class = "brand brand-home",
+        type = "button",
+        "2025 Congressional Stock Trading Networks"
+      ),
+      tags$div(
+        class = "brand-subtitle",
+        "Explore reported 2025 House stock purchases across politicians, companies, committees, and subcommittees."
+      )
+    ),
     tags$div(
       class = "nav-actions",
-      tags$button(id = "navExplore", class = "nav-button active", "Explore"),
       tags$button(id = "navAbout", class = "nav-button", "About"),
       tags$button(id = "navCode", class = "nav-button", "Methodology"),
       tags$button(id = "navClass", class = "nav-button", "Class Report")
