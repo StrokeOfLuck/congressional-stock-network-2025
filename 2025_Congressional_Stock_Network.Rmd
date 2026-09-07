@@ -2993,6 +2993,9 @@ build_person_coverage_html <- function(bioguide_value) {
     paste0(
       "<div class='network-status shared'>",
       "Included in the main shared-stock network",
+      "</div>",
+      "<div class='network-status-note'>",
+      "This politician bought at least one stock that was also bought by another politician in the main graph.",
       "</div>"
     )
   }
@@ -3023,7 +3026,18 @@ build_person_coverage_html <- function(bioguide_value) {
         p$coverage_status
       ),
     "</div>",
-    "<div class='detail-stat-grid institution-stat-grid'>",
+    "<div class='person-color-key'>",
+      "<div class='person-color-key-title'>Color key</div>",
+      "<div class='person-color-key-items'>",
+        "<span class='person-key-item'><span class='party-dot dem'></span>Democrat</span>",
+        "<span class='person-key-item'><span class='party-dot rep'></span>Republican</span>",
+        "<span class='person-key-item'><span class='person-key-pill stock'></span>Stock purchase</span>",
+        "<span class='person-key-item'><span class='person-key-pill committee'></span>Committee</span>",
+        "<span class='person-key-item'><span class='person-key-pill subcommittee'></span>Subcommittee</span>",
+      "</div>",
+      "<div class='person-color-key-note'>A dashed gold ticker is an accepted purchase that is hidden from the main graph because that ticker did not pass the 2+ politician display filter.</div>",
+    "</div>",
+    "<div class='detail-stat-grid institution-stat-grid'>
       "<div class='detail-stat'><b>",
         p$accepted_purchase_records,
         "</b><span>accepted purchase records</span></div>",
@@ -3043,7 +3057,7 @@ build_person_coverage_html <- function(bioguide_value) {
         "</b><span>House service overlapping 2025</span></div>",
     "</div>",
     explanation,
-    "<div class='detail-section-title'>Accepted 2025 public-stock purchases</div>",
+    "<div class='detail-section-title'>Accepted 2025 public stock purchases</div>",
     "<div class='member-stock-chips coverage-stock-chips'>",
       ticker_html,
     "</div>",
@@ -4906,6 +4920,81 @@ body.network-focus-mode .stock-detail-drawer {
   background: #ffffff;
   color: #7a681f;
   border: 1px dashed #c5ad47;
+}
+
+.network-status-note {
+  margin-top: 5px;
+  max-width: 360px;
+  color: #6f757d;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.person-color-key {
+  margin-top: 12px;
+  padding: 9px 10px;
+  border: 1px solid #e2e5e8;
+  border-radius: 10px;
+  background: #fafbfc;
+}
+
+.person-color-key-title {
+  margin-bottom: 6px;
+  color: #4f565f;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+
+.person-color-key-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.person-key-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #5f666e;
+  font-size: 9.5px;
+  line-height: 1.2;
+}
+
+.person-key-item .party-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.person-key-pill {
+  display: inline-block;
+  width: 16px;
+  height: 9px;
+  border-radius: 999px;
+  box-sizing: border-box;
+}
+
+.person-key-pill.stock {
+  border: 1px solid #c4a936;
+  background: #fff3b2;
+}
+
+.person-key-pill.committee {
+  border: 1px solid #9fb0a7;
+  background: #eef3f0;
+}
+
+.person-key-pill.subcommittee {
+  border: 1px solid #bdc9c2;
+  background: #f6f8f7;
+}
+
+.person-color-key-note {
+  margin-top: 7px;
+  color: #7a8088;
+  font-size: 9px;
+  line-height: 1.4;
 }
 
 .chip-legend {
