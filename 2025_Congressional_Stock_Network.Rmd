@@ -3447,7 +3447,7 @@ make_network <- function(
           "var container = network.body && network.body.container;",
           "var host = container ? (container.closest('.network-view') || container.parentElement) : null;",
           "if (host && host.clientWidth > 0 && host.clientHeight > 0) {",
-            "var extraTop = document.body.classList.contains('embed-mode') ? 24 : 0;",
+            "var extraTop = document.body.classList.contains('embed-mode') ? 28 : 0;",
             "network.setSize(host.clientWidth + 'px', (host.clientHeight + extraTop) + 'px');",
             "network.redraw();",
             "network.fit({animation:false});",
@@ -3820,11 +3820,11 @@ body.embed-mode.explore-locked .network-view.active {
 
 body.embed-mode.explore-locked .network-view.active .visNetwork {
   position: absolute !important;
-  top: -24px !important;
+  top: -28px !important;
   left: 0 !important;
   display: block !important;
   width: 100% !important;
-  height: calc(100% + 24px) !important;
+  height: calc(100% + 28px) !important;
   min-height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -5635,7 +5635,7 @@ body.network-focus-mode .stock-detail-drawer {
 
 body.embed-mode .network-toolbar.graph-search-panel,
 body.network-focus-mode .network-toolbar.graph-search-panel {
-  top: 12px;
+  top: 8px;
   left: 14px;
   right: auto;
   width: min(520px, calc(100% - 28px));
@@ -5644,14 +5644,14 @@ body.network-focus-mode .network-toolbar.graph-search-panel {
 
 body.embed-mode .graph-layer-panel,
 body.network-focus-mode .graph-layer-panel {
-  top: 12px;
+  top: 8px;
   left: auto;
   right: 14px;
 }
 
 body.embed-mode .graph-legend,
 body.network-focus-mode .graph-legend {
-  top: 86px;
+  top: 82px;
   left: 14px;
   bottom: auto;
   max-width: 245px;
@@ -7106,7 +7106,7 @@ visPhysics(
             }
 
             const extraTop = document.body.classList.contains('embed-mode')
-              ? 24
+              ? 28
               : 0;
 
             network.setSize(
