@@ -2033,9 +2033,9 @@ build_member_stock_html <- function(
 
         chip_class <- if (is_shared) "stock-chip shared" else "stock-chip outside"
         chip_title <- if (is_shared) {
-          "Also appears in the main shared-stock network (2+ politicians)"
+          "Shared stock: bought by 2+ politicians in the accepted 2025 PTR data; shown in the main graph"
         } else {
-          "Accepted 2025 purchase, but this ticker was bought by only one politician and is hidden from the main graph"
+          "Single-politician stock: only this politician bought this ticker in the accepted 2025 PTR data; not shown in the main graph"
         }
 
         paste0(
@@ -2337,6 +2337,11 @@ build_committee_detail_html <- function(committee_id_value) {
     "</div>",
 
     "<div class='detail-section-title member-purchase-heading'>Members with time-matched 2025 purchases</div>",
+    "<div class='chip-legend' aria-label='Stock chip key'>",
+      "<span title='Bought by 2+ politicians in the accepted 2025 PTR data; shown in the main graph'><i class='chip-swatch shared'></i><b>Solid yellow</b>: bought by 2+ politicians</span>",
+      "<span title='Only this politician bought the ticker in the accepted 2025 PTR data; not shown in the main graph'><i class='chip-swatch outside'></i><b>Dashed yellow</b>: bought only by this politician</span>",
+    "</div>",
+    "<div class='shared-stock-explainer'>This key describes each ticker's status in the main House graph, not whether it is shared inside the selected committee or subcommittee. Hover over any ticker for the same explanation.</div>",
     "<div class='institution-member-list'>",
       purchaser_html,
     "</div>",
@@ -2540,6 +2545,11 @@ build_subcommittee_detail_html <- function(subcommittee_id_value) {
     "</div>",
 
     "<div class='detail-section-title member-purchase-heading'>Members with time-matched 2025 purchases</div>",
+    "<div class='chip-legend' aria-label='Stock chip key'>",
+      "<span title='Bought by 2+ politicians in the accepted 2025 PTR data; shown in the main graph'><i class='chip-swatch shared'></i><b>Solid yellow</b>: bought by 2+ politicians</span>",
+      "<span title='Only this politician bought the ticker in the accepted 2025 PTR data; not shown in the main graph'><i class='chip-swatch outside'></i><b>Dashed yellow</b>: bought only by this politician</span>",
+    "</div>",
+    "<div class='shared-stock-explainer'>This key describes each ticker's status in the main House graph, not whether it is shared inside the selected committee or subcommittee. Hover over any ticker for the same explanation.</div>",
     "<div class='institution-member-list'>",
       purchaser_html,
     "</div>",
