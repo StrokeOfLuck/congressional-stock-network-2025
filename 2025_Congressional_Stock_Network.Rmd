@@ -3700,7 +3700,10 @@ body.embed-mode .network-card {
 }
 
 body.embed-mode .network-toolbar {
-  padding: 14px 16px;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  padding: 8px 9px;
 }
 
 body.embed-mode .network-search-input {
@@ -3715,9 +3718,12 @@ body.embed-mode .network-tool-button {
 }
 
 body.embed-mode .network-note {
-  font-size: 13px;
-  line-height: 1.5;
-  padding: 13px 16px;
+  left: 10px;
+  bottom: 10px;
+  max-width: calc(100% - 20px);
+  font-size: 11px;
+  line-height: 1.35;
+  padding: 8px 10px;
 }
 
 /* The graph is the main event: give it most of the first viewport.
@@ -3920,12 +3926,28 @@ body.embed-mode .stock-detail-drawer {
 }
 
 .network-toolbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 4200;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 14px;
-  border-bottom: 1px solid #eceef1;
-  background: #ffffff;
+  padding: 9px 10px;
+  border: 1px solid rgba(205, 210, 216, 0.90);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.93);
+  box-shadow: 0 7px 22px rgba(24, 31, 39, 0.11);
+  backdrop-filter: blur(10px);
+  opacity: 0.95;
+  transition: opacity .16s ease, box-shadow .16s ease;
+}
+
+.network-toolbar:hover,
+.network-toolbar:focus-within {
+  opacity: 1;
+  box-shadow: 0 9px 28px rgba(24, 31, 39, 0.14);
 }
 
 .network-search-wrap {
@@ -4281,6 +4303,7 @@ body.embed-mode .stock-detail-drawer {
 }
 
 .network-card {
+  position: relative;
   width: 100%;
   max-width: none;
   box-sizing: border-box;
@@ -4293,15 +4316,39 @@ body.embed-mode .stock-detail-drawer {
 }
 
 .network-note {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 4100;
   display: flex;
-  gap: 18px;
+  gap: 7px 12px;
   align-items: center;
   flex-wrap: wrap;
-  padding: 12px 18px;
-  border-bottom: 1px solid #eceef1;
-  font-size: 12px;
-  color: #60666f;
-  background: #fbfbfc;
+  width: max-content;
+  max-width: calc(100% - 24px);
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid rgba(205, 210, 216, 0.90);
+  border-radius: 12px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #5f666e;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 6px 18px rgba(24, 31, 39, 0.10);
+  backdrop-filter: blur(9px);
+  opacity: 0.92;
+  transition: opacity .16s ease;
+}
+
+.network-note:hover {
+  opacity: 1;
+}
+
+/* Keep only the actual visual key plus the opening 2+ politician display rule
+   in the floating legend. Long provenance/interaction notes remain documented
+   in About and Methodology instead of covering the network. */
+.network-note > span:nth-child(n+7) {
+  display: none;
 }
 
 .legend-dot {
@@ -4382,17 +4429,19 @@ body.network-focus-mode .network-card {
   box-shadow: none !important;
 }
 
-body.network-focus-mode .network-toolbar,
-body.network-focus-mode .network-note {
-  flex: 0 0 auto;
+body.network-focus-mode .network-toolbar {
+  top: 12px;
+  left: 12px;
+  right: 12px;
 }
 
 body.network-focus-mode .network-note {
-  padding: 8px 12px;
+  left: 12px;
+  bottom: 12px;
+  padding: 8px 10px;
   font-size: 11px;
-  white-space: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
+  white-space: normal;
+  overflow: visible;
 }
 
 body.network-focus-mode .network-note::-webkit-scrollbar {
@@ -5333,6 +5382,32 @@ body.network-focus-mode .stock-detail-drawer {
     border-radius: 12px;
   }
 }
+@media (max-width: 700px) {
+  .network-toolbar {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    gap: 6px;
+    padding: 6px 7px;
+  }
+
+  .network-note {
+    left: 8px;
+    bottom: 8px;
+    max-width: calc(100% - 16px);
+    gap: 5px 8px;
+    padding: 6px 8px;
+    font-size: 9.5px;
+  }
+
+  .network-note .legend-dot,
+  .network-note .legend-box,
+  .network-note .legend-box-sub {
+    transform: scale(.88);
+    transform-origin: center;
+  }
+}
+
 </style>
 
 ```{r app, echo=FALSE}
@@ -5526,7 +5601,7 @@ page <- tags$div(
           tags$span(HTML("<span class='legend-box-sub' style='background:#A8B7AE'></span>Subcommittee")),
           tags$span(
             paste0(
-              "Opening filter: stocks purchased by ≥ ",
+              "Opening view: stocks purchased by ≥ ",
               min_politicians_per_stock,
               " politicians"
             )
