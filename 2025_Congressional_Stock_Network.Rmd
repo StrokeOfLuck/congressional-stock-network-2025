@@ -3610,6 +3610,13 @@ make_network <- function(
       # then stop continuous physics calculations for better performance.
       stabilizationIterationsDone = stabilization_event,
 
+      # Keep every edge visible while moving the canvas, but temporarily draw
+      # straight edges and disable hover hit-testing. This is much cheaper than
+      # redrawing thousands of curved edges on every drag/zoom frame.
+      dragStart = "function(params) { if (!this.__fastMotion) { this.__fastMotion = true; this.setOptions({edges:{smooth:false}, interaction:{hover:false}}); } }",
+      dragEnd = "function(params) { var network = this; window.clearTimeout(network.__fastMotionTimer); network.__fastMotionTimer = window.setTimeout(function() { network.__fastMotion = false; network.setOptions({edges:{smooth:{enabled:true,type:'continuous',roundness:0.12}}, interaction:{hover:true}}); }, 70); }",
+      zoom = "function(params) { var network = this; if (!network.__fastMotion) { network.__fastMotion = true; network.setOptions({edges:{smooth:false}, interaction:{hover:false}}); } window.clearTimeout(network.__fastMotionTimer); network.__fastMotionTimer = window.setTimeout(function() { network.__fastMotion = false; network.setOptions({edges:{smooth:{enabled:true,type:'continuous',roundness:0.12}}, interaction:{hover:true}}); }, 110); }",
+
       selectNode = "function(params) { var id = params.nodes[0]; if (typeof id !== 'string') return; if (id.indexOf('STOCK_') === 0 && window.showStockDetail) { window.showStockDetail(id.replace('STOCK_', '')); } else if (id.indexOf('COMMITTEE_') === 0 && window.showCommitteeDetail) { window.showCommitteeDetail(id.replace('COMMITTEE_', '')); } else if (id.indexOf('SUBCOMMITTEE_') === 0 && window.showSubcommitteeDetail) { window.showSubcommitteeDetail(id.replace('SUBCOMMITTEE_', '')); } else if (id.indexOf('POL_') === 0 && window.showPoliticianNodeDetail) { window.showPoliticianNodeDetail(id); } }"
     )
 
@@ -6548,7 +6555,7 @@ buyers <- matched_purchase_rows %>%
 
       tags$h2("10. Use a collision-aware force-directed layout"),
       tags$p(
-        "ForceAtlas2 keeps the exploratory spaghetti behavior while avoidOverlap reduces circle-on-circle collisions. Stabilization is capped at 500 iterations, and dragging no longer restarts whole-network physics. The lower label draw threshold is unchanged so names stay visible farther out while zooming."
+        "ForceAtlas2 keeps the exploratory spaghetti behavior while avoidOverlap reduces circle-on-circle collisions. Stabilization is capped at 500 iterations, and dragging no longer restarts whole-network physics. While the viewer is actively panning or zooming, edges stay visible but temporarily render as straight lines and hover hit-testing pauses; curved edges and hover return as soon as movement stops. The lower label draw threshold is unchanged so names stay visible farther out while zooming."
       ),
       tags$pre(
         class = "r-code-block",
@@ -7152,7 +7159,7 @@ visPhysics(
                 position: currentPosition,
                 scale: nextScale,
                 animation: {
-                  duration: 180,
+                  duration: 90,
                   easingFunction: 'easeInOutQuad'
                 }
               });
