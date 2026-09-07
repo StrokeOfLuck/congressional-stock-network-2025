@@ -5942,52 +5942,59 @@ body.embed-mode.explore-page-active .graph-legend {
 /* Embedded portfolio layout: wrapper project chrome sits above the iframe,
    so keep the in-graph controls compact and flush to the viewer again. */
 body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
-  top: 8px;
+  top: 66px;
   left: 14px;
   width: min(520px, calc(100% - 28px));
 }
 
 body.embed-mode.explore-page-active .graph-layer-panel {
-  top: 8px;
+  top: 66px;
   left: auto;
   right: 14px;
 }
 
 body.embed-mode.explore-page-active .graph-legend {
-  top: 82px;
+  top: 128px;
   left: 14px;
 }
 
 @media (max-width: 1100px) {
+  body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
+    top: 106px;
+    left: 12px;
+    width: calc(100% - 24px);
+  }
+
   body.embed-mode.explore-page-active .graph-layer-panel {
-    top: 74px;
-    left: 14px;
+    top: 164px;
+    left: 12px;
     right: auto;
+    max-width: calc(100% - 24px);
   }
 
   body.embed-mode.explore-page-active .graph-legend {
-    top: 134px;
-    left: 14px;
+    top: 216px;
+    left: 12px;
   }
 }
 
 @media (max-width: 700px) {
   body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
-    top: 8px;
+    top: 100px;
     left: 8px;
     width: calc(100% - 16px);
     padding: 6px;
   }
 
   body.embed-mode.explore-page-active .graph-layer-panel {
-    top: 66px;
+    top: 154px;
     left: 8px;
     right: auto;
     max-width: calc(100% - 16px);
   }
 
   body.embed-mode.explore-page-active .graph-legend {
-    top: 114px;
+    top: 204px;
     left: 8px;
   }
 }
