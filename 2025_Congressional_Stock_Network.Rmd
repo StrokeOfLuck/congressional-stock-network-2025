@@ -3449,7 +3449,7 @@ make_network <- function(
             "network.redraw();",
             "network.fit({animation:false});",
             "var fittedScale = network.getScale();",
-            "network.moveTo({scale:fittedScale * 1.025, animation:false});",
+            "network.moveTo({scale:fittedScale * 1.05, animation:false});",
           "}",
         "} catch (error) {}",
       "}, 120);",
@@ -7142,7 +7142,7 @@ visPhysics(
               window.setTimeout(function() {
                 try {
                   network.moveTo({
-                    scale: network.getScale() * 1.025,
+                    scale: network.getScale() * 1.05,
                     animation: false
                   });
                 } catch (error) {}
@@ -7163,7 +7163,7 @@ visPhysics(
                 network.redraw();
                 network.fit({animation: false});
                 network.moveTo({
-                  scale: network.getScale() * 1.025,
+                  scale: network.getScale() * 1.05,
                   animation: false
                 });
               } catch (error) {}
