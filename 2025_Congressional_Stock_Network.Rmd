@@ -4309,6 +4309,70 @@ body.embed-mode .stock-detail-drawer {
   display: block;
 }
 
+/* Graph focus mode keeps the controls and detail drawer, but removes the
+   surrounding intro/coverage content so the network can use the whole screen. */
+body.network-focus-mode {
+  overflow: hidden;
+}
+
+body.network-focus-mode .topbar,
+body.network-focus-mode .hero-row,
+body.network-focus-mode .coverage-card {
+  display: none !important;
+}
+
+body.network-focus-mode #explorePage {
+  width: 100%;
+  height: 100vh;
+  background: #f6f7f9;
+  overflow: hidden;
+}
+
+body.network-focus-mode #explorePage.focus-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+}
+
+body.network-focus-mode .explore-wrap {
+  height: 100vh;
+  padding: 0 !important;
+}
+
+body.network-focus-mode .network-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  border-radius: 0 !important;
+  border-left: 0;
+  border-right: 0;
+  box-shadow: none !important;
+}
+
+body.network-focus-mode .network-toolbar,
+body.network-focus-mode .network-note {
+  flex: 0 0 auto;
+}
+
+body.network-focus-mode .network-view.active {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+body.network-focus-mode .network-view.active .visNetwork {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+body.network-focus-mode .stock-detail-drawer {
+  top: 12px;
+  right: 12px;
+  max-height: calc(100vh - 24px);
+}
+
 .committee-missing {
   margin: 22px;
   padding: 18px;
@@ -5341,6 +5405,12 @@ page <- tags$div(
               class = "network-tool-button",
               type = "button",
               "Reset layout"
+            ),
+            tags$button(
+              id = "expandNetworkBtn",
+              class = "network-tool-button",
+              type = "button",
+              "Expand graph"
             )
           )
         ),
@@ -5683,7 +5753,7 @@ page <- tags$div(
       tags$p(
         HTML(
           paste0(
-            "This version no longer applies April to the entire year. It uses <b>",
+            "It uses <b>",
             nrow(committee_snapshot_index),
             " pinned source snapshots</b>. A Jan. 2 transaction uses Dec. 17, 2024 because Jan. 2 is still in the 118th Congress. A Jan. 10 transaction uses Jan. 21, 2025 because that is the first usable House snapshot of the 119th Congress. A July 10 transaction uses June 17, and an Oct. 5 transaction uses Sept. 11."
           )
@@ -6409,6 +6479,7 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
         const networkSearchResults = document.getElementById('networkSearchResults');
         const recenterNetworkBtn = document.getElementById('recenterNetworkBtn');
         const resetNetworkBtn = document.getElementById('resetNetworkBtn');
+        const expandNetworkBtn = document.getElementById('expandNetworkBtn');
 
         const stockDetailDrawer = document.getElementById('stockDetailDrawer');
         const stockDetailBody = document.getElementById('stockDetailBody');
@@ -7427,6 +7498,98 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
           showSubcommittee(false);
         });
 
+        function updateExpandButtonLabel() {
+          const active =
+            document.fullscreenElement === explorePage ||
+            explorePage.classList.contains('focus-fallback');
+
+          expandNetworkBtn.textContent = active
+            ? 'Exit focus'
+            : 'Expand graph';
+        }
+
+        function enterGraphFocus() {
+          document.body.classList.add('network-focus-mode');
+
+          const fullscreenRequest =
+            explorePage.requestFullscreen ||
+            explorePage.webkitRequestFullscreen;
+
+          if (fullscreenRequest) {
+            Promise.resolve(
+              fullscreenRequest.call(explorePage)
+            ).catch(function() {
+              explorePage.classList.add('focus-fallback');
+              updateExpandButtonLabel();
+              fireResize();
+              window.setTimeout(recenterActiveNetwork, 180);
+            });
+          } else {
+            explorePage.classList.add('focus-fallback');
+          }
+
+          updateExpandButtonLabel();
+          fireResize();
+          window.setTimeout(recenterActiveNetwork, 180);
+        }
+
+        function exitGraphFocus() {
+          explorePage.classList.remove('focus-fallback');
+
+          if (
+            document.fullscreenElement &&
+            document.exitFullscreen
+          ) {
+            document.exitFullscreen();
+          } else if (
+            document.webkitFullscreenElement &&
+            document.webkitExitFullscreen
+          ) {
+            document.webkitExitFullscreen();
+          } else {
+            document.body.classList.remove('network-focus-mode');
+            updateExpandButtonLabel();
+            fireResize();
+            window.setTimeout(recenterActiveNetwork, 180);
+          }
+        }
+
+        function toggleGraphFocus() {
+          const active =
+            document.fullscreenElement === explorePage ||
+            explorePage.classList.contains('focus-fallback');
+
+          if (active) {
+            exitGraphFocus();
+          } else {
+            enterGraphFocus();
+          }
+        }
+
+        function syncGraphFocusState() {
+          const fullscreenActive =
+            document.fullscreenElement === explorePage ||
+            document.webkitFullscreenElement === explorePage;
+
+          if (!fullscreenActive && !explorePage.classList.contains('focus-fallback')) {
+            document.body.classList.remove('network-focus-mode');
+          }
+
+          updateExpandButtonLabel();
+          fireResize();
+          window.setTimeout(recenterActiveNetwork, 180);
+        }
+
+        document.addEventListener(
+          'fullscreenchange',
+          syncGraphFocusState
+        );
+
+        document.addEventListener(
+          'webkitfullscreenchange',
+          syncGraphFocusState
+        );
+
         recenterNetworkBtn.addEventListener(
           'click',
           recenterActiveNetwork
@@ -7435,6 +7598,11 @@ if (transaction_date <= as.Date(\"2025-01-02\")) {
         resetNetworkBtn.addEventListener(
           'click',
           resetActiveNetwork
+        );
+
+        expandNetworkBtn.addEventListener(
+          'click',
+          toggleGraphFocus
         );
 
         networkSearchInput.addEventListener(
