@@ -2067,7 +2067,12 @@ build_member_stock_html <- function(
 
   paste0(
     "<div class='institution-member-row export-member-row'",
-      " data-export-member='",
+      " data-network-node-id='",
+        htmltools::htmlEscape(
+          if (has_ptr_name) paste0("POL_", ptr_name) else "",
+          attribute = TRUE
+        ),
+      "' data-export-member='",
         htmltools::htmlEscape(display_name, attribute = TRUE),
       "' data-export-party='",
         htmltools::htmlEscape(party_value, attribute = TRUE),
@@ -2330,7 +2335,7 @@ build_committee_detail_html <- function(committee_id_value) {
     "<div class='shared-stock-explainer'>",
       "A purchase appears here only when this member appeared on the committee in the membership snapshot selected for that transaction date. ",
       "Jan. 1-2 transactions use the Dec. 17, 2024 118th-Congress snapshot; Jan. 3-20 use the Jan. 21, 2025 first usable 119th-Congress House snapshot; Jan. 21 onward uses the latest available snapshot on or before the transaction date. ",
-      "Member names are sorted by purchase-record count for the ticker. These shared stocks are also highlighted in the graph while this committee or subcommittee is selected.",
+      "Member names are sorted by purchase-record count for the ticker. While this committee or subcommittee is selected, the graph emphasizes only the institution's matched members, these shared stocks, and the relevant member-to-stock links.",
     "</div>",
     "<div class='shared-stock-list'>",
       shared_within_committee_html,
@@ -2538,7 +2543,7 @@ build_subcommittee_detail_html <- function(subcommittee_id_value) {
     "<div class='shared-stock-explainer'>",
       "A purchase appears here only when this member appeared on the subcommittee in the membership snapshot selected for that transaction date. ",
       "Jan. 1-2 transactions use the Dec. 17, 2024 118th-Congress snapshot; Jan. 3-20 use the Jan. 21, 2025 first usable 119th-Congress House snapshot; Jan. 21 onward uses the latest available snapshot on or before the transaction date. ",
-      "Member names are sorted by purchase-record count for the ticker. These shared stocks are also highlighted in the graph while this committee or subcommittee is selected.",
+      "Member names are sorted by purchase-record count for the ticker. While this committee or subcommittee is selected, the graph emphasizes only the institution's matched members, these shared stocks, and the relevant member-to-stock links.",
     "</div>",
     "<div class='shared-stock-list'>",
       shared_within_committee_html,
@@ -3605,6 +3610,7 @@ make_network <- function(
       # Save a reference to each network so the custom search/reset controls
       # can focus, recenter, and restore its original stabilized layout.
       beforeDrawing = register_network_event,
+      afterDrawing = "function(ctx) { if (window.drawInstitutionFocus) { window.drawInstitutionFocus(this, ctx); } }",
 
       # After the initial layout settles, store the exact starting positions,
       # then stop continuous physics calculations for better performance.
@@ -3617,7 +3623,7 @@ make_network <- function(
       dragEnd = "function(params) { var network = this; window.clearTimeout(network.__fastMotionTimer); network.__fastMotionTimer = window.setTimeout(function() { network.__fastMotion = false; network.setOptions({interaction:{hover:true}}); }, 70); }",
       zoom = "function(params) { var network = this; if (!network.__fastMotion) { network.__fastMotion = true; network.setOptions({interaction:{hover:false}}); } window.clearTimeout(network.__fastMotionTimer); network.__fastMotionTimer = window.setTimeout(function() { network.__fastMotion = false; network.setOptions({interaction:{hover:true}}); }, 110); }",
 
-      selectNode = "function(params) { var id = params.nodes[0]; if (typeof id !== 'string') return; if (id.indexOf('STOCK_') === 0 && window.showStockDetail) { window.showStockDetail(id.replace('STOCK_', '')); } else if (id.indexOf('COMMITTEE_') === 0 && window.showCommitteeDetail) { window.showCommitteeDetail(id.replace('COMMITTEE_', '')); } else if (id.indexOf('SUBCOMMITTEE_') === 0 && window.showSubcommitteeDetail) { window.showSubcommitteeDetail(id.replace('SUBCOMMITTEE_', '')); } else if (id.indexOf('POL_') === 0 && window.showPoliticianNodeDetail) { window.showPoliticianNodeDetail(id); } }"
+      selectNode = "function(params) { var id = params.nodes[0]; if (window.clearInstitutionFocusForNetwork) { window.clearInstitutionFocusForNetwork(this); } if (typeof id !== 'string') return; if (id.indexOf('STOCK_') === 0 && window.showStockDetail) { window.showStockDetail(id.replace('STOCK_', '')); } else if (id.indexOf('COMMITTEE_') === 0 && window.showCommitteeDetail) { window.showCommitteeDetail(id.replace('COMMITTEE_', '')); } else if (id.indexOf('SUBCOMMITTEE_') === 0 && window.showSubcommitteeDetail) { window.showSubcommitteeDetail(id.replace('SUBCOMMITTEE_', '')); } else if (id.indexOf('POL_') === 0 && window.showPoliticianNodeDetail) { window.showPoliticianNodeDetail(id); } }"
     )
 
   widget
@@ -6850,11 +6856,125 @@ visPhysics(
             .filter(Boolean);
         }
 
-        function highlightInstitutionSharedStocks(type, id, html) {
-          const tickerNodeIds = sharedInstitutionTickers(html)
-            .map(function(ticker) {
-              return 'STOCK_' + ticker;
+        function institutionFocusFromHtml(html) {
+          const sharedTickers = sharedInstitutionTickers(html);
+          const sharedSet = new Set(sharedTickers);
+          const tickerNodeIds = sharedTickers.map(function(ticker) {
+            return 'STOCK_' + ticker;
+          });
+          const links = [];
+
+          if (!html || sharedSet.size === 0) {
+            return {
+              tickerNodeIds: tickerNodeIds,
+              links: links
+            };
+          }
+
+          const template = document.createElement('template');
+          template.innerHTML = html;
+
+          Array.from(
+            template.content.querySelectorAll(
+              '.export-member-row[data-network-node-id]'
+            )
+          ).forEach(function(row) {
+            const memberNodeId =
+              row.dataset.networkNodeId || '';
+
+            if (!memberNodeId) return;
+
+            Array.from(
+              row.querySelectorAll('[data-export-ticker]')
+            ).forEach(function(chip) {
+              const ticker =
+                chip.dataset.exportTicker || '';
+
+              if (!sharedSet.has(ticker)) return;
+
+              links.push({
+                memberNodeId: memberNodeId,
+                tickerNodeId: 'STOCK_' + ticker
+              });
             });
+          });
+
+          return {
+            tickerNodeIds: tickerNodeIds,
+            links: links
+          };
+        }
+
+        window.clearInstitutionFocusForNetwork = function(network) {
+          if (!network || !network.__institutionFocus) return;
+
+          const focus = network.__institutionFocus;
+
+          (focus.tickerNodeIds || []).forEach(function(nodeId) {
+            try {
+              const node =
+                network.body &&
+                network.body.nodes &&
+                network.body.nodes[nodeId];
+
+              if (node && typeof node.unselect === 'function') {
+                node.unselect();
+              }
+            } catch (error) {}
+          });
+
+          network.__institutionFocus = null;
+
+          try {
+            network.redraw();
+          } catch (error) {}
+        };
+
+        window.drawInstitutionFocus = function(network, ctx) {
+          const focus =
+            network && network.__institutionFocus;
+
+          if (
+            !focus ||
+            !focus.links ||
+            focus.links.length === 0
+          ) {
+            return;
+          }
+
+          const scale = Math.max(
+            0.05,
+            Number(network.getScale()) || 1
+          );
+
+          ctx.save();
+          ctx.strokeStyle = 'rgba(105, 84, 26, 0.62)';
+          ctx.lineWidth = 2.25 / scale;
+          ctx.lineCap = 'round';
+
+          focus.links.forEach(function(link) {
+            try {
+              const positions = network.getPositions([
+                link.memberNodeId,
+                link.tickerNodeId
+              ]);
+              const member = positions[link.memberNodeId];
+              const stock = positions[link.tickerNodeId];
+
+              if (!member || !stock) return;
+
+              ctx.beginPath();
+              ctx.moveTo(member.x, member.y);
+              ctx.lineTo(stock.x, stock.y);
+              ctx.stroke();
+            } catch (error) {}
+          });
+
+          ctx.restore();
+        };
+
+        function highlightInstitutionSharedStocks(type, id, html) {
+          const focus = institutionFocusFromHtml(html);
 
           const institutionNodeId =
             type === 'committee'
@@ -6863,10 +6983,32 @@ visPhysics(
 
           withActiveNetwork(function(network) {
             try {
+              window.clearInstitutionFocusForNetwork(network);
+
+              // Select ONLY the committee/subcommittee. This keeps the normal
+              // nearest-neighbor fade scoped to its members instead of
+              // expanding through shared stock nodes to unrelated buyers.
               network.selectNodes(
-                [institutionNodeId].concat(tickerNodeIds),
+                [institutionNodeId],
                 false
               );
+
+              network.__institutionFocus = focus;
+
+              // Give shared stocks the normal selected-stock appearance
+              // without adding them to the network selection set.
+              focus.tickerNodeIds.forEach(function(nodeId) {
+                const node =
+                  network.body &&
+                  network.body.nodes &&
+                  network.body.nodes[nodeId];
+
+                if (node && typeof node.select === 'function') {
+                  node.select();
+                }
+              });
+
+              network.redraw();
             } catch (error) {}
           });
         }
@@ -7031,6 +7173,9 @@ visPhysics(
 
           withActiveNetwork(function(network) {
             try {
+              if (window.clearInstitutionFocusForNetwork) {
+                window.clearInstitutionFocusForNetwork(network);
+              }
               network.unselectAll();
             } catch (error) {}
           });
@@ -7273,6 +7418,9 @@ visPhysics(
             try {
               network.setOptions({physics: false});
               syncNetworkCanvasSize(network);
+              if (window.clearInstitutionFocusForNetwork) {
+                window.clearInstitutionFocusForNetwork(network);
+              }
               network.unselectAll();
 
               if (saved) {
