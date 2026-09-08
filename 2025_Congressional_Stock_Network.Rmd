@@ -3981,7 +3981,7 @@ body:not(.explore-page-active) .topbar .nav-actions {
   padding: 5px;
   border: 1px solid rgba(205,210,216,.82);
   border-radius: 999px;
-  background: rgba(255,255,255,.88);
+  background: rgba(255,255,255,.80);
   box-shadow: 0 6px 18px rgba(24,31,39,.08);
   backdrop-filter: blur(9px);
   -webkit-backdrop-filter: blur(9px);
@@ -3991,6 +3991,10 @@ body:not(.explore-page-active) .topbar .nav-actions {
 body:not(.explore-page-active) .topbar .nav-button {
   padding: 6px 10px;
   font-size: 11px;
+}
+
+body.embed-mode:not(.explore-page-active) .topbar .nav-actions {
+  top: 76px;
 }
 
 .nav-button, .view-button {
@@ -5823,7 +5827,7 @@ body.explore-page-active .topbar .brand-block {
   box-sizing: border-box;
   padding: 8px 10px;
   border: 1px solid rgba(205,210,216,.82);
-  border-radius: 12px;
+  border-radius: 14px;
   background: rgba(255,255,255,.84);
   box-shadow: 0 6px 18px rgba(24,31,39,.08);
   backdrop-filter: blur(9px);
@@ -5880,7 +5884,7 @@ body.explore-page-active .topbar .nav-button {
 body.explore-page-active .network-toolbar.graph-search-panel {
   top: 88px;
   left: 14px;
-  width: min(520px, calc(50% - 28px));
+  width: min(520px, calc(50vw - 28px));
 }
 
 body.explore-page-active .graph-layer-panel {
