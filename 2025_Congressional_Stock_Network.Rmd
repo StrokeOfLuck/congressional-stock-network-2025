@@ -5772,7 +5772,7 @@ body.explore-page-active .topbar {
 
 body.explore-page-active .topbar .brand-block {
   position: absolute;
-  top: 8px;
+  top: 18px;
   left: 14px;
   width: min(520px, calc(50vw - 28px));
   min-width: 0;
@@ -5806,7 +5806,7 @@ body.explore-page-active .topbar .brand-subtitle {
 
 body.explore-page-active .topbar .nav-actions {
   position: absolute;
-  top: 8px;
+  top: 18px;
   right: 14px;
   display: flex;
   max-width: calc(50vw - 28px);
@@ -5834,27 +5834,27 @@ body.explore-page-active .topbar .nav-button {
 }
 
 body.explore-page-active .network-toolbar.graph-search-panel {
-  top: 66px;
+  top: 88px;
   left: 14px;
   width: min(520px, calc(50% - 28px));
 }
 
 body.explore-page-active .graph-layer-panel {
-  top: 66px;
+  top: 88px;
   left: auto;
   right: 14px;
   max-width: calc(50% - 28px);
 }
 
 body.explore-page-active .graph-legend {
-  top: 128px;
+  top: 158px;
   left: 14px;
   max-width: 245px;
 }
 
 @media (max-width: 760px) {
   body.explore-page-active .topbar .brand-block {
-    top: 6px;
+    top: 14px;
     left: 8px;
     width: calc(100vw - 16px);
     padding: 7px 9px;
@@ -5869,7 +5869,7 @@ body.explore-page-active .graph-legend {
   }
 
   body.explore-page-active .topbar .nav-actions {
-    top: 56px;
+    top: 70px;
     left: 8px;
     right: auto;
     max-width: calc(100vw - 16px);
@@ -5881,14 +5881,14 @@ body.explore-page-active .graph-legend {
   }
 
   body.explore-page-active .network-toolbar.graph-search-panel {
-    top: 100px;
+    top: 118px;
     left: 8px;
     width: calc(100% - 16px);
     padding: 6px;
   }
 
   body.explore-page-active .graph-layer-panel {
-    top: 154px;
+    top: 180px;
     left: 8px;
     right: auto;
     max-width: calc(100% - 16px);
@@ -5901,7 +5901,7 @@ body.explore-page-active .graph-legend {
   }
 
   body.explore-page-active .graph-legend {
-    top: 204px;
+    top: 238px;
     left: 8px;
     max-width: 205px;
   }
