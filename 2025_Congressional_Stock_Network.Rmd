@@ -3949,6 +3949,14 @@ body.embed-mode.explore-locked .network-view.active .visNetwork {
   gap: 8px;
 }
 
+/* Keep project navigation available while About / Methodology scroll. */
+body:not(.explore-page-active) .topbar .nav-actions {
+  position: fixed;
+  top: 18px;
+  right: 14px;
+  z-index: 4500;
+}
+
 .nav-button, .view-button {
   border: 1px solid #d8dce2;
   background: #ffffff;
@@ -5855,14 +5863,20 @@ body.explore-page-active .graph-legend {
 /* The portfolio iframe begins slightly above its visible content area.
    Give embedded project chrome extra top clearance so the title and project
    navigation are fully visible instead of being clipped above the viewer. */
-body.embed-mode.explore-page-active .topbar .brand-block,
-body.embed-mode.explore-page-active .topbar .nav-actions {
+body.embed-mode.explore-page-active .topbar .brand-block {
   top: 64px;
 }
 
-body.embed-mode.explore-page-active .network-toolbar.graph-search-panel,
-body.embed-mode.explore-page-active .graph-layer-panel {
+body.embed-mode.explore-page-active .topbar .nav-actions {
+  top: 76px;
+}
+
+body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
   top: 132px;
+}
+
+body.embed-mode.explore-page-active .graph-layer-panel {
+  top: 120px;
 }
 
 body.embed-mode.explore-page-active .graph-legend {
@@ -5928,19 +5942,19 @@ body.embed-mode.explore-page-active .graph-legend {
   }
 
   body.embed-mode.explore-page-active .topbar .nav-actions {
-    top: 108px;
+    top: 116px;
   }
 
   body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
-    top: 156px;
+    top: 164px;
   }
 
   body.embed-mode.explore-page-active .graph-layer-panel {
-    top: 216px;
+    top: 158px;
   }
 
   body.embed-mode.explore-page-active .graph-legend {
-    top: 270px;
+    top: 220px;
   }
 }
 
