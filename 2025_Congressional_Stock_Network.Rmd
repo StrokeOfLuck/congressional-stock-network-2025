@@ -5852,6 +5852,23 @@ body.explore-page-active .graph-legend {
   max-width: 245px;
 }
 
+/* The portfolio iframe begins slightly above its visible content area.
+   Give embedded project chrome extra top clearance so the title and project
+   navigation are fully visible instead of being clipped above the viewer. */
+body.embed-mode.explore-page-active .topbar .brand-block,
+body.embed-mode.explore-page-active .topbar .nav-actions {
+  top: 64px;
+}
+
+body.embed-mode.explore-page-active .network-toolbar.graph-search-panel,
+body.embed-mode.explore-page-active .graph-layer-panel {
+  top: 132px;
+}
+
+body.embed-mode.explore-page-active .graph-legend {
+  top: 202px;
+}
+
 @media (max-width: 760px) {
   body.explore-page-active .topbar .brand-block {
     top: 14px;
@@ -5904,6 +5921,26 @@ body.explore-page-active .graph-legend {
     top: 238px;
     left: 8px;
     max-width: 205px;
+  }
+
+  body.embed-mode.explore-page-active .topbar .brand-block {
+    top: 54px;
+  }
+
+  body.embed-mode.explore-page-active .topbar .nav-actions {
+    top: 108px;
+  }
+
+  body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
+    top: 156px;
+  }
+
+  body.embed-mode.explore-page-active .graph-layer-panel {
+    top: 216px;
+  }
+
+  body.embed-mode.explore-page-active .graph-legend {
+    top: 270px;
   }
 }
 
