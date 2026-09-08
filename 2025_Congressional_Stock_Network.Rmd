@@ -5864,7 +5864,7 @@ body.explore-page-active .graph-legend {
    Give embedded project chrome extra top clearance so the title and project
    navigation are fully visible instead of being clipped above the viewer. */
 body.embed-mode.explore-page-active .topbar .brand-block {
-  top: 64px;
+  top: 74px;
 }
 
 body.embed-mode.explore-page-active .topbar .nav-actions {
@@ -5938,7 +5938,7 @@ body.embed-mode.explore-page-active .graph-legend {
   }
 
   body.embed-mode.explore-page-active .topbar .brand-block {
-    top: 54px;
+    top: 62px;
   }
 
   body.embed-mode.explore-page-active .topbar .nav-actions {
