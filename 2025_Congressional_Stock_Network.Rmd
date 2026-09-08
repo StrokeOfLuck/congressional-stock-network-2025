@@ -3996,7 +3996,7 @@ body:not(.explore-page-active) .topbar .nav-button {
 }
 
 body.embed-mode:not(.explore-page-active) .topbar .nav-actions {
-  top: 76px;
+  top: 74px;
 }
 
 .nav-button, .view-button {
