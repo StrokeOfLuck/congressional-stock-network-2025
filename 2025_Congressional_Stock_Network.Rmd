@@ -3709,12 +3709,8 @@ h1.title, h4.author, h4.date {
   min-height: 100vh;
 }
 
-/* In the portfolio embed, the outer project wrapper owns the title and
-   Explore / About / Methodology controls. The SAN keeps its own project chrome
-   when opened standalone or shared as a self-contained HTML. */
-body.embed-mode .topbar {
-  display: none !important;
-}
+/* The SAN owns its own project chrome in both standalone and embedded use.
+   The portfolio wrapper only provides the site-wide navbar. */
 
 body.embed-mode .explore-wrap {
   padding: 18px 20px 34px;
@@ -3832,11 +3828,11 @@ body.embed-mode.explore-locked .network-view.active {
 
 body.embed-mode.explore-locked .network-view.active .visNetwork {
   position: absolute !important;
-  top: -28px !important;
+  top: 0 !important;
   left: 0 !important;
   display: block !important;
   width: 100% !important;
-  height: calc(100% + 28px) !important;
+  height: 100% !important;
   min-height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -7521,13 +7517,9 @@ visPhysics(
               return false;
             }
 
-            const extraTop = document.body.classList.contains('embed-mode')
-              ? 28
-              : 0;
-
             network.setSize(
               host.clientWidth + 'px',
-              (host.clientHeight + extraTop) + 'px'
+              host.clientHeight + 'px'
             );
             return true;
           } catch (error) {
