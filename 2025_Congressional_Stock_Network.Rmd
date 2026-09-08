@@ -3452,8 +3452,7 @@ make_network <- function(
           "var container = network.body && network.body.container;",
           "var host = container ? (container.closest('.network-view') || container.parentElement) : null;",
           "if (host && host.clientWidth > 0 && host.clientHeight > 0) {",
-            "var extraTop = document.body.classList.contains('embed-mode') ? 28 : 0;",
-            "network.setSize(host.clientWidth + 'px', (host.clientHeight + extraTop) + 'px');",
+            "network.setSize(host.clientWidth + 'px', host.clientHeight + 'px');",
             "network.redraw();",
             "network.fit({animation:false});",
           "}",
@@ -5920,7 +5919,7 @@ body.embed-mode.explore-page-active .graph-layer-panel {
 }
 
 body.embed-mode.explore-page-active .graph-legend {
-  top: 202px;
+  top: 208px;
 }
 
 @media (max-width: 760px) {
