@@ -5910,7 +5910,7 @@ body.embed-mode.explore-page-active .topbar .brand-block {
 }
 
 body.embed-mode.explore-page-active .topbar .nav-actions {
-  top: 76px;
+  top: 74px;
 }
 
 body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
