@@ -5466,8 +5466,8 @@ body.embed-mode:not(.explore-page-active) .topbar .nav-actions {
 }
 
 /* Final graph-control layout:
-   search top-left, layer choices top-right on wider screens, vertical legend
-   on the left, and zoom/recenter/reset/full-screen controls at bottom-right. */
+   search top-left, layer choices bottom-left on wider screens, vertical legend
+   on the left, and zoom/recenter/reset controls at bottom-right. */
 .network-toolbar.graph-search-panel {
   position: absolute;
   top: 16px;
@@ -5494,9 +5494,10 @@ body.embed-mode:not(.explore-page-active) .topbar .nav-actions {
 
 .graph-layer-panel {
   position: absolute;
-  top: 16px;
-  left: auto;
-  right: 16px;
+  top: auto;
+  bottom: 16px;
+  left: 16px;
+  right: auto;
   z-index: 4250;
   display: flex;
   width: max-content;
@@ -5626,9 +5627,10 @@ body.embed-mode .network-toolbar.graph-search-panel {
 }
 
 body.embed-mode .graph-layer-panel {
-  top: 8px;
-  left: auto;
-  right: 14px;
+  top: auto;
+  bottom: 22px;
+  left: 14px;
+  right: auto;
 }
 
 body.embed-mode .graph-legend {
@@ -5641,21 +5643,6 @@ body.embed-mode .graph-legend {
 body.embed-mode .network-tool-actions.graph-tool-panel {
   right: 14px;
   bottom: 22px;
-}
-
-@media (max-width: 1100px) {
-  .graph-layer-panel,
-  body.embed-mode .graph-layer-panel {
-    top: 74px;
-    left: 14px;
-    right: auto;
-  }
-
-  .graph-legend,
-  body.embed-mode .graph-legend {
-    top: 134px;
-    left: 14px;
-  }
 }
 
 @media (max-width: 700px) {
@@ -5672,6 +5659,7 @@ body.embed-mode .network-tool-actions.graph-tool-panel {
   .graph-layer-panel,
   body.embed-mode .graph-layer-panel {
     top: 66px;
+    bottom: auto;
     left: 8px;
     right: auto;
     max-width: calc(100% - 16px);
