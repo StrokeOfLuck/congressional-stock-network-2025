@@ -5752,17 +5752,16 @@ body.network-focus-mode .network-tool-actions.graph-tool-panel {
   }
 }
 
-/* Explore owns its project chrome directly on the SAN canvas:
-   title + explainer above search on the left, project navigation above
-   layer choices on the right. About/Methodology keep the normal topbar. */
+/* Explore project chrome lives on the same graph viewer layer as search,
+   layer controls, legend, and graph tools. About/Methodology use the normal
+   document header once Explore is left. */
 body.explore-page-active .topbar {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto 0;
   z-index: 4400;
-  min-height: 0;
   height: 0;
+  min-height: 0;
+  margin: 0;
   padding: 0;
   border: 0;
   background: transparent;
@@ -5774,8 +5773,9 @@ body.explore-page-active .topbar {
 body.explore-page-active .topbar .brand-block {
   position: absolute;
   top: 8px;
-  left: 16px;
-  width: min(520px, calc(100vw - 32px));
+  left: 14px;
+  width: min(520px, calc(50vw - 28px));
+  min-width: 0;
   box-sizing: border-box;
   padding: 8px 10px;
   border: 1px solid rgba(205,210,216,.82);
@@ -5796,93 +5796,63 @@ body.explore-page-active .topbar .brand {
 body.explore-page-active .topbar .brand-subtitle {
   margin-top: 2px;
   max-width: none;
+  overflow: hidden;
+  color: #666d76;
   font-size: 9.5px;
   line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 body.explore-page-active .topbar .nav-actions {
   position: absolute;
   top: 8px;
-  right: 16px;
+  right: 14px;
   display: flex;
+  max-width: calc(50vw - 28px);
   gap: 5px;
   padding: 5px;
+  overflow-x: auto;
   border: 1px solid rgba(205,210,216,.82);
   border-radius: 999px;
   background: rgba(255,255,255,.80);
   box-shadow: 0 6px 18px rgba(24,31,39,.08);
   backdrop-filter: blur(9px);
   -webkit-backdrop-filter: blur(9px);
+  scrollbar-width: none;
   pointer-events: auto;
 }
 
+body.explore-page-active .topbar .nav-actions::-webkit-scrollbar {
+  display: none;
+}
+
 body.explore-page-active .topbar .nav-button {
+  flex: 0 0 auto;
   padding: 6px 10px;
   font-size: 11px;
 }
 
-body.explore-page-active .network-toolbar.graph-search-panel,
-body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
+body.explore-page-active .network-toolbar.graph-search-panel {
   top: 66px;
-  left: 16px;
-  width: min(520px, calc(100% - 32px));
+  left: 14px;
+  width: min(520px, calc(50% - 28px));
 }
 
-body.explore-page-active .graph-layer-panel,
-body.embed-mode.explore-page-active .graph-layer-panel {
+body.explore-page-active .graph-layer-panel {
   top: 66px;
-  right: 16px;
   left: auto;
+  right: 14px;
+  max-width: calc(50% - 28px);
 }
 
-body.explore-page-active .graph-legend,
-body.embed-mode.explore-page-active .graph-legend {
+body.explore-page-active .graph-legend {
   top: 128px;
-  left: 16px;
+  left: 14px;
+  max-width: 245px;
 }
 
-@media (max-width: 1100px) {
-  body.explore-page-active .topbar .brand-block {
-    top: 8px;
-    left: 12px;
-    width: calc(100vw - 24px);
-  }
-
-  body.explore-page-active .topbar .brand-subtitle {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  body.explore-page-active .topbar .nav-actions {
-    top: 60px;
-    left: 12px;
-    right: auto;
-  }
-
-  body.explore-page-active .network-toolbar.graph-search-panel,
-  body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
-    top: 106px;
-    left: 12px;
-    width: calc(100% - 24px);
-  }
-
-  body.explore-page-active .graph-layer-panel,
-  body.embed-mode.explore-page-active .graph-layer-panel {
-    top: 164px;
-    left: 12px;
-    right: auto;
-    max-width: calc(100% - 24px);
-  }
-
-  body.explore-page-active .graph-legend,
-  body.embed-mode.explore-page-active .graph-legend {
-    top: 216px;
-    left: 12px;
-  }
-}
-
-@media (max-width: 700px) {
+@media (max-width: 760px) {
   body.explore-page-active .topbar .brand-block {
     top: 6px;
     left: 8px;
@@ -5901,17 +5871,11 @@ body.embed-mode.explore-page-active .graph-legend {
   body.explore-page-active .topbar .nav-actions {
     top: 56px;
     left: 8px;
+    right: auto;
     max-width: calc(100vw - 16px);
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  body.explore-page-active .topbar .nav-actions::-webkit-scrollbar {
-    display: none;
   }
 
   body.explore-page-active .topbar .nav-button {
-    flex: 0 0 auto;
     padding: 6px 9px;
     font-size: 10px;
   }
@@ -5920,6 +5884,7 @@ body.embed-mode.explore-page-active .graph-legend {
     top: 100px;
     left: 8px;
     width: calc(100% - 16px);
+    padding: 6px;
   }
 
   body.explore-page-active .graph-layer-panel {
@@ -5927,71 +5892,18 @@ body.embed-mode.explore-page-active .graph-legend {
     left: 8px;
     right: auto;
     max-width: calc(100% - 16px);
+    padding: 5px;
+  }
+
+  body.explore-page-active .graph-layer-panel .view-button {
+    padding: 6px 8px;
+    font-size: 10px;
   }
 
   body.explore-page-active .graph-legend {
     top: 204px;
     left: 8px;
-  }
-}
-
-/* Embedded portfolio layout: wrapper project chrome sits above the iframe,
-   so keep the in-graph controls compact and flush to the viewer again. */
-body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
-  top: 66px;
-  left: 14px;
-  width: min(520px, calc(100% - 28px));
-}
-
-body.embed-mode.explore-page-active .graph-layer-panel {
-  top: 66px;
-  left: auto;
-  right: 14px;
-}
-
-body.embed-mode.explore-page-active .graph-legend {
-  top: 128px;
-  left: 14px;
-}
-
-@media (max-width: 1100px) {
-  body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
-    top: 106px;
-    left: 12px;
-    width: calc(100% - 24px);
-  }
-
-  body.embed-mode.explore-page-active .graph-layer-panel {
-    top: 164px;
-    left: 12px;
-    right: auto;
-    max-width: calc(100% - 24px);
-  }
-
-  body.embed-mode.explore-page-active .graph-legend {
-    top: 216px;
-    left: 12px;
-  }
-}
-
-@media (max-width: 700px) {
-  body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
-    top: 100px;
-    left: 8px;
-    width: calc(100% - 16px);
-    padding: 6px;
-  }
-
-  body.embed-mode.explore-page-active .graph-layer-panel {
-    top: 154px;
-    left: 8px;
-    right: auto;
-    max-width: calc(100% - 16px);
-  }
-
-  body.embed-mode.explore-page-active .graph-legend {
-    top: 204px;
-    left: 8px;
+    max-width: 205px;
   }
 }
 
@@ -6870,6 +6782,8 @@ visPhysics(
       (function() {
         const embedMode =
           new URLSearchParams(window.location.search).get('embed') === '1';
+
+        document.body.classList.add('explore-page-active');
 
         if (embedMode) {
           document.body.classList.add('embed-mode');
