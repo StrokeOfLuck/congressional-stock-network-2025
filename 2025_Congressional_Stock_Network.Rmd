@@ -3949,12 +3949,48 @@ body.embed-mode.explore-locked .network-view.active .visNetwork {
   gap: 8px;
 }
 
-/* Keep project navigation available while About / Methodology scroll. */
+/* About / Methodology: keep only the project-section pills pinned to the
+   viewport. Collapse the normal header so it cannot reserve a blank strip or
+   carry the buttons offscreen inside the portfolio iframe. */
+body:not(.explore-page-active) .topbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 4400;
+  height: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: none;
+}
+
+body:not(.explore-page-active) .topbar .brand-block {
+  display: none;
+}
+
 body:not(.explore-page-active) .topbar .nav-actions {
   position: fixed;
   top: 18px;
   right: 14px;
   z-index: 4500;
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  border: 1px solid rgba(205,210,216,.82);
+  border-radius: 999px;
+  background: rgba(255,255,255,.88);
+  box-shadow: 0 6px 18px rgba(24,31,39,.08);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  pointer-events: auto;
+}
+
+body:not(.explore-page-active) .topbar .nav-button {
+  padding: 6px 10px;
+  font-size: 11px;
 }
 
 .nav-button, .view-button {
