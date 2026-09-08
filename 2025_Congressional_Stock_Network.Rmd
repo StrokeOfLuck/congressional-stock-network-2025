@@ -5794,9 +5794,10 @@ body.explore-page-active .network-toolbar.graph-search-panel {
 }
 
 body.explore-page-active .graph-layer-panel {
-  top: 88px;
-  left: auto;
-  right: 14px;
+  top: auto;
+  bottom: 16px;
+  left: 14px;
+  right: auto;
   max-width: calc(50% - 28px);
 }
 
@@ -5822,7 +5823,8 @@ body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
 }
 
 body.embed-mode.explore-page-active .graph-layer-panel {
-  top: 120px;
+  top: auto;
+  bottom: 22px;
 }
 
 body.embed-mode.explore-page-active .graph-legend {
@@ -5866,6 +5868,7 @@ body.embed-mode.explore-page-active .graph-legend {
 
   body.explore-page-active .graph-layer-panel {
     top: 180px;
+    bottom: auto;
     left: 8px;
     right: auto;
     max-width: calc(100% - 16px);
@@ -5897,6 +5900,7 @@ body.embed-mode.explore-page-active .graph-legend {
 
   body.embed-mode.explore-page-active .graph-layer-panel {
     top: 158px;
+    bottom: auto;
   }
 
   body.embed-mode.explore-page-active .graph-legend {
