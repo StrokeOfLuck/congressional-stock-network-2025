@@ -1,0 +1,360 @@
+from pathlib import Path
+
+html_path = Path("index.html")
+html = html_path.read_text(encoding="utf-8")
+
+STYLE_ID = "mobile-network-control-overrides"
+SCRIPT_ID = "mobile-network-controls-script"
+
+mobile_css = r'''<style id="mobile-network-control-overrides">
+/* Mobile-only cleanup for the graph controls. Desktop layout is unchanged. */
+.mobile-network-controls {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  /* The desktop three-button layer selector is too wide for phones. Keep it
+     in the DOM for the existing graph logic, but replace it visually with a
+     compact mobile picker. */
+  body.explore-page-active .graph-layer-panel,
+  body.embed-mode.explore-page-active .graph-layer-panel {
+    display: none !important;
+  }
+
+  /* Legend is collapsed by default on phones and opened from the mobile bar. */
+  body.explore-page-active .graph-legend,
+  body.embed-mode.explore-page-active .graph-legend {
+    display: none !important;
+  }
+
+  body.explore-page-active.mobile-legend-open .graph-legend {
+    display: flex !important;
+    top: 230px !important;
+    left: 8px !important;
+    bottom: auto !important;
+    width: auto !important;
+    max-width: min(220px, calc(100vw - 16px)) !important;
+    max-height: calc(100dvh - 310px);
+    overflow-y: auto;
+    padding: 9px 10px;
+    font-size: 9.5px;
+    z-index: 4380;
+  }
+
+  body.embed-mode.explore-page-active.mobile-legend-open .graph-legend {
+    top: 276px !important;
+    max-height: calc(100dvh - 350px);
+  }
+
+  body.explore-page-active .mobile-network-controls {
+    position: absolute;
+    top: 180px;
+    left: 8px;
+    right: 8px;
+    z-index: 4400;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: auto;
+    pointer-events: auto;
+  }
+
+  body.embed-mode.explore-page-active .mobile-network-controls {
+    top: 226px;
+  }
+
+  .mobile-view-picker {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .mobile-view-trigger,
+  .mobile-legend-toggle {
+    height: 36px;
+    box-sizing: border-box;
+    border: 1px solid rgba(205,210,216,.9);
+    border-radius: 999px;
+    background: rgba(255,255,255,.92);
+    color: #343a40;
+    box-shadow: 0 6px 18px rgba(24,31,39,.10);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .mobile-view-trigger {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 13px;
+    text-align: left;
+  }
+
+  .mobile-view-trigger-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-view-trigger-caret {
+    flex: 0 0 auto;
+    font-size: 10px;
+    transition: transform .16s ease;
+  }
+
+  .mobile-view-trigger[aria-expanded="true"] .mobile-view-trigger-caret {
+    transform: rotate(180deg);
+  }
+
+  .mobile-legend-toggle {
+    flex: 0 0 auto;
+    padding: 0 13px;
+  }
+
+  .mobile-legend-toggle[aria-expanded="true"] {
+    background: rgba(23,25,28,.94);
+    color: #fff;
+    border-color: rgba(23,25,28,.94);
+  }
+
+  .mobile-view-menu {
+    position: absolute;
+    top: 42px;
+    left: 0;
+    z-index: 4500;
+    display: grid;
+    width: min(280px, calc(100vw - 90px));
+    padding: 6px;
+    gap: 3px;
+    border: 1px solid rgba(205,210,216,.92);
+    border-radius: 14px;
+    background: rgba(255,255,255,.97);
+    box-shadow: 0 10px 28px rgba(24,31,39,.16);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .mobile-view-menu[hidden] {
+    display: none !important;
+  }
+
+  .mobile-view-option {
+    width: 100%;
+    padding: 9px 10px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #343a40;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 650;
+    line-height: 1.25;
+    text-align: left;
+  }
+
+  .mobile-view-option:hover,
+  .mobile-view-option:focus-visible {
+    background: #f1f3f5;
+    outline: none;
+  }
+
+  .mobile-view-option.active {
+    background: rgba(23,25,28,.94);
+    color: #fff;
+  }
+
+  .mobile-view-option:disabled {
+    opacity: .42;
+  }
+
+  /* Keep the bottom graph tools compact and safely inside the phone width. */
+  body.explore-page-active .network-tool-actions.graph-tool-panel,
+  body.embed-mode.explore-page-active .network-tool-actions.graph-tool-panel {
+    right: 8px;
+    bottom: 8px;
+    max-width: calc(100vw - 16px);
+    padding: 3px;
+  }
+
+  body.explore-page-active .graph-tool-panel .network-tool-button {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  body.explore-page-active .graph-tool-panel .graph-zoom-button {
+    width: 29px;
+    height: 28px;
+    padding: 0;
+    font-size: 18px;
+  }
+}
+</style>'''
+
+mobile_js = r'''<script id="mobile-network-controls-script">
+(function () {
+  function initMobileNetworkControls() {
+    if (document.querySelector('.mobile-network-controls')) return;
+
+    const networkCard = document.querySelector('.network-card');
+    const layerPanel = document.querySelector('.graph-layer-panel');
+    const legend = document.querySelector('.graph-legend');
+    const stockButton = document.getElementById('stockOnlyBtn');
+    const committeeButton = document.getElementById('committeeBtn');
+    const fullButton = document.getElementById('subcommitteeBtn');
+
+    if (!networkCard || !layerPanel || !legend || !stockButton || !committeeButton || !fullButton) {
+      return;
+    }
+
+    const controls = document.createElement('div');
+    controls.className = 'mobile-network-controls';
+    controls.setAttribute('aria-label', 'Network display controls');
+
+    const picker = document.createElement('div');
+    picker.className = 'mobile-view-picker';
+
+    const trigger = document.createElement('button');
+    trigger.className = 'mobile-view-trigger';
+    trigger.type = 'button';
+    trigger.setAttribute('aria-haspopup', 'menu');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.innerHTML = '<span class="mobile-view-trigger-label">View: Full network</span><span class="mobile-view-trigger-caret" aria-hidden="true">▼</span>';
+
+    const menu = document.createElement('div');
+    menu.className = 'mobile-view-menu';
+    menu.setAttribute('role', 'menu');
+    menu.hidden = true;
+
+    const views = [
+      { source: fullButton, label: 'Full network', menuLabel: 'Stocks + committees + subcommittees' },
+      { source: committeeButton, label: 'Committees only', menuLabel: 'Stocks + committees only' },
+      { source: stockButton, label: 'Stocks only', menuLabel: 'Stocks only' }
+    ];
+
+    const options = views.map(function (view) {
+      const option = document.createElement('button');
+      option.className = 'mobile-view-option';
+      option.type = 'button';
+      option.setAttribute('role', 'menuitem');
+      option.textContent = view.menuLabel;
+      option.disabled = view.source.disabled;
+      menu.appendChild(option);
+      return { option: option, view: view };
+    });
+
+    const legendToggle = document.createElement('button');
+    legendToggle.className = 'mobile-legend-toggle';
+    legendToggle.type = 'button';
+    legendToggle.textContent = 'Legend';
+    legendToggle.setAttribute('aria-expanded', 'false');
+
+    picker.appendChild(trigger);
+    picker.appendChild(menu);
+    controls.appendChild(picker);
+    controls.appendChild(legendToggle);
+    layerPanel.insertAdjacentElement('afterend', controls);
+
+    function activeView() {
+      return views.find(function (view) {
+        return view.source.classList.contains('active');
+      }) || views[0];
+    }
+
+    function syncViewUi() {
+      const current = activeView();
+      const label = trigger.querySelector('.mobile-view-trigger-label');
+      if (label) label.textContent = 'View: ' + current.label;
+
+      options.forEach(function (item) {
+        item.option.classList.toggle('active', item.view === current);
+        item.option.disabled = item.view.source.disabled;
+      });
+    }
+
+    function closeMenu() {
+      menu.hidden = true;
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+
+    function closeLegend() {
+      document.body.classList.remove('mobile-legend-open');
+      legendToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    trigger.addEventListener('click', function (event) {
+      event.stopPropagation();
+      const opening = menu.hidden;
+      closeLegend();
+      menu.hidden = !opening;
+      trigger.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    });
+
+    options.forEach(function (item) {
+      item.option.addEventListener('click', function () {
+        if (item.option.disabled) return;
+        item.view.source.click();
+        syncViewUi();
+        closeMenu();
+      });
+
+      item.view.source.addEventListener('click', function () {
+        window.setTimeout(syncViewUi, 0);
+      });
+    });
+
+    legendToggle.addEventListener('click', function (event) {
+      event.stopPropagation();
+      const opening = !document.body.classList.contains('mobile-legend-open');
+      closeMenu();
+      document.body.classList.toggle('mobile-legend-open', opening);
+      legendToggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', function (event) {
+      if (!picker.contains(event.target)) closeMenu();
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closeMenu();
+        closeLegend();
+      }
+    });
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 760) {
+        closeMenu();
+        closeLegend();
+      }
+    });
+
+    syncViewUi();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileNetworkControls);
+  } else {
+    initMobileNetworkControls();
+  }
+})();
+</script>'''
+
+if STYLE_ID not in html:
+    if "</head>" not in html:
+        raise RuntimeError("Could not find </head> in rendered index.html")
+    html = html.replace("</head>", mobile_css + "\n</head>", 1)
+
+if SCRIPT_ID not in html:
+    if "</body>" not in html:
+        raise RuntimeError("Could not find </body> in rendered index.html")
+    html = html.replace("</body>", mobile_js + "\n</body>", 1)
+
+html_path.write_text(html, encoding="utf-8")
+print("Injected mobile network controls into index.html")
