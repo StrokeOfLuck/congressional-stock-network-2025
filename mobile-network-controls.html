@@ -5,6 +5,24 @@
 }
 
 @media (max-width: 760px) {
+  /* Keep the Explore / About / Methodology pills accessible at the bottom-left
+     on phones, opposite the graph tools. */
+  .topbar .nav-actions,
+  body.explore-page-active .topbar .nav-actions,
+  body.embed-mode.explore-page-active .topbar .nav-actions,
+  body:not(.explore-page-active) .topbar .nav-actions {
+    position: fixed !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: 8px !important;
+    left: 8px !important;
+    z-index: 4460 !important;
+    width: auto !important;
+    max-width: calc(100vw - 170px) !important;
+    margin: 0 !important;
+    pointer-events: auto !important;
+  }
+
   /* Keep the existing desktop controls in the DOM for graph logic, but use a
      compact mobile picker instead of squeezing three long buttons together. */
   body.explore-page-active .graph-layer-panel,
@@ -168,8 +186,8 @@
   /* Keep graph tools compact and safely inside the phone width. */
   body.explore-page-active .network-tool-actions.graph-tool-panel,
   body.embed-mode.explore-page-active .network-tool-actions.graph-tool-panel {
-    left: 8px;
-    right: auto;
+    left: auto;
+    right: 8px;
     bottom: 8px;
     max-width: calc(100vw - 16px);
     padding: 3px;
