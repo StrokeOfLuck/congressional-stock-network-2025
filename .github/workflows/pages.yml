@@ -54,6 +54,9 @@ jobs:
             quiet = FALSE
           )
 
+      - name: Apply mobile graph controls
+        run: python3 postprocess_mobile.py
+
       - name: Prepare Pages artifact
         run: |
           mkdir -p _site
