@@ -46,16 +46,7 @@ jobs:
             any::tibble
 
       - name: Render interactive network
-        shell: Rscript {0}
-        run: |
-          rmarkdown::render(
-            "2025_Congressional_Stock_Network.Rmd",
-            output_file = "index.html",
-            quiet = FALSE
-          )
-
-      - name: Apply mobile graph controls
-        run: python3 postprocess_mobile.py
+        run: Rscript render.R
 
       - name: Prepare Pages artifact
         run: |

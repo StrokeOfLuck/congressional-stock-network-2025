@@ -1,27 +1,18 @@
-from pathlib import Path
-
-html_path = Path("index.html")
-html = html_path.read_text(encoding="utf-8")
-
-STYLE_ID = "mobile-network-control-overrides"
-SCRIPT_ID = "mobile-network-controls-script"
-
-mobile_css = r'''<style id="mobile-network-control-overrides">
+<style id="mobile-network-control-overrides">
 /* Mobile-only cleanup for the graph controls. Desktop layout is unchanged. */
 .mobile-network-controls {
   display: none;
 }
 
 @media (max-width: 760px) {
-  /* The desktop three-button layer selector is too wide for phones. Keep it
-     in the DOM for the existing graph logic, but replace it visually with a
-     compact mobile picker. */
+  /* Keep the existing desktop controls in the DOM for graph logic, but use a
+     compact mobile picker instead of squeezing three long buttons together. */
   body.explore-page-active .graph-layer-panel,
   body.embed-mode.explore-page-active .graph-layer-panel {
     display: none !important;
   }
 
-  /* Legend is collapsed by default on phones and opened from the mobile bar. */
+  /* The legend is available on demand so it does not cover the network. */
   body.explore-page-active .graph-legend,
   body.embed-mode.explore-page-active .graph-legend {
     display: none !important;
@@ -174,7 +165,7 @@ mobile_css = r'''<style id="mobile-network-control-overrides">
     opacity: .42;
   }
 
-  /* Keep the bottom graph tools compact and safely inside the phone width. */
+  /* Keep graph tools compact and safely inside the phone width. */
   body.explore-page-active .network-tool-actions.graph-tool-panel,
   body.embed-mode.explore-page-active .network-tool-actions.graph-tool-panel {
     right: 8px;
@@ -195,9 +186,9 @@ mobile_css = r'''<style id="mobile-network-control-overrides">
     font-size: 18px;
   }
 }
-</style>'''
+</style>
 
-mobile_js = r'''<script id="mobile-network-controls-script">
+<script id="mobile-network-controls-script">
 (function () {
   function initMobileNetworkControls() {
     if (document.querySelector('.mobile-network-controls')) return;
@@ -344,17 +335,4 @@ mobile_js = r'''<script id="mobile-network-controls-script">
     initMobileNetworkControls();
   }
 })();
-</script>'''
-
-if STYLE_ID not in html:
-    if "</head>" not in html:
-        raise RuntimeError("Could not find </head> in rendered index.html")
-    html = html.replace("</head>", mobile_css + "\n</head>", 1)
-
-if SCRIPT_ID not in html:
-    if "</body>" not in html:
-        raise RuntimeError("Could not find </body> in rendered index.html")
-    html = html.replace("</body>", mobile_js + "\n</body>", 1)
-
-html_path.write_text(html, encoding="utf-8")
-print("Injected mobile network controls into index.html")
+</script>

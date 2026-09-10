@@ -2,7 +2,7 @@
 
 Interactive network analysis of reported 2025 U.S. House public-stock purchases.
 
-This repository is intentionally separate from `sean-data-portfolio`. The portfolio repository contains only a lightweight project page and links here. Keeping the analysis, data extract, methodology, and deployment history in their own Git repository reduces coupling and keeps changes to this project from creating technical debt in the website repo.
+This repository is intentionally separate from `sean-data-portfolio`. The portfolio repository contains only a lightweight project page and links here. Keeping the analysis, data extract, methodology, responsive interface code, and deployment history in their own Git repository reduces coupling and keeps changes to this project from creating technical debt in the website repo.
 
 ## Interactive project
 
@@ -13,7 +13,7 @@ The rendered page contains four internal sections:
 - **Methodology** — design and analytical choices
 - **Class Report** — narrated R commands and outputs for course-format review
 
-The interface also includes graph search, reset/recenter controls, institution drawers, original PTR links, shareable selections, CSV export, and House coverage diagnostics.
+The interface also includes graph search, reset/recenter controls, institution drawers, original PTR links, shareable selections, CSV export, House coverage diagnostics, and a compact mobile view/legend control.
 
 ## Analysis input
 
@@ -57,7 +57,13 @@ https://github.com/StrokeOfLuck/congress-legislators
 
 ## Run locally
 
-Open `2025_Congressional_Stock_Network.Rmd` in Positron / RStudio and render it.
+Run:
+
+```bash
+Rscript render.R
+```
+
+`render.R` is the canonical renderer. It renders `2025_Congressional_Stock_Network.Rmd` and includes `mobile-network-controls.html`, so local and GitHub Pages builds use the same responsive interface source. The generated `index.html` is not patched after rendering.
 
 The first render needs internet access because the Rmd downloads exact pinned historical committee and legislator source files. It then caches the flattened tables locally.
 
@@ -65,4 +71,4 @@ Required packages are listed in `INSTALL_PACKAGES.R`.
 
 ## GitHub Pages
 
-`.github/workflows/pages.yml` renders the Rmd to `index.html` and deploys it to GitHub Pages whenever `main` is updated.
+`.github/workflows/pages.yml` runs the same `render.R` entry point and deploys the resulting `index.html` to GitHub Pages whenever `main` is updated.
