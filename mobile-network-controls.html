@@ -23,6 +23,35 @@
     pointer-events: auto !important;
   }
 
+  /* The compact project card stays one line by default. Tapping it expands the
+     subtitle, and the graph controls are repositioned from its actual height. */
+  body.explore-page-active .topbar .brand-block {
+    pointer-events: auto !important;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  body.explore-page-active .topbar .brand-subtitle {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  body.explore-page-active.mobile-brand-expanded .topbar .brand-subtitle {
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: normal !important;
+  }
+
+  /* Remove the old space reserved for the top navigation row. JavaScript sets
+     these variables from the live title/search heights so the layout remains
+     tight when the project description is expanded. */
+  body.explore-page-active .network-toolbar.graph-search-panel,
+  body.embed-mode.explore-page-active .network-toolbar.graph-search-panel {
+    top: var(--mobile-search-top, 76px) !important;
+  }
+
   /* Keep the existing desktop controls in the DOM for graph logic, but use a
      compact mobile picker instead of squeezing three long buttons together. */
   body.explore-page-active .graph-layer-panel,
@@ -36,28 +65,25 @@
     display: none !important;
   }
 
-  body.explore-page-active.mobile-legend-open .graph-legend {
+  body.explore-page-active.mobile-legend-open .graph-legend,
+  body.embed-mode.explore-page-active.mobile-legend-open .graph-legend {
     display: flex !important;
-    top: 230px !important;
+    top: var(--mobile-legend-top, 188px) !important;
     left: 8px !important;
     bottom: auto !important;
     width: auto !important;
     max-width: min(220px, calc(100vw - 16px)) !important;
-    max-height: calc(100dvh - 310px);
+    max-height: calc(100dvh - var(--mobile-legend-top, 188px) - 70px);
     overflow-y: auto;
     padding: 9px 10px;
     font-size: 9.5px;
     z-index: 4380;
   }
 
-  body.embed-mode.explore-page-active.mobile-legend-open .graph-legend {
-    top: 276px !important;
-    max-height: calc(100dvh - 350px);
-  }
-
-  body.explore-page-active .mobile-network-controls {
+  body.explore-page-active .mobile-network-controls,
+  body.embed-mode.explore-page-active .mobile-network-controls {
     position: absolute;
-    top: 180px;
+    top: var(--mobile-controls-top, 138px) !important;
     left: 8px;
     right: 8px;
     z-index: 4400;
@@ -66,10 +92,6 @@
     gap: 6px;
     width: auto;
     pointer-events: auto;
-  }
-
-  body.embed-mode.explore-page-active .mobile-network-controls {
-    top: 226px;
   }
 
   .mobile-view-picker {
@@ -215,6 +237,8 @@
     const networkCard = document.querySelector('.network-card');
     const layerPanel = document.querySelector('.graph-layer-panel');
     const legend = document.querySelector('.graph-legend');
+    const searchPanel = document.querySelector('.network-toolbar.graph-search-panel');
+    const brandBlock = document.querySelector('.topbar .brand-block');
     const stockButton = document.getElementById('stockOnlyBtn');
     const committeeButton = document.getElementById('committeeBtn');
     const fullButton = document.getElementById('subcommitteeBtn');
@@ -271,6 +295,67 @@
     controls.appendChild(legendToggle);
     layerPanel.insertAdjacentElement('afterend', controls);
 
+    function positionMobileChrome() {
+      if (window.innerWidth > 760 || !document.body.classList.contains('explore-page-active')) {
+        return;
+      }
+
+      if (!brandBlock || !searchPanel) return;
+
+      const cardRect = networkCard.getBoundingClientRect();
+      const brandRect = brandBlock.getBoundingClientRect();
+      const searchTop = Math.max(8, Math.round(brandRect.bottom - cardRect.top + 6));
+
+      document.body.style.setProperty('--mobile-search-top', searchTop + 'px');
+
+      window.requestAnimationFrame(function () {
+        const freshCardRect = networkCard.getBoundingClientRect();
+        const searchRect = searchPanel.getBoundingClientRect();
+        const controlsTop = Math.max(
+          searchTop + 48,
+          Math.round(searchRect.bottom - freshCardRect.top + 2)
+        );
+        const legendTop = controlsTop + controls.getBoundingClientRect().height + 8;
+
+        document.body.style.setProperty('--mobile-controls-top', controlsTop + 'px');
+        document.body.style.setProperty('--mobile-legend-top', Math.round(legendTop) + 'px');
+      });
+    }
+
+    function scheduleMobileChromePosition() {
+      window.requestAnimationFrame(function () {
+        positionMobileChrome();
+        window.setTimeout(positionMobileChrome, 80);
+      });
+    }
+
+    if (brandBlock) {
+      brandBlock.setAttribute('role', 'button');
+      brandBlock.setAttribute('tabindex', '0');
+      brandBlock.setAttribute('aria-expanded', 'false');
+      brandBlock.setAttribute('title', 'Tap to show the full project description');
+
+      function toggleBrandDescription() {
+        if (window.innerWidth > 760 || !document.body.classList.contains('explore-page-active')) return;
+        const opening = !document.body.classList.contains('mobile-brand-expanded');
+        document.body.classList.toggle('mobile-brand-expanded', opening);
+        brandBlock.setAttribute('aria-expanded', opening ? 'true' : 'false');
+        scheduleMobileChromePosition();
+      }
+
+      brandBlock.addEventListener('click', function (event) {
+        event.stopPropagation();
+        toggleBrandDescription();
+      });
+
+      brandBlock.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          toggleBrandDescription();
+        }
+      });
+    }
+
     function activeView() {
       return views.find(function (view) {
         return view.source.classList.contains('active');
@@ -296,6 +381,12 @@
     function closeLegend() {
       document.body.classList.remove('mobile-legend-open');
       legendToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    function closeBrandDescription() {
+      document.body.classList.remove('mobile-brand-expanded');
+      if (brandBlock) brandBlock.setAttribute('aria-expanded', 'false');
+      scheduleMobileChromePosition();
     }
 
     trigger.addEventListener('click', function (event) {
@@ -335,6 +426,7 @@
       if (event.key === 'Escape') {
         closeMenu();
         closeLegend();
+        closeBrandDescription();
       }
     });
 
@@ -342,10 +434,21 @@
       if (window.innerWidth > 760) {
         closeMenu();
         closeLegend();
+        document.body.classList.remove('mobile-brand-expanded');
+        if (brandBlock) brandBlock.setAttribute('aria-expanded', 'false');
+      } else {
+        scheduleMobileChromePosition();
       }
     });
 
+    window.addEventListener('orientationchange', scheduleMobileChromePosition);
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(scheduleMobileChromePosition);
+    }
+
     syncViewUi();
+    scheduleMobileChromePosition();
   }
 
   if (document.readyState === 'loading') {
