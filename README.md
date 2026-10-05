@@ -23,7 +23,7 @@ The rendered page contains four internal sections:
 - **Explore** — force-directed politician / stock / committee network
 - **About** — source definitions, provenance, and caveats
 - **Methodology** — design and analytical choices
-- **Class Report** — narrated R commands and outputs for course-format review
+- **Compare members** — projected member overlap, all accepted affiliations, and descriptive party mixing
 
 The interface also includes graph search, reset/recenter controls, institution drawers, original PTR links, shareable selections, CSV export, House coverage diagnostics, and a compact mobile view/legend control.
 

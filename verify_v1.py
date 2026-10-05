@@ -2,19 +2,20 @@
 import csv
 import json
 import math
+import re
 from collections import Counter, defaultdict
 from itertools import combinations
 from pathlib import Path
 
 rows = list(csv.DictReader(open('PTR_transactions_2025_ACCEPTED_STOCK_PURCHASES.csv')))
-clean = lambda name: ' '.join(name.split())
+clean = lambda name: re.sub(r'^Honorable\s+', '', re.sub(r'^Hon\.\s*', '', name, flags=re.I), flags=re.I).strip()
 # R strips honorifics; mapping to raw names is verified via the same stock sets.
 members = list(csv.DictReader(open('validation/member-metrics.csv')))
 edges = list(csv.DictReader(open('validation/member-overlap.csv')))
 metrics = json.loads(Path('validation/metrics.json').read_text())
 stocks = defaultdict(set)
 for row in rows:
-    stocks[row['ticker_v8_2_cleaned'].strip().upper()].add(row['politician'])
+    stocks[row['ticker_v8_2_cleaned'].strip().upper()].add(clean(row['politician']))
 shared = {ticker for ticker, buyers in stocks.items() if len(buyers) >= 2}
 raw_sets = defaultdict(set)
 for ticker, buyers in stocks.items():
@@ -31,7 +32,9 @@ assert metrics['displayed_rows'] == sum(r['ticker_v8_2_cleaned'] in shared for r
 assert metrics['hidden_tickers'] == len(stocks) - len(shared) == 500
 assert metrics['identical_excess_rows'] == len(rows) - len({tuple(r.values()) for r in rows}) == 124
 assert metrics['projected_edges'] == len(expected_weights) == len(edges)
-assert sorted(int(e['shared_stocks']) for e in edges) == sorted(expected_weights.values())
+assert {tuple(sorted((e['from'], e['to']))): int(e['shared_stocks']) for e in edges} == dict(expected_weights)
+for e in edges:
+    assert set(e['tickers'].split(', ')) == raw_sets[e['from']] & raw_sets[e['to']]
 assert sorted(int(m['full_stock_degree']) for m in members) == sorted(map(len, raw_sets.values()))
 assert metrics['isolates'] == sum(int(m['shared_member_degree']) == 0 for m in members) == 10
 parties = {m['id']: m['party'] for m in members}
