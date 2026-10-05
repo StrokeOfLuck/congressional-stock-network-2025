@@ -1,0 +1,79 @@
+<style>
+.v1-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0}
+.v1-controls label{font-weight:500;display:flex;align-items:center;gap:6px}
+.v1-controls input{border:1px solid #bfc7ce;padding:8px;border-radius:5px;max-width:180px}
+.v1-graph{height:620px;border:1px solid #d8dee5;background:white;border-radius:8px;overflow:hidden}
+#v1Selection{max-height:200px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:12px}
+#v1Page .code-wrap{max-width:1200px}
+.book-reference{font-size:.94rem;color:#526173;border-left:3px solid #a4b7cb;padding:8px 14px;margin:12px 0}
+@media(max-width:600px){.v1-graph{height:480px}.v1-controls{gap:8px}.v1-controls .nav-button{padding:8px 10px}#v1Page .code-wrap{padding:18px 12px}}
+</style>
+<script>
+(function(){
+  function init(){
+    const page=document.getElementById('v1Page'), nav=document.getElementById('navV1');
+    if(!page||!nav)return;
+    let mode='members';
+    const byId=id=>document.getElementById(id);
+    const network=()=>window.v1Networks&&window.v1Networks[mode];
+    function fit(){window.dispatchEvent(new Event('resize'));setTimeout(()=>{const n=network();if(n){n.redraw();n.fit({animation:false});}},180);}
+    function open(){
+      ['explorePage','aboutPage','codePage'].forEach(id=>byId(id).style.display='none');
+      ['navExplore','navAbout','navCode'].forEach(id=>byId(id).classList.remove('active'));
+      page.style.display='block';nav.classList.add('active');
+      document.body.classList.remove('explore-page-active','explore-locked');
+      window.scrollTo(0,0);fit();
+    }
+    nav.addEventListener('click',open);
+    ['navExplore','navAbout','navCode','backToNetwork','backToNetworkFromCode'].forEach(id=>{
+      const el=byId(id);if(el)el.addEventListener('click',()=>{page.style.display='none';nav.classList.remove('active');});
+    });
+    function selectMode(next){
+      mode=next;
+      byId('v1MembersGraph').style.display=mode==='members'?'block':'none';
+      byId('v1AllGraph').style.display=mode==='all'?'block':'none';
+      byId('v1MembersBtn').classList.toggle('active',mode==='members');
+      byId('v1AllBtn').classList.toggle('active',mode==='all');
+      byId('v1ThresholdLabel').style.display=mode==='members'?'flex':'none';
+      byId('v1GraphNote').textContent=mode==='members'
+        ?'Member overlap: thicker lines mean more distinct shared tickers. Node size counts all distinct accepted stocks. Red = Republican; blue = Democrat. Click a line for its tickers or a member for their accepted stocks. The threshold changes the display only; statistics below always use the complete projection.'
+        :'All accepted affiliations: circles are members; gold diamonds are stocks. Each equal-width line means at least one reported purchase. This includes stocks reported by just one member. Click a member or stock to inspect its connections.';
+      byId('v1Selection').textContent='Select a member or connection to inspect it.';fit();
+    }
+    byId('v1MembersBtn').onclick=()=>selectMode('members');
+    byId('v1AllBtn').onclick=()=>selectMode('all');
+    byId('v1FitBtn').onclick=fit;
+    byId('v1Threshold').oninput=function(){
+      const n=window.v1Networks&&window.v1Networks.members;if(!n)return;
+      const minimum=Math.max(1,Number(this.value)||1);
+      const edges=n.body.data.edges.get();
+      n.body.data.edges.update(edges.map(e=>({id:e.id,hidden:e.shared_stocks<minimum})));
+      byId('v1Selection').textContent=edges.filter(e=>e.shared_stocks>=minimum).length+' visible member pairs at ≥ '+minimum+' shared stocks. All 55 members are retained; analytical statistics are unchanged.';
+    };
+    function find(){
+      const n=network(), q=byId('v1Search').value.toLowerCase().trim();if(!n||!q)return;
+      const matches=n.body.data.nodes.get().filter(x=>(x.label||'').toLowerCase().includes(q));
+      if(!matches.length){byId('v1Selection').textContent='No matching node in this view.';return;}
+      const id=matches[0].id;n.selectNodes([id]);n.focus(id,{scale:1.3,animation:true});
+      window.v1Inspect(mode,{nodes:[id],edges:[]},n);
+    }
+    byId('v1FindBtn').onclick=find;
+    byId('v1Search').onkeydown=e=>{if(e.key==='Enter')find();};
+    window.v1Inspect=function(key,p,n){
+      const out=byId('v1Selection');
+      if(p.nodes&&p.nodes.length){
+        const id=p.nodes[0], node=n.body.data.nodes.get(id);
+        const name=key==='members'?id:String(id).replace(/^M:/,'');
+        const stocks=(window.v1StockSets||{})[name];
+        out.textContent=stocks?name+' — '+stocks.length+' distinct accepted stocks:\n'+stocks.join(', ')
+          :node.label+' — connected members:\n'+n.getConnectedNodes(id).map(x=>n.body.data.nodes.get(x).label).sort().join(', ');
+      }else if(key==='members'&&p.edges&&p.edges.length){
+        const e=n.body.data.edges.get(p.edges[0]);
+        out.textContent=e.from+' + '+e.to+'\n'+e.shared_stocks+' shared tickers: '+e.tickers+'\nShared annual purchases do not establish coordination or simultaneous ownership.';
+      }
+    };
+    if(new URLSearchParams(location.search).get('analysis')==='1')setTimeout(open,500);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>

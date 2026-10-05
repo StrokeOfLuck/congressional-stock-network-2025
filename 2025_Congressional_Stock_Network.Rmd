@@ -1,5 +1,5 @@
 ---
-title: "2025 Congressional Stock Trading Networks"
+title: "2025 House Reported Stock Purchases · 1.0"
 author: "Sean Ryan"
 date: "`r format(Sys.Date(), '%B %d, %Y')`"
 output:
@@ -91,7 +91,7 @@ committee_fork_repo <- "https://github.com/StrokeOfLuck/congress-legislators"
 committee_file_override <- "committee-membership-2025-TRANSACTION_MATCHED.csv"
 committee_snapshot_index_file <- "committee-snapshot-index-2025.csv"
 committee_reference_file <- "committee-membership-2025-TRANSACTION_MATCHED-REFERENCE.md"
-house_roster_2025_cache_file <- "house-roster-119th-congress-2025.csv"
+house_roster_2025_cache_file <- "house-roster-119th-congress-2025-v1.csv"
 
 committee_snapshot_index <- tibble::tribble(
   ~snapshot_date, ~source_commit, ~snapshot_note,
@@ -511,7 +511,7 @@ build_2025_house_roster <- function() {
       !is.na(term_start),
       !is.na(term_end),
       term_start <= as.Date("2025-12-31"),
-      term_end >= as.Date("2025-01-03")
+      term_end > as.Date("2025-01-03")
     ) %>%
     group_by(bioguide) %>%
     summarise(
@@ -3649,6 +3649,8 @@ subcommittee_widget <- make_network(
   "full"
 )
 
+source("v1-analysis.R", local = TRUE)
+
 # ============================================================
 # SUMMARY VALUES FOR THE ABOUT PAGE
 # ============================================================
@@ -5984,6 +5986,7 @@ default_view <- if (
 
 page <- tags$div(
   class = "app-shell",
+  v1_panel,
 
   tags$div(
     class = "topbar",
@@ -5991,7 +5994,7 @@ page <- tags$div(
       class = "brand-block",
       tags$div(
         class = "brand",
-        "2025 Congressional Stock Trading Networks"
+        "2025 House Reported Stock Purchases · 1.0"
       ),
       tags$div(
         class = "brand-subtitle",
@@ -6002,7 +6005,8 @@ page <- tags$div(
       class = "nav-actions",
       tags$button(id = "navExplore", class = "nav-button active", "Explore"),
       tags$button(id = "navAbout", class = "nav-button", "About"),
-      tags$button(id = "navCode", class = "nav-button", "Methodology")
+      tags$button(id = "navCode", class = "nav-button", "Methodology"),
+      tags$button(id = "navV1", class = "nav-button", "Compare members")
     )
   ),
 
@@ -6376,7 +6380,7 @@ page <- tags$div(
 
       tags$h2("How to read it"),
       tags$p(
-        "The Stocks + committees + subcommittees view loads first. Politicians connect to reported stock purchases, purchase lines inherit the politician's party color, and the graph keeps shared stocks purchased by at least two politicians for readability. Committee and subcommittee relationships are transaction-date-aware. Dragging a node lets the force-directed network settle again; clicking any node opens the detail drawer."
+        "The Stocks + committees + subcommittees view loads first. Politicians connect to reported stock purchases, purchase lines inherit the politician's party color, and the graph keeps shared stocks purchased by at least two politicians for readability. Committee and subcommittee relationships are transaction-date-aware. The initial layout uses force-directed physics; after stabilization, nodes can be repositioned manually. Clicking a node opens its detail drawer."
       ),
       tags$p(
         "The exact PTR filters, pinned committee snapshots, transaction-date matching rule, source commits, and reproducibility checks are documented on the Methodology page."
@@ -6402,9 +6406,10 @@ page <- tags$div(
       ),
 
       tags$h2("Important limitation"),
+      v1_caveats,
       tags$div(
         class = "method-note",
-        "A stock purchase and a committee or subcommittee assignment appearing in the same network are not evidence of misconduct, influence, or causation. The network is an exploratory tool for finding relationships worth checking against original PTR filings and official committee records. The institutional layer uses the closest available 2025 snapshot on or before each transaction date, which is more precise than one annual snapshot. It still should not be treated as proof of a day-by-day assignment because a change can occur between published snapshots. Two members can appear under the same shared stock even if their purchases occurred on different dates."
+        "A stock purchase and a committee or subcommittee assignment appearing in the same network are not evidence of misconduct, influence, or causation. The network is an exploratory tool for finding relationships worth checking against original PTR filings and official committee records. The institutional layer normally uses the latest available snapshot on or before the transaction date. Jan. 1–2 uses Dec. 17, 2024; Jan. 3–20 uses the later Jan. 21, 2025 snapshot as an explicitly approximate assignment. It still should not be treated as proof of a day-by-day assignment because a change can occur between published snapshots. Two members can appear under the same shared stock even if their purchases occurred on different dates."
       ),
 
       tags$button(
@@ -6423,7 +6428,9 @@ page <- tags$div(
     style = "display:none;",
     tags$div(
       class = "code-wrap",
-      tags$h1("Methodology"),
+      tags$h1("Methodology · version 1.0"),
+      v1_caveats,
+      tags$p("The stocks-only layer is an undirected two-mode affiliation network. The combined institutional view has several node and edge types, including committee–subcommittee hierarchy; it is not a single two-mode graph. ", v1_book("Textbook chapter 13: Two Mode Networks", "two_mode.html")),
       tags$div(
         class = "report-meta",
         HTML(
@@ -6440,6 +6447,7 @@ page <- tags$div(
       ),
 
       tags$h2("1. Filter the PTR records"),
+      tags$div(class = "book-reference", "Textbook connection: ", v1_book("§2.0.1: Networks as edgelists", "networks.html#networks-as-edgelists")),
       tags$p(
         "First, the PTR data are restricted to transaction dates in 2025, purchase transactions, public stocks, and ticker records that passed the cleaning step."
       ),
@@ -6476,6 +6484,7 @@ purchases_2025_all <- ptr %>%
       ),
 
       tags$h2("2. Keep stocks shared by at least two politicians"),
+      tags$div(class = "book-reference", "Textbook connection: ", v1_book("§§13.1–13.4: Two-mode networks and degree", "two_mode.html")),
       tags$p(
         "Because the question is who bought the same stocks, a ticker enters the displayed network only when at least two different politicians connect to it."
       ),
@@ -6506,9 +6515,11 @@ purchases_network <- purchases_2025_all %>%
         )
       ),
 
+      tags$p("Purchase edge width in Explore is 0.55 + 0.95 × log(1 + purchase-record count), not dollars. Politician node size reflects distinct displayed stocks, not influence. The Compare members tab uses full accepted stock degree and distinct shared tickers. ", v1_book("Textbook §2.1.2: Binary vs. Valued Matrices", "networks.html#binary-vs.-valued-matrices"), " · ", v1_book("§13.4: Degree in two-mode networks", "two_mode.html#degree-centrality-in-two-mode-networks")),
       tags$h2("3. Encode party as color"),
+      tags$div(class = "book-reference", "Textbook connection: ", v1_book("§2.1: Graph attributes; §8.1 separately measures assortativity", "networks.html#igraph-objects")),
       tags$p(
-        "Party is treated as a visual attribute of the politician node and of that politician's purchase edges. This makes the red and blue bundles readable as political structure rather than decoration."
+        "Party is treated as a visual attribute of the politician node and of that politician's purchase edges. Colors identify party affiliation; they do not establish partisan clustering. The Compare members tab separately measures party assortativity on the member projection."
       ),
       tags$pre(
         class = "r-code-block",
@@ -6564,6 +6575,7 @@ membership_history <- bind_rows(
       ),
 
       tags$h2("5. Match committee membership to the transaction date"),
+      tags$div(class = "book-reference", "Textbook connection: ", v1_book("Chapter 15: Dynamic Networks (conceptual context; this display is annual)", "dynamic.html")),
       tags$p(
         "Each accepted stock purchase gets one committee snapshot date. Jan. 1-2 uses Dec. 17, 2024 because those dates are still in the 118th Congress. Jan. 3-20 uses Jan. 21, 2025 because the Jan. 17 repository update had no House committee rows. From Jan. 21 onward, the code takes the most recent available snapshot on or before the transaction date. The purchase is then joined only to committee/subcommittee assignments present in that selected snapshot."
       ),
@@ -6639,6 +6651,7 @@ committee_detail_purchases <- committee_purchase_rows %>%
       ),
 
       tags$h2("7. Find shared stocks within the selected institution"),
+      tags$div(class = "book-reference", "Textbook connection: ", v1_book("§13.6: Projecting One Mode Networks (shared affiliation)", "two_mode.html#projecting-one-mode-networks")),
       tags$p(
         "After the time-aware matching is done, a committee or subcommittee drawer groups its matched purchase rows by ticker. A shared institutional stock requires at least two different matched members. Individual member names are then sorted by their number of matched purchase records for that ticker."
       ),
@@ -6661,6 +6674,7 @@ buyers <- matched_purchase_rows %>%
       ),
 
       tags$h2("8. Measure House coverage"),
+      tags$p("Version 1.0 uses term_start ≤ Dec. 31, 2025 and term_end > Jan. 3, 2025, excluding outgoing terms ending at the 119th-Congress transition. The roster is pinned to Dec. 5, 2025, so it is a snapshot-based denominator, not independently verified year-end completeness."),
       tags$p(
         "The pinned 119th-Congress House roster (terms overlapping Jan. 3-Dec. 31, 2025) is compared with accepted public-stock purchases. This separates people in the main graph, accepted purchasers hidden only by the 2+ ticker filter, and roster members with no accepted purchase found. The last category is a data-coverage flag, not proof that the member did not trade. Two PTR naming exceptions are handled explicitly for coverage matching: “Neal Patrick MD, Facs Dunn” is mapped to Neal P. Dunn, and “Peter Allen Stauber” is mapped to Pete Stauber."
       ),
@@ -6682,6 +6696,7 @@ buyers <- matched_purchase_rows %>%
       ),
 
       tags$h2("9. Add investigation controls"),
+      tags$div(class = "book-reference", "Textbook connection: ", v1_book("Appendix B.3: Interactive visualization with visNetwork", "interact_vis.html#interactive-visualization-with-visnetwork")),
       tags$p(
         "The HTML includes a compact search index for graph nodes plus browser-side controls for focusing nodes, fitting the active network back on screen, restoring the originally stabilized layout, preserving drawer drill-down state in the URL, and exporting a selected committee/subcommittee member-by-ticker summary as CSV."
       ),
@@ -6706,6 +6721,7 @@ buyers <- matched_purchase_rows %>%
       ),
 
       tags$h2("10. Use a collision-aware force-directed layout"),
+      tags$div(class = "book-reference", "Textbook connection: ", v1_book("§4.1: Force Directed Layouts (general principle; the implementation uses ForceAtlas2)", "graph_layouts.html#force-directed-layouts")),
       tags$p(
         "ForceAtlas2 keeps the exploratory network shape while avoidOverlap reduces circle-on-circle collisions. Stabilization is capped at 500 iterations, and dragging no longer restarts whole-network physics. Edges are drawn as straight lines to reduce visual tangling and lower redraw cost during pan and zoom; hover hit-testing still pauses briefly while the viewer is moving. The lower label draw threshold is unchanged so names stay visible farther out while zooming."
       ),
@@ -6746,6 +6762,11 @@ visPhysics(
         "The setup/helper code remains hidden because it is long and would interrupt the visualization, but the substantive data filtering, network construction, institutional links, and visualization settings are documented here. The Rmd itself contains the complete executable code."
       ),
 
+      tags$h2("11. Project members and measure party mixing"),
+      tags$p("Compare members starts from distinct member–ticker affiliations, forms the member projection, and weights each pair by distinct shared tickers. Ten members with no shared ticker remain as isolates. Party assortativity is reported for unweighted ties and, separately, shared-ticker weights; it is descriptive, without a significance test. The display threshold never changes the reported complete-projection statistic."),
+      tags$p(v1_book("§13.6: Projection", "two_mode.html#projecting-one-mode-networks"), " · ", v1_book("§8.1: Assortativity", "assortitivity.html#estimating-assortativity")),
+      tags$pre(class = "r-code-block", tags$code("pairs <- distinct(purchases_2025_all, politician_clean, ticker)\nB <- as.matrix(xtabs(~ politician_clean + ticker, pairs))\nshared <- tcrossprod(B)\ndiag(shared) <- 0\n# Positive upper-triangle values are member-pair shared-ticker counts.\n# For nominal mixing matrix e normalized to sum 1:\n# r = (sum(diag(e)) - sum(rowSums(e)^2)) / (1 - sum(rowSums(e)^2))")),
+      tags$p("Full executable construction and export logic: v1-analysis.R. Independent checks: verify_v1.py. Reference: McDonald, Leppard, Davis, and Mallavarapu (2026), Introduction to Social Network Analysis. No claim is made that the textbook validates the source scraping or that the layout demonstrates misconduct."),
       tags$button(
         id = "backToNetworkFromCode",
         class = "nav-button active",
@@ -6759,6 +6780,7 @@ visPhysics(
   tags$script(
     HTML(
       paste0(
+        "window.v1StockSets = ", jsonlite::toJSON(v1_stock_sets, auto_unbox = FALSE), ";",
         "window.stockDetails = ", stock_details_json, ";",
         "window.committeeDetails = ", committee_details_json, ";",
         "window.subcommitteeDetails = ", subcommittee_details_json, ";",

@@ -9,7 +9,7 @@ rmarkdown::render(
   output_file = "index.html",
   output_options = list(
     includes = rmarkdown::includes(
-      after_body = "mobile-network-controls.html"
+      after_body = c("mobile-network-controls.html", "v1-ui.html")
     )
   ),
   quiet = FALSE
