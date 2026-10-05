@@ -1,0 +1,15 @@
+{
+  "accepted_rows": 3179,
+  "displayed_rows": 2402,
+  "accepted_members": 55,
+  "accepted_tickers": 855,
+  "hidden_rows": 777,
+  "hidden_tickers": 500,
+  "projected_edges": 494,
+  "isolates": 10,
+  "assortativity": -0.03288505285695,
+  "weighted_assortativity": -0.05398177883831,
+  "identical_excess_rows": 124,
+  "early_future_snapshot_rows": 130,
+  "roster_count": 445
+}

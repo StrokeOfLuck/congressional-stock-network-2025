@@ -1,0 +1,495 @@
+from,to,shared_stocks,tickers
+April McClain Delaney,Byron Donalds,2,"BRO, IDXX"
+Bruce Westerman,Byron Donalds,4,"ABT, AMZN, AVGO, V"
+Bruce Westerman,Carol Devine Miller,2,"ITW, PEP"
+Bruce Westerman,Cleo Fields,11,"AAPL, AMZN, AVGO, GOOGL, JPM, META, MSFT, NFLX, NVDA, ORCL, TSM"
+Byron Donalds,Cleo Fields,4,"AMZN, AVGO, CMG, HOOD"
+Bruce Westerman,Cliff Bentz,1,PG
+April McClain Delaney,Dan Newhouse,1,BRO
+Bruce Westerman,Dan Newhouse,3,"COP, SCHW, XOM"
+Byron Donalds,Dan Newhouse,1,BRO
+Cleo Fields,Dan Newhouse,1,AMD
+Bruce Westerman,David J. Taylor,8,"AMZN, AVGO, CRM, HD, JPM, LLY, PG, V"
+Byron Donalds,David J. Taylor,4,"AMZN, AVGO, PGR, V"
+Cleo Fields,David J. Taylor,4,"AMZN, AVGO, JPM, T"
+Cliff Bentz,David J. Taylor,1,PG
+Dan Newhouse,David J. Taylor,1,PLD
+Bruce Westerman,Debbie Dingell,1,WMT
+Bruce Westerman,Dwight Evans,3,"AMZN, GOOGL, NVDA"
+Byron Donalds,Dwight Evans,1,AMZN
+Cleo Fields,Dwight Evans,3,"AMZN, GOOGL, NVDA"
+David J. Taylor,Dwight Evans,1,AMZN
+Bruce Westerman,Ed Case,1,AAPL
+Cleo Fields,Ed Case,1,AAPL
+April McClain Delaney,Gilbert Cisneros,4,"BRO, CACI, ITT, PTC"
+Bruce Westerman,Gilbert Cisneros,35,"AAPL, ABT, AMZN, ASML, AVGO, AZN, BA, BSX, CAT, CCI, COST, CVX, FCX, GOOGL, HD, ISRG, JNJ, JPM, LLY, MA, META, MRK, MS, MSFT, NFLX, NOW, NVDA, ORCL, PFE, PG, SAP, SPOT, TSM, UNH, WMT"
+Byron Donalds,Gilbert Cisneros,8,"ABT, AMZN, ANET, AVGO, BRO, CMG, DASH, HOOD"
+Carol Devine Miller,Gilbert Cisneros,2,"HON, LMT"
+Cleo Fields,Gilbert Cisneros,16,"AAPL, AMD, AMZN, AVGO, CMG, GOOGL, HOOD, JPM, META, MSFT, NFLX, NVDA, ORCL, PLTR, TSM, UBER"
+Cliff Bentz,Gilbert Cisneros,1,PG
+Dan Newhouse,Gilbert Cisneros,7,"AMD, BRO, GIS, LULU, NXPI, OKE, UPS"
+David J. Taylor,Gilbert Cisneros,7,"AMZN, AVGO, ETN, HD, JPM, LLY, PG"
+Debbie Dingell,Gilbert Cisneros,1,WMT
+Dwight Evans,Gilbert Cisneros,5,"AMZN, GOOGL, IBM, INTC, NVDA"
+Ed Case,Gilbert Cisneros,1,AAPL
+Bruce Westerman,Greg Landsman,1,AMZN
+Byron Donalds,Greg Landsman,1,AMZN
+Cleo Fields,Greg Landsman,1,AMZN
+David J. Taylor,Greg Landsman,1,AMZN
+Dwight Evans,Greg Landsman,1,AMZN
+Gilbert Cisneros,Greg Landsman,1,AMZN
+Bruce Westerman,James Comer,9,"AAPL, AMZN, AVGO, COST, CRM, HD, MSFT, NFLX, NVDA"
+Byron Donalds,James Comer,6,"AMZN, ANET, APH, AVGO, PYPL, TTD"
+Cleo Fields,James Comer,10,"AAPL, AMZN, AVGO, GOOG, MSFT, NFLX, NVDA, PLTR, T, UBER"
+Dan Newhouse,James Comer,1,PANW
+David J. Taylor,James Comer,5,"AMZN, AVGO, CRM, HD, T"
+Dwight Evans,James Comer,2,"AMZN, NVDA"
+Ed Case,James Comer,1,AAPL
+Gilbert Cisneros,James Comer,12,"AAPL, AMZN, ANET, AVGO, COST, HD, MSFT, NFLX, NVDA, PLTR, UBER, VRSN"
+Greg Landsman,James Comer,1,AMZN
+April McClain Delaney,James French Hill,1,MKL
+April McClain Delaney,Jared Moskowitz,1,TSCO
+Bruce Westerman,Jared Moskowitz,11,"AMZN, AVGO, AXP, CAT, GS, ITW, NVDA, ORCL, PEP, TSM, V"
+Byron Donalds,Jared Moskowitz,3,"AMZN, AVGO, V"
+Carol Devine Miller,Jared Moskowitz,4,"HON, ITW, LMT, PEP"
+Cleo Fields,Jared Moskowitz,7,"AMZN, AVGO, CSCO, NVDA, ORCL, QCOM, TSM"
+Cliff Bentz,Jared Moskowitz,1,AMGN
+David J. Taylor,Jared Moskowitz,4,"AMZN, AVGO, RPM, V"
+Dwight Evans,Jared Moskowitz,2,"AMZN, NVDA"
+Gilbert Cisneros,Jared Moskowitz,13,"ACN, AMZN, AVGO, CAT, CI, HON, LIN, LMT, MCK, NVDA, ORCL, SYK, TSM"
+Greg Landsman,Jared Moskowitz,1,AMZN
+James Comer,Jared Moskowitz,3,"AMZN, AVGO, NVDA"
+April McClain Delaney,Jefferson Shreve,2,"FBIN, IDXX"
+Bruce Westerman,Jefferson Shreve,29,"AAPL, ADBE, AVGO, AXP, BAC, CAT, CCI, COP, CRM, CSX, CVX, EW, GS, HD, ISRG, JNJ, MRK, MSFT, NFLX, NVDA, ORCL, PEP, PFE, RTX, SPOT, UNH, UNP, WMT, XOM"
+Byron Donalds,Jefferson Shreve,9,"ADSK, ANET, AVGO, CCL, CMG, IDXX, LRCX, PYPL, TTD"
+Carol Devine Miller,Jefferson Shreve,4,"AWK, GILD, LMT, PEP"
+Cleo Fields,Jefferson Shreve,11,"AAPL, AMD, AVGO, CMG, MCD, MSFT, NFLX, NVDA, ORCL, QCOM, UBER"
+Cliff Bentz,Jefferson Shreve,1,AMGN
+Dan Newhouse,Jefferson Shreve,12,"AMAT, AMD, COP, LULU, PANW, PLD, ROST, SNPS, SPGI, TGT, UPS, XOM"
+David J. Taylor,Jefferson Shreve,6,"AVGO, CRM, HD, MPC, PLD, VRTX"
+Debbie Dingell,Jefferson Shreve,2,"DIS, WMT"
+Dwight Evans,Jefferson Shreve,2,"INTC, NVDA"
+Ed Case,Jefferson Shreve,1,AAPL
+Gilbert Cisneros,Jefferson Shreve,46,"AAPL, AMD, ANET, APP, AVGO, BKNG, CAT, CBOE, CCI, CI, CMG, CNC, COIN, CSGP, CVX, DG, ELV, FIS, HAL, HD, INTC, ISRG, JNJ, LEN, LIN, LMT, LULU, MRK, MSFT, NFLX, NVDA, ORCL, OXY, PFE, PWR, SLB, SPOT, SYK, TDG, UBER, UNH, UPS, WDAY, WFC, WMT, ZTS"
+James Comer,Jefferson Shreve,14,"AAPL, ANET, AVGO, BLK, CRM, HD, MRVL, MSFT, NFLX, NVDA, PANW, PYPL, TTD, UBER"
+Jared Moskowitz,Jefferson Shreve,18,"ABBV, ADI, AMGN, AVGO, AXP, CAT, CI, GS, LIN, LMT, NVDA, ORCL, PEP, QCOM, SHW, SYK, TJX, TXN"
+Bruce Westerman,John McGuire,4,"META, NFLX, NOW, UNH"
+Cleo Fields,John McGuire,2,"META, NFLX"
+Gilbert Cisneros,John McGuire,4,"META, NFLX, NOW, UNH"
+James Comer,John McGuire,1,NFLX
+Jefferson Shreve,John McGuire,2,"NFLX, UNH"
+Bruce Westerman,Jonathan Jackson,5,"AMZN, GS, LLY, META, NFLX"
+Byron Donalds,Jonathan Jackson,3,"AMZN, HOOD, LRCX"
+Cleo Fields,Jonathan Jackson,6,"AMZN, ARM, HOOD, META, NFLX, PLTR"
+Dan Newhouse,Jonathan Jackson,2,"PANW, TMUS"
+David J. Taylor,Jonathan Jackson,2,"AMZN, LLY"
+Dwight Evans,Jonathan Jackson,2,"AMZN, IBM"
+Gilbert Cisneros,Jonathan Jackson,9,"AMZN, HOOD, IBM, KKR, LLY, MCK, META, NFLX, PLTR"
+Greg Landsman,Jonathan Jackson,1,AMZN
+James Comer,Jonathan Jackson,4,"AMZN, NFLX, PANW, PLTR"
+Jared Moskowitz,Jonathan Jackson,3,"AMZN, GS, MCK"
+Jefferson Shreve,Jonathan Jackson,4,"GS, LRCX, NFLX, PANW"
+John McGuire,Jonathan Jackson,2,"META, NFLX"
+Bruce Westerman,Josh Gottheimer,19,"ABT, ASML, AVGO, CRM, HD, JNJ, LLY, MA, META, MSFT, NSRGY, NVDA, RTX, SBUX, SCHW, SHEL, UNP, V, WMT"
+Byron Donalds,Josh Gottheimer,5,"ABT, AVGO, DASH, FI, V"
+Carol Devine Miller,Josh Gottheimer,1,GILD
+Cleo Fields,Josh Gottheimer,5,"AVGO, META, MSFT, NVDA, UBER"
+Dan Newhouse,Josh Gottheimer,1,SCHW
+David J. Taylor,Josh Gottheimer,5,"AVGO, CRM, HD, LLY, V"
+Debbie Dingell,Josh Gottheimer,1,WMT
+Dwight Evans,Josh Gottheimer,2,"IBM, NVDA"
+Gilbert Cisneros,Josh Gottheimer,26,"ABT, APP, ASML, AVGO, BABA, BKNG, BRK.B, CDRE, CSW, CVLT, DASH, DHI, HD, IBM, JNJ, LLY, MA, META, MSFT, NET, NVDA, PAR, TNDM, TSLA, UBER, WMT"
+James Comer,Josh Gottheimer,6,"AVGO, CRM, HD, MSFT, NVDA, UBER"
+Jared Moskowitz,Josh Gottheimer,4,"ABBV, AVGO, NVDA, V"
+Jefferson Shreve,Josh Gottheimer,15,"ABBV, APP, AVGO, BKNG, CRM, GILD, HD, JNJ, MSFT, NVDA, RTX, UBER, UNP, WMT, XYZ"
+John McGuire,Josh Gottheimer,1,META
+Jonathan Jackson,Josh Gottheimer,4,"IBM, LLY, META, SHOP"
+Bruce Westerman,Julia Letlow,17,"AAPL, ADBE, AMZN, AZN, C, CRM, DE, DHR, GOOGL, JCI, META, MSFT, PFE, PG, TMO, UNH, V"
+Byron Donalds,Julia Letlow,4,"AMZN, CMG, TW, V"
+Cleo Fields,Julia Letlow,8,"AAPL, AMD, AMZN, CMG, CSCO, GOOGL, META, MSFT"
+Cliff Bentz,Julia Letlow,1,PG
+Dan Newhouse,Julia Letlow,1,AMD
+David J. Taylor,Julia Letlow,4,"AMZN, CRM, PG, V"
+Debbie Dingell,Julia Letlow,1,DIS
+Dwight Evans,Julia Letlow,4,"AMZN, GOOGL, IBM, INTC"
+Ed Case,Julia Letlow,1,AAPL
+Gilbert Cisneros,Julia Letlow,18,"AAPL, ACN, AMD, AMZN, AZN, CMG, CNC, GOOGL, HUM, IBM, INTC, META, MSFT, PFE, PG, RBLX, UNH, WAT"
+Greg Landsman,Julia Letlow,1,AMZN
+James Comer,Julia Letlow,4,"AAPL, AMZN, CRM, MSFT"
+Jared Moskowitz,Julia Letlow,5,"ABBV, ACN, AMZN, CSCO, V"
+Jefferson Shreve,Julia Letlow,16,"AAPL, ABBV, ADBE, AIG, AMD, CMG, CNC, CRM, DIS, DVN, INTC, INTU, LOW, MSFT, PFE, UNH"
+John McGuire,Julia Letlow,2,"META, UNH"
+Jonathan Jackson,Julia Letlow,4,"AMZN, IBM, META, STT"
+Josh Gottheimer,Julia Letlow,8,"ABBV, CRM, IBM, KO, META, MMM, MSFT, V"
+April McClain Delaney,Julie Johnson,1,PAYX
+Bruce Westerman,Julie Johnson,13,"ADBE, BA, COP, CVX, DE, DHR, FCX, GS, MRK, NOW, PEP, RTX, UNP"
+Byron Donalds,Julie Johnson,3,"ANET, PGR, PYPL"
+Carol Devine Miller,Julie Johnson,4,"CME, HON, HSY, PEP"
+Cleo Fields,Julie Johnson,3,"GOOG, PLTR, UBER"
+Dan Newhouse,Julie Johnson,2,"COP, NXPI"
+David J. Taylor,Julie Johnson,3,"ETN, KR, PGR"
+Gilbert Cisneros,Julie Johnson,27,"ANET, BA, BMY, CI, CVX, DG, DOW, ETN, F, FCX, FIS, FISV, HON, IP, MRK, NOW, NXPI, PLTR, REGN, SBAC, SMCI, TAP, UBER, VRSK, VRSN, WBA, WFC"
+James Comer,Julie Johnson,6,"ANET, GOOG, PLTR, PYPL, UBER, VRSN"
+Jared Moskowitz,Julie Johnson,6,"CARR, CI, GS, HON, PEG, PEP"
+Jefferson Shreve,Julie Johnson,22,"A, ADBE, ANET, APTV, CEG, CI, COP, CRL, CVX, DG, FIS, GS, MRK, NEE, PEP, PYPL, RTX, UBER, UNP, VST, WFC, WY"
+John McGuire,Julie Johnson,1,NOW
+Jonathan Jackson,Julie Johnson,2,"GS, PLTR"
+Josh Gottheimer,Julie Johnson,4,"MMM, RTX, UBER, UNP"
+Julia Letlow,Julie Johnson,6,"ADBE, DE, DGX, DHR, DLTR, MMM"
+Bruce Westerman,Kelly Louise Morrison,2,"AVGO, META"
+Byron Donalds,Kelly Louise Morrison,1,AVGO
+Cleo Fields,Kelly Louise Morrison,2,"AVGO, META"
+Dan Newhouse,Kelly Louise Morrison,1,TGT
+David J. Taylor,Kelly Louise Morrison,1,AVGO
+Gilbert Cisneros,Kelly Louise Morrison,2,"AVGO, META"
+James Comer,Kelly Louise Morrison,1,AVGO
+Jared Moskowitz,Kelly Louise Morrison,1,AVGO
+Jefferson Shreve,Kelly Louise Morrison,2,"AVGO, TGT"
+John McGuire,Kelly Louise Morrison,1,META
+Jonathan Jackson,Kelly Louise Morrison,1,META
+Josh Gottheimer,Kelly Louise Morrison,2,"AVGO, META"
+Julia Letlow,Kelly Louise Morrison,1,META
+April McClain Delaney,Lisa McClain,8,"BJ, BRO, CACI, CNM, ENTG, ITT, MORN, PAYX"
+Bruce Westerman,Lisa McClain,61,"AAPL, ABT, ADBE, AMZN, ASML, AVGO, AXP, AZN, BAC, BCS, BHP, BP, BSX, BUD, CMI, COP, COST, CRM, CVX, DE, DHR, EMR, FCX, GOOGL, GS, GSK, HD, HSBC, ISRG, ITW, JNJ, JPM, LLY, MA, META, MRK, MSFT, MUFG, NFLX, NOW, NVDA, NWG, ORCL, PEP, PFE, PG, RIO, SAP, SBUX, SCHW, SHEL, SONY, TM, TMO, TSM, UL, UNH, UNP, V, WMT, XOM"
+Byron Donalds,Lisa McClain,12,"ABT, ADSK, AMZN, ANET, AVGO, BRO, FI, FTNT, PGR, PYPL, TTD, V"
+Carol Devine Miller,Lisa McClain,3,"HON, ITW, PEP"
+Cleo Fields,Lisa McClain,18,"AAPL, AMD, AMZN, AVGO, CSCO, GOOG, GOOGL, JPM, MCD, META, MSFT, NFLX, NVDA, ORCL, PLTR, T, TSM, UBER"
+Cliff Bentz,Lisa McClain,2,"AMGN, PG"
+Dan Newhouse,Lisa McClain,16,"ADP, AMAT, AMD, BR, BRO, COP, GIS, LULU, PANW, ROST, SCHW, SNPS, TMUS, TXT, UPS, XOM"
+David J. Taylor,Lisa McClain,12,"AMZN, AVGO, CRM, ETN, HD, JPM, LLY, PG, PGR, SJM, T, V"
+Debbie Dingell,Lisa McClain,1,WMT
+Dwight Evans,Lisa McClain,4,"AMZN, GOOGL, IBM, NVDA"
+Ed Case,Lisa McClain,1,AAPL
+Gilbert Cisneros,Lisa McClain,89,"AAPL, ABT, ACN, AMD, AMZN, ANET, ARMK, ASML, AVGO, AVNT, AZN, BABA, BRK.B, BRO, BSX, CACI, CAG, CLX, COST, CPB, CSGP, CTRA, CVLT, CVS, CVX, CYTK, DG, DHI, DOW, EG, ELV, ETN, FCX, FTV, GIS, GOOGL, HAL, HD, HON, HUM, IBM, ISRG, ITT, JKHY, JNJ, JPM, KMI, KVUE, LIN, LLY, LULU, MA, META, MRK, MSFT, NFLX, NOC, NOVT, NOW, NVDA, OKTA, ORCL, ORLY, PFE, PG, PLTR, PWR, RBA, RVTY, SAP, SBAC, SBCF, SLB, STZ, TRGP, TSLA, TSM, UBER, UNH, UPS, VRSK, VRSN, VRT, WAT, WDAY, WMT, WYNN, YUM, ZTS"
+Greg Landsman,Lisa McClain,2,"AMZN, CRWD"
+James Comer,Lisa McClain,19,"AAPL, AMZN, ANET, AVGO, BLK, COST, CRM, GOOG, HD, MSFT, NFLX, NVDA, PANW, PLTR, PYPL, T, TTD, UBER, VRSN"
+James French Hill,Lisa McClain,1,L
+Jared Moskowitz,Lisa McClain,21,"ABBV, ACN, AMGN, AMZN, AVGO, AXP, CARR, CSCO, DELL, GS, HCA, HON, ITW, LIN, NVDA, ORCL, PEP, SHW, TSM, TXN, V"
+Jefferson Shreve,Lisa McClain,65,"A, AAPL, ABBV, ADBE, ADSK, AIG, AKAM, AMAT, AMD, AMGN, ANET, APD, AVGO, AXP, BAC, BC, BLK, CEG, COP, CRM, CSGP, CVX, DG, ECL, ELV, EPAM, EXPO, GS, HAL, HD, HOMB, INTU, ISRG, JNJ, LIN, LULU, MCD, MRK, MSFT, NEM, NFLX, NVDA, ORCL, PANW, PEP, PFE, PWR, PYPL, RGLD, ROST, SHW, SLB, SNDR, SNPS, TTD, TXN, UBER, UNH, UNP, UPS, VST, WDAY, WMT, XOM, ZTS"
+John McGuire,Lisa McClain,4,"META, NFLX, NOW, UNH"
+Jonathan Jackson,Lisa McClain,12,"AMZN, CHD, GS, IBM, LLY, META, NFLX, PANW, PLTR, THC, TMUS, WMB"
+Josh Gottheimer,Lisa McClain,30,"ABBV, ABT, ASML, AVGO, BABA, BRK.B, CRM, CVLT, DHI, FI, HD, IBM, IRT, JNJ, KO, LLY, MA, META, MSFT, NTES, NVDA, SBUX, SCHW, SE, SHEL, TSLA, UBER, UNP, V, WMT"
+Julia Letlow,Lisa McClain,29,"AAPL, ABBV, ACI, ACN, ADBE, AIG, AMD, AMZN, AZN, CRM, CSCO, DE, DHR, GOOGL, HPE, HUM, IBM, INTU, KO, META, MSFT, MU, PFE, PG, SF, TMO, UNH, V, WAT"
+Julie Johnson,Lisa McClain,39,"A, ADBE, ALK, ANET, BK, CARR, CEG, CL, COP, CVX, DE, DG, DHR, DOW, ETN, FCX, GOOG, GS, HAS, HON, LYB, MKC, MNST, MRK, NOW, PAYX, PEP, PGR, PLTR, PYPL, ROL, SBAC, SRE, TER, UBER, UNP, VRSK, VRSN, VST"
+Kelly Louise Morrison,Lisa McClain,2,"AVGO, META"
+Bruce Westerman,Lloyd Doggett,3,"HD, JNJ, PG"
+Cliff Bentz,Lloyd Doggett,1,PG
+David J. Taylor,Lloyd Doggett,2,"HD, PG"
+Dwight Evans,Lloyd Doggett,1,IBM
+Gilbert Cisneros,Lloyd Doggett,4,"HD, IBM, JNJ, PG"
+James Comer,Lloyd Doggett,1,HD
+Jefferson Shreve,Lloyd Doggett,2,"HD, JNJ"
+Jonathan Jackson,Lloyd Doggett,1,IBM
+Josh Gottheimer,Lloyd Doggett,4,"HD, IBM, JNJ, KO"
+Julia Letlow,Lloyd Doggett,3,"IBM, KO, PG"
+Lisa McClain,Lloyd Doggett,5,"HD, IBM, JNJ, KO, PG"
+April McClain Delaney,Marjorie Taylor Greene,2,"PAYX, TSCO"
+Brandon Gill,Marjorie Taylor Greene,1,IBIT
+Bruce Westerman,Marjorie Taylor Greene,34,"AAPL, ADBE, AMZN, ASML, AVGO, AXP, BA, BAC, BHP, BP, CAT, CMI, COST, CVX, GS, HD, JNJ, JPM, LLY, META, MRK, MS, MSFT, NFLX, NKE, NOW, NVDA, PEP, PG, SBUX, SCHW, UNH, V, WMT"
+Byron Donalds,Marjorie Taylor Greene,4,"AMZN, AVGO, LRCX, V"
+Carol Devine Miller,Marjorie Taylor Greene,3,"GILD, HSY, PEP"
+Cleo Fields,Marjorie Taylor Greene,12,"AAPL, AMD, AMZN, AVGO, GOOG, JPM, META, MSFT, NFLX, NVDA, PLTR, QCOM"
+Cliff Bentz,Marjorie Taylor Greene,2,"AMGN, PG"
+Dan Newhouse,Marjorie Taylor Greene,8,"ADP, AMAT, AMD, BX, LULU, PANW, SCHW, UPS"
+David J. Taylor,Marjorie Taylor Greene,7,"AMZN, AVGO, HD, JPM, LLY, PG, V"
+Debbie Dingell,Marjorie Taylor Greene,1,WMT
+Dwight Evans,Marjorie Taylor Greene,3,"AMZN, INTC, NVDA"
+Ed Case,Marjorie Taylor Greene,1,AAPL
+Gilbert Cisneros,Marjorie Taylor Greene,33,"AAPL, AMD, AMZN, ASML, AVGO, BA, BRK.B, CAT, COST, CVX, DG, HD, INTC, JNJ, JPM, KMI, LLY, LULU, MELI, META, MRK, MS, MSFT, NFLX, NOW, NVDA, OXY, PG, PLTR, TSLA, UNH, UPS, WMT"
+Greg Landsman,Marjorie Taylor Greene,2,"AMZN, CRWD"
+James Comer,Marjorie Taylor Greene,11,"AAPL, AMZN, AVGO, COST, GOOG, HD, MSFT, NFLX, NVDA, PANW, PLTR"
+Jared Moskowitz,Marjorie Taylor Greene,14,"ABBV, AMGN, AMZN, AVGO, AXP, CAT, DELL, GS, NVDA, PEP, QCOM, SO, TSCO, V"
+Jefferson Shreve,Marjorie Taylor Greene,33,"AAPL, ABBV, ADBE, AMAT, AMD, AMGN, AVGO, AXP, BAC, CAT, CVX, DG, DVN, GILD, GS, HD, INTC, JNJ, LRCX, LULU, MRK, MSFT, NEE, NFLX, NSC, NVDA, OXY, PANW, PEP, QCOM, UNH, UPS, WMT"
+John McGuire,Marjorie Taylor Greene,4,"META, NFLX, NOW, UNH"
+Jonathan Jackson,Marjorie Taylor Greene,8,"AMZN, GS, LLY, LRCX, META, NFLX, PANW, PLTR"
+Josh Gottheimer,Marjorie Taylor Greene,18,"ABBV, ASML, AVGO, BRK.B, GILD, GLW, HD, JNJ, LLY, META, MSFT, NVDA, SBUX, SCHW, SNOW, TSLA, V, WMT"
+Julia Letlow,Marjorie Taylor Greene,12,"AAPL, ABBV, ADBE, AMD, AMZN, DVN, INTC, META, MSFT, PG, UNH, V"
+Julie Johnson,Marjorie Taylor Greene,13,"ADBE, BA, CVX, DG, GOOG, GS, HSY, MRK, NEE, NOW, PAYX, PEP, PLTR"
+Kelly Louise Morrison,Marjorie Taylor Greene,2,"AVGO, META"
+Lisa McClain,Marjorie Taylor Greene,51,"AAPL, ABBV, ADBE, ADP, AMAT, AMD, AMGN, AMZN, ASML, AVGO, AXP, BAC, BHP, BP, BRK.B, CMI, COST, CRWD, CVX, DELL, DG, DUK, EXC, GOOG, GS, HD, JNJ, JPM, KMI, LLY, LULU, META, MRK, MSFT, NFLX, NOW, NVDA, NVO, PANW, PAYX, PEP, PG, PLTR, RHP, SBUX, SCHW, TSLA, UNH, UPS, V, WMT"
+Lloyd Doggett,Marjorie Taylor Greene,3,"HD, JNJ, PG"
+Bruce Westerman,Michael Rulli,4,"AAPL, META, NVDA, ORCL"
+Cleo Fields,Michael Rulli,4,"AAPL, META, NVDA, ORCL"
+Dwight Evans,Michael Rulli,1,NVDA
+Ed Case,Michael Rulli,1,AAPL
+Gilbert Cisneros,Michael Rulli,4,"AAPL, META, NVDA, ORCL"
+James Comer,Michael Rulli,2,"AAPL, NVDA"
+Jared Moskowitz,Michael Rulli,2,"NVDA, ORCL"
+Jefferson Shreve,Michael Rulli,3,"AAPL, NVDA, ORCL"
+John McGuire,Michael Rulli,1,META
+Jonathan Jackson,Michael Rulli,1,META
+Josh Gottheimer,Michael Rulli,3,"KO, META, NVDA"
+Julia Letlow,Michael Rulli,3,"AAPL, KO, META"
+Kelly Louise Morrison,Michael Rulli,1,META
+Lisa McClain,Michael Rulli,5,"AAPL, KO, META, NVDA, ORCL"
+Lloyd Doggett,Michael Rulli,1,KO
+Marjorie Taylor Greene,Michael Rulli,3,"AAPL, META, NVDA"
+Lisa McClain,Mike Kelly,1,X
+Gilbert Cisneros,Mike Kennedy,1,BRK.B
+Josh Gottheimer,Mike Kennedy,1,BRK.B
+Lisa McClain,Mike Kennedy,1,BRK.B
+Marjorie Taylor Greene,Mike Kennedy,1,BRK.B
+Bruce Westerman,Nancy Pelosi,1,AVGO
+Byron Donalds,Nancy Pelosi,1,AVGO
+Cleo Fields,Nancy Pelosi,1,AVGO
+David J. Taylor,Nancy Pelosi,1,AVGO
+Gilbert Cisneros,Nancy Pelosi,1,AVGO
+James Comer,Nancy Pelosi,1,AVGO
+Jared Moskowitz,Nancy Pelosi,1,AVGO
+Jefferson Shreve,Nancy Pelosi,1,AVGO
+Josh Gottheimer,Nancy Pelosi,1,AVGO
+Kelly Louise Morrison,Nancy Pelosi,1,AVGO
+Lisa McClain,Nancy Pelosi,1,AVGO
+Marjorie Taylor Greene,Nancy Pelosi,1,AVGO
+Bruce Westerman,Richard Dean Dr McCormick,14,"AAPL, ABT, COST, EMR, HD, ITW, JNJ, MDT, MSFT, PEP, PG, UNH, V, WMT"
+Byron Donalds,Richard Dean Dr McCormick,2,"ABT, V"
+Carol Devine Miller,Richard Dean Dr McCormick,3,"AWK, ITW, PEP"
+Cleo Fields,Richard Dean Dr McCormick,4,"AAPL, CSCO, MCD, MSFT"
+Cliff Bentz,Richard Dean Dr McCormick,1,PG
+Dan Newhouse,Richard Dean Dr McCormick,1,ADP
+David J. Taylor,Richard Dean Dr McCormick,3,"HD, PG, V"
+Debbie Dingell,Richard Dean Dr McCormick,1,WMT
+Ed Case,Richard Dean Dr McCormick,1,AAPL
+Gilbert Cisneros,Richard Dean Dr McCormick,12,"AAPL, ABT, BRK.B, COST, HD, JNJ, LHX, MSFT, O, PG, UNH, WMT"
+James Comer,Richard Dean Dr McCormick,5,"AAPL, BLK, COST, HD, MSFT"
+Jared Moskowitz,Richard Dean Dr McCormick,5,"ADI, CSCO, ITW, PEP, V"
+Jefferson Shreve,Richard Dean Dr McCormick,13,"AAPL, ADI, APD, AWK, BLK, HD, JNJ, MCD, MSFT, NEE, PEP, UNH, WMT"
+John McGuire,Richard Dean Dr McCormick,1,UNH
+Josh Gottheimer,Richard Dean Dr McCormick,7,"ABT, BRK.B, HD, JNJ, MSFT, V, WMT"
+Julia Letlow,Richard Dean Dr McCormick,6,"AAPL, CSCO, MSFT, PG, UNH, V"
+Julie Johnson,Richard Dean Dr McCormick,2,"NEE, PEP"
+Lisa McClain,Richard Dean Dr McCormick,19,"AAPL, ABT, ADP, APD, BLK, BRK.B, COST, CSCO, EMR, HD, ITW, JNJ, MCD, MSFT, PEP, PG, UNH, V, WMT"
+Lloyd Doggett,Richard Dean Dr McCormick,3,"HD, JNJ, PG"
+Marjorie Taylor Greene,Richard Dean Dr McCormick,13,"AAPL, ADP, BRK.B, COST, HD, JNJ, MSFT, NEE, PEP, PG, UNH, V, WMT"
+Michael Rulli,Richard Dean Dr McCormick,1,AAPL
+Mike Kennedy,Richard Dean Dr McCormick,1,BRK.B
+Bruce Westerman,Richard W. Allen,2,"NFLX, SCHW"
+Cleo Fields,Richard W. Allen,1,NFLX
+Dan Newhouse,Richard W. Allen,1,SCHW
+Gilbert Cisneros,Richard W. Allen,3,"AZO, FERG, NFLX"
+James Comer,Richard W. Allen,1,NFLX
+Jared Moskowitz,Richard W. Allen,1,ATO
+Jefferson Shreve,Richard W. Allen,2,"INTU, NFLX"
+John McGuire,Richard W. Allen,1,NFLX
+Jonathan Jackson,Richard W. Allen,1,NFLX
+Josh Gottheimer,Richard W. Allen,1,SCHW
+Julia Letlow,Richard W. Allen,1,INTU
+Lisa McClain,Richard W. Allen,3,"INTU, NFLX, SCHW"
+Marjorie Taylor Greene,Richard W. Allen,2,"NFLX, SCHW"
+Bruce Westerman,Rick Larsen,4,"ABT, AXP, GOOGL, WMT"
+Byron Donalds,Rick Larsen,1,ABT
+Cleo Fields,Rick Larsen,1,GOOGL
+Dan Newhouse,Rick Larsen,1,BR
+David J. Taylor,Rick Larsen,1,AEP
+Debbie Dingell,Rick Larsen,1,WMT
+Dwight Evans,Rick Larsen,1,GOOGL
+Gilbert Cisneros,Rick Larsen,4,"ABT, GOOGL, VRSK, WMT"
+Jared Moskowitz,Rick Larsen,1,AXP
+Jefferson Shreve,Rick Larsen,3,"AXP, CTAS, WMT"
+Josh Gottheimer,Rick Larsen,2,"ABT, WMT"
+Julia Letlow,Rick Larsen,1,GOOGL
+Julie Johnson,Rick Larsen,1,VRSK
+Lisa McClain,Rick Larsen,6,"ABT, AXP, BR, GOOGL, VRSK, WMT"
+Marjorie Taylor Greene,Rick Larsen,2,"AXP, WMT"
+Richard Dean Dr McCormick,Rick Larsen,2,"ABT, WMT"
+Gilbert Cisneros,Ritchie John Torres,1,MCK
+James Comer,Ritchie John Torres,1,MRVL
+Jared Moskowitz,Ritchie John Torres,1,MCK
+Jefferson Shreve,Ritchie John Torres,1,MRVL
+Jonathan Jackson,Ritchie John Torres,1,MCK
+Julie Johnson,Ritchie John Torres,1,MKC
+Lisa McClain,Ritchie John Torres,1,MKC
+April McClain Delaney,Rob Bresnahan,5,"CDW, IDXX, LH, STE, TECH"
+Bruce Westerman,Rob Bresnahan,26,"ADBE, AMZN, AVGO, BA, CAT, COP, DE, DHR, EMR, EW, JPM, MDT, META, MRK, MSFT, NKE, NOW, NVDA, PEP, PFE, SPOT, TMO, UNH, UNP, V, XOM"
+Byron Donalds,Rob Bresnahan,11,"AMZN, APH, AVGO, DASH, GDDY, HOOD, IDXX, LRCX, PYPL, TTD, V"
+Carol Devine Miller,Rob Bresnahan,4,"CME, HSY, LMT, PEP"
+Cleo Fields,Rob Bresnahan,11,"AMD, AMZN, AVGO, GOOG, HOOD, JPM, META, MSFT, NVDA, PLTR, UBER"
+Dan Newhouse,Rob Bresnahan,10,"AMD, BR, COP, GIS, LULU, NXPI, RCL, SPGI, UPS, XOM"
+David J. Taylor,Rob Bresnahan,5,"AMZN, AVGO, JPM, MPC, V"
+Dwight Evans,Rob Bresnahan,4,"AMZN, IBM, INTC, NVDA"
+Gilbert Cisneros,Rob Bresnahan,62,"AMCR, AMD, AMZN, APP, ARE, AVGO, BA, BABA, BRK.B, CAT, CNC, COIN, CPB, CRDO, CVS, DASH, DG, DHI, DOW, EXE, F, FTV, GIS, HAL, HOOD, HUM, IBM, INTC, IR, JPM, K, LMT, LULU, MELI, META, MOH, MRK, MSFT, NET, NOW, NVDA, NXPI, OKTA, OXY, PFE, PLTR, PWR, REGN, RVTY, SBAC, SLB, SMCI, SPOT, STZ, TSLA, UBER, UNH, UPS, VTRS, WAT, WDAY, ZTS"
+Greg Landsman,Rob Bresnahan,2,"AMZN, CRWD"
+James Comer,Rob Bresnahan,11,"AMZN, APH, AVGO, DOV, GOOG, MSFT, NVDA, PLTR, PYPL, TTD, UBER"
+Jared Moskowitz,Rob Bresnahan,11,"ABBV, ADI, AMZN, AVGO, CAT, DELL, LMT, NVDA, PEP, TXN, V"
+Jefferson Shreve,Rob Bresnahan,49,"A, ABBV, ADBE, ADI, AMD, APD, APP, AVGO, CAT, CMCSA, CNC, COIN, COP, CRL, DG, DVN, DXCM, EW, HAL, IDXX, INTC, INTU, LMT, LRCX, LULU, MPC, MRK, MSFT, NEM, NVDA, OXY, PEP, PFE, PWR, PYPL, SLB, SPGI, SPOT, TTD, TXN, UBER, UNH, UNP, UPS, VLO, WDAY, WY, XOM, ZTS"
+John McGuire,Rob Bresnahan,3,"META, NOW, UNH"
+Jonathan Jackson,Rob Bresnahan,6,"AMZN, HOOD, IBM, LRCX, META, PLTR"
+Josh Gottheimer,Rob Bresnahan,21,"ABBV, APP, AVGO, BABA, BRK.B, DASH, DHI, GLW, IBM, META, MSFT, NET, NVDA, SE, SNOW, TEL, TSLA, TWLO, UBER, UNP, V"
+Julia Letlow,Rob Bresnahan,22,"ABBV, ADBE, AMD, AMZN, CNC, DE, DHR, DVN, HUM, IBM, INTC, INTU, META, MSFT, MTD, PFE, TMO, TTWO, UNH, URI, V, WAT"
+Julie Johnson,Rob Bresnahan,32,"A, ADBE, AEE, BA, CME, COP, CRL, DE, DG, DHR, DOW, ES, F, GOOG, HSY, LYB, MDLZ, MRK, MSCI, NOW, NXPI, PEP, PLTR, PYPL, REGN, SBAC, SMCI, SRE, UBER, UNP, WEC, WY"
+Kelly Louise Morrison,Rob Bresnahan,2,"AVGO, META"
+Lisa McClain,Rob Bresnahan,71,"A, ABBV, ADBE, ALGN, AMD, AMZN, APD, AVGO, BABA, BAX, BDX, BR, BRK.B, COP, CPB, CRWD, CVS, DAL, DE, DELL, DG, DHI, DHR, DOW, DRI, EMR, FTV, GIS, GOOG, HAL, HUM, IBM, INTU, JPM, KDP, LULU, LYB, META, MRK, MSFT, NEM, NOW, NVDA, OKTA, PEP, PFE, PLTR, PWR, PYPL, RVTY, SBAC, SE, SLB, SRE, STZ, TMO, TPL, TSLA, TTD, TXN, UBER, UNH, UNP, UPS, V, VZ, WAT, WDAY, WST, XOM, ZTS"
+Lloyd Doggett,Rob Bresnahan,1,IBM
+Marjorie Taylor Greene,Rob Bresnahan,36,"ABBV, ADBE, AMD, AMZN, AVGO, BA, BRK.B, CAH, CAT, CRWD, DELL, DG, DVN, GLW, GOOG, HSY, INTC, JPM, LRCX, LULU, MELI, META, MRK, MSFT, NKE, NOW, NVDA, ODFL, OXY, PEP, PLTR, SNOW, TSLA, UNH, UPS, V"
+Michael Patrick Guest,Rob Bresnahan,1,MPWR
+Michael Rulli,Rob Bresnahan,2,"META, NVDA"
+Mike Kennedy,Rob Bresnahan,1,BRK.B
+Nancy Pelosi,Rob Bresnahan,1,AVGO
+Richard Dean Dr McCormick,Rob Bresnahan,9,"ADI, APD, BRK.B, EMR, MDT, MSFT, PEP, UNH, V"
+Richard W. Allen,Rob Bresnahan,1,INTU
+Rick Larsen,Rob Bresnahan,1,BR
+Bruce Westerman,Roger Williams,2,"JPM, RTX"
+Cleo Fields,Roger Williams,1,JPM
+David J. Taylor,Roger Williams,1,JPM
+Gilbert Cisneros,Roger Williams,1,JPM
+Jefferson Shreve,Roger Williams,1,RTX
+Josh Gottheimer,Roger Williams,1,RTX
+Julie Johnson,Roger Williams,1,RTX
+Lisa McClain,Roger Williams,1,JPM
+Marjorie Taylor Greene,Roger Williams,1,JPM
+Rob Bresnahan,Roger Williams,1,JPM
+Bruce Westerman,Scott Scott Franklin,2,"AMZN, UNP"
+Byron Donalds,Scott Scott Franklin,1,AMZN
+Carol Devine Miller,Scott Scott Franklin,1,LMT
+Cleo Fields,Scott Scott Franklin,1,AMZN
+David J. Taylor,Scott Scott Franklin,1,AMZN
+Dwight Evans,Scott Scott Franklin,1,AMZN
+Gilbert Cisneros,Scott Scott Franklin,2,"AMZN, LMT"
+Greg Landsman,Scott Scott Franklin,1,AMZN
+James Comer,Scott Scott Franklin,1,AMZN
+Jared Moskowitz,Scott Scott Franklin,2,"AMZN, LMT"
+Jefferson Shreve,Scott Scott Franklin,2,"LMT, UNP"
+Jonathan Jackson,Scott Scott Franklin,1,AMZN
+Josh Gottheimer,Scott Scott Franklin,1,UNP
+Julia Letlow,Scott Scott Franklin,1,AMZN
+Julie Johnson,Scott Scott Franklin,1,UNP
+Lisa McClain,Scott Scott Franklin,3,"AMZN, NVO, UNP"
+Marjorie Taylor Greene,Scott Scott Franklin,2,"AMZN, NVO"
+Rob Bresnahan,Scott Scott Franklin,3,"AMZN, LMT, UNP"
+Bruce Westerman,Terri A. Sewell,2,"AAPL, NVDA"
+Cleo Fields,Terri A. Sewell,2,"AAPL, NVDA"
+Dwight Evans,Terri A. Sewell,1,NVDA
+Ed Case,Terri A. Sewell,1,AAPL
+Gilbert Cisneros,Terri A. Sewell,2,"AAPL, NVDA"
+James Comer,Terri A. Sewell,2,"AAPL, NVDA"
+Jared Moskowitz,Terri A. Sewell,1,NVDA
+Jefferson Shreve,Terri A. Sewell,2,"AAPL, NVDA"
+Josh Gottheimer,Terri A. Sewell,1,NVDA
+Julia Letlow,Terri A. Sewell,1,AAPL
+Lisa McClain,Terri A. Sewell,2,"AAPL, NVDA"
+Marjorie Taylor Greene,Terri A. Sewell,2,"AAPL, NVDA"
+Michael Rulli,Terri A. Sewell,2,"AAPL, NVDA"
+Richard Dean Dr McCormick,Terri A. Sewell,1,AAPL
+Rob Bresnahan,Terri A. Sewell,1,NVDA
+Bruce Westerman,Thomas H. Kean Jr,5,"ABT, AMZN, DHR, MSFT, TMO"
+Byron Donalds,Thomas H. Kean Jr,4,"ABT, AMZN, FCNCA, FI"
+Cleo Fields,Thomas H. Kean Jr,2,"AMZN, MSFT"
+Dan Newhouse,Thomas H. Kean Jr,1,PLD
+David J. Taylor,Thomas H. Kean Jr,2,"AMZN, PLD"
+Dwight Evans,Thomas H. Kean Jr,1,AMZN
+Gilbert Cisneros,Thomas H. Kean Jr,5,"ABT, AMCR, AMZN, CP, MSFT"
+Greg Landsman,Thomas H. Kean Jr,1,AMZN
+James Comer,Thomas H. Kean Jr,2,"AMZN, MSFT"
+Jared Moskowitz,Thomas H. Kean Jr,3,"ADI, AMZN, TXN"
+Jefferson Shreve,Thomas H. Kean Jr,6,"ADI, AON, MSFT, NVT, PLD, TXN"
+Jonathan Jackson,Thomas H. Kean Jr,1,AMZN
+Josh Gottheimer,Thomas H. Kean Jr,3,"ABT, FI, MSFT"
+Julia Letlow,Thomas H. Kean Jr,4,"AMZN, DHR, MSFT, TMO"
+Julie Johnson,Thomas H. Kean Jr,2,"DHR, MDLZ"
+Lisa McClain,Thomas H. Kean Jr,9,"ABT, AMZN, BDX, DHR, FI, ILMN, MSFT, TMO, TXN"
+Marjorie Taylor Greene,Thomas H. Kean Jr,2,"AMZN, MSFT"
+Richard Dean Dr McCormick,Thomas H. Kean Jr,4,"ABT, ADI, ICE, MSFT"
+Rick Larsen,Thomas H. Kean Jr,1,ABT
+Rob Bresnahan,Thomas H. Kean Jr,9,"ADI, AMCR, AMZN, BDX, DHR, MDLZ, MSFT, TMO, TXN"
+Scott Scott Franklin,Thomas H. Kean Jr,1,AMZN
+Bruce Westerman,Tim Moore,2,"AAPL, UNH"
+Byron Donalds,Tim Moore,1,DASH
+Cleo Fields,Tim Moore,1,AAPL
+Dwight Evans,Tim Moore,1,INTC
+Ed Case,Tim Moore,1,AAPL
+Gilbert Cisneros,Tim Moore,9,"AAPL, BKR, CNC, COIN, DASH, F, INTC, SMCI, UNH"
+James Comer,Tim Moore,2,"AAPL, BLK"
+Jefferson Shreve,Tim Moore,8,"AAPL, BLK, CNC, COIN, HOG, INTC, LGIH, UNH"
+John McGuire,Tim Moore,1,UNH
+Josh Gottheimer,Tim Moore,1,DASH
+Julia Letlow,Tim Moore,4,"AAPL, CNC, INTC, UNH"
+Julie Johnson,Tim Moore,2,"F, SMCI"
+Lisa McClain,Tim Moore,6,"AAL, AAPL, BLK, UNH, USFD, VZ"
+Marjorie Taylor Greene,Tim Moore,3,"AAPL, INTC, UNH"
+Michael Rulli,Tim Moore,1,AAPL
+Richard Dean Dr McCormick,Tim Moore,3,"AAPL, BLK, UNH"
+Rob Bresnahan,Tim Moore,8,"CNC, COIN, DASH, F, INTC, SMCI, UNH, VZ"
+Terri A. Sewell,Tim Moore,1,AAPL
+Bruce Westerman,Tim Walberg,7,"AAPL, AMZN, BA, BAC, CAT, CVX, XOM"
+Byron Donalds,Tim Walberg,1,AMZN
+Carol Devine Miller,Tim Walberg,1,LMT
+Cleo Fields,Tim Walberg,2,"AAPL, AMZN"
+Dan Newhouse,Tim Walberg,1,XOM
+David J. Taylor,Tim Walberg,2,"AMZN, ETN"
+Dwight Evans,Tim Walberg,1,AMZN
+Ed Case,Tim Walberg,1,AAPL
+Gilbert Cisneros,Tim Walberg,9,"AAPL, AMZN, BA, CAT, CVX, ETN, LHX, LMT, WFC"
+Greg Landsman,Tim Walberg,1,AMZN
+James Comer,Tim Walberg,2,"AAPL, AMZN"
+Jared Moskowitz,Tim Walberg,3,"AMZN, CAT, LMT"
+Jefferson Shreve,Tim Walberg,7,"AAPL, BAC, CAT, CVX, LMT, WFC, XOM"
+Jonathan Jackson,Tim Walberg,1,AMZN
+Julia Letlow,Tim Walberg,2,"AAPL, AMZN"
+Julie Johnson,Tim Walberg,4,"BA, CVX, ETN, WFC"
+Lisa McClain,Tim Walberg,6,"AAPL, AMZN, BAC, CVX, ETN, XOM"
+Marjorie Taylor Greene,Tim Walberg,6,"AAPL, AMZN, BA, BAC, CAT, CVX"
+Michael Rulli,Tim Walberg,1,AAPL
+Richard Dean Dr McCormick,Tim Walberg,2,"AAPL, LHX"
+Rob Bresnahan,Tim Walberg,5,"AMZN, BA, CAT, LMT, XOM"
+Scott Scott Franklin,Tim Walberg,2,"AMZN, LMT"
+Terri A. Sewell,Tim Walberg,1,AAPL
+Thomas H. Kean Jr,Tim Walberg,1,AMZN
+Tim Moore,Tim Walberg,1,AAPL
+April McClain Delaney,Valerie Hoyle,1,BRO
+Bruce Westerman,Valerie Hoyle,20,"AAPL, AMZN, AVGO, BAC, COP, CRM, EMR, GOOGL, JPM, LVMUY, META, MS, MSFT, NFLX, NOW, NVDA, SPOT, TMO, TSM, UNH"
+Byron Donalds,Valerie Hoyle,6,"AMZN, ANET, AVGO, BRO, GDDY, PGR"
+Carol Devine Miller,Valerie Hoyle,1,CME
+Cleo Fields,Valerie Hoyle,12,"AAPL, AMZN, AVGO, CRWV, GOOGL, JPM, META, MSFT, NFLX, NVDA, TSM, UBER"
+Dan Newhouse,Valerie Hoyle,5,"BRO, BX, COP, PANW, TGT"
+David J. Taylor,Valerie Hoyle,6,"AMZN, AVGO, CRM, JPM, KR, PGR"
+Dwight Evans,Valerie Hoyle,3,"AMZN, GOOGL, NVDA"
+Ed Case,Valerie Hoyle,1,AAPL
+Gilbert Cisneros,Valerie Hoyle,23,"AAPL, AMZN, ANET, AVGO, BRO, GOOGL, JPM, KKR, LEN, LPLA, MCK, MELI, META, MS, MSFT, NFLX, NOW, NVDA, SPOT, TSM, UBER, UNH, WFC"
+Greg Landsman,Valerie Hoyle,1,AMZN
+James Comer,Valerie Hoyle,11,"AAPL, AMZN, ANET, AVGO, CRM, MRVL, MSFT, NFLX, NVDA, PANW, UBER"
+Jared Moskowitz,Valerie Hoyle,5,"AMZN, AVGO, MCK, NVDA, TSM"
+Jefferson Shreve,Valerie Hoyle,17,"AAPL, ANET, AVGO, BAC, COP, CRM, LEN, MRVL, MSFT, NFLX, NVDA, PANW, SPOT, TGT, UBER, UNH, WFC"
+John McGuire,Valerie Hoyle,4,"META, NFLX, NOW, UNH"
+Jonathan Jackson,Valerie Hoyle,6,"AMZN, KKR, MCK, META, NFLX, PANW"
+Josh Gottheimer,Valerie Hoyle,6,"AVGO, CRM, META, MSFT, NVDA, UBER"
+Julia Letlow,Valerie Hoyle,9,"AAPL, AMZN, CRM, GOOGL, META, MSFT, TMO, UNH, URI"
+Julie Johnson,Valerie Hoyle,10,"ANET, BK, CME, COF, COP, KR, NOW, PGR, UBER, WFC"
+Kelly Louise Morrison,Valerie Hoyle,3,"AVGO, META, TGT"
+Lisa McClain,Valerie Hoyle,26,"AAPL, AMZN, ANET, AVGO, BAC, BF.B, BK, BRO, COP, CRM, EMR, GOOGL, JPM, META, MSFT, NFLX, NOW, NTRS, NVDA, PANW, PGR, TMO, TSM, TYL, UBER, UNH"
+Marjorie Taylor Greene,Valerie Hoyle,15,"AAPL, AMZN, AVGO, BAC, BX, JPM, MELI, META, MS, MSFT, NFLX, NOW, NVDA, PANW, UNH"
+Michael Rulli,Valerie Hoyle,3,"AAPL, META, NVDA"
+Nancy Pelosi,Valerie Hoyle,1,AVGO
+Richard Dean Dr McCormick,Valerie Hoyle,4,"AAPL, EMR, MSFT, UNH"
+Richard W. Allen,Valerie Hoyle,1,NFLX
+Rick Larsen,Valerie Hoyle,1,GOOGL
+Ritchie John Torres,Valerie Hoyle,2,"MCK, MRVL"
+Rob Bresnahan,Valerie Hoyle,17,"AMZN, AVGO, CME, COP, EMR, GDDY, JPM, MELI, META, MSFT, NOW, NVDA, SPOT, TMO, UBER, UNH, URI"
+Roger Williams,Valerie Hoyle,1,JPM
+Scott Scott Franklin,Valerie Hoyle,1,AMZN
+Terri A. Sewell,Valerie Hoyle,2,"AAPL, NVDA"
+Thomas H. Kean Jr,Valerie Hoyle,3,"AMZN, MSFT, TMO"
+Tim Moore,Valerie Hoyle,2,"AAPL, UNH"
+Tim Walberg,Valerie Hoyle,4,"AAPL, AMZN, BAC, WFC"
+Bruce Westerman,William R. Keating,3,"AMZN, MSFT, PEP"
+Byron Donalds,William R. Keating,2,"AMZN, FI"
+Carol Devine Miller,William R. Keating,1,PEP
+Cleo Fields,William R. Keating,2,"AMZN, MSFT"
+David J. Taylor,William R. Keating,1,AMZN
+Dwight Evans,William R. Keating,1,AMZN
+Gilbert Cisneros,William R. Keating,5,"ACN, AMZN, ARMK, CSGP, MSFT"
+Greg Landsman,William R. Keating,1,AMZN
+James Comer,William R. Keating,2,"AMZN, MSFT"
+Jared Moskowitz,William R. Keating,3,"ACN, AMZN, PEP"
+Jefferson Shreve,William R. Keating,3,"CSGP, MSFT, PEP"
+Jonathan Jackson,William R. Keating,1,AMZN
+Josh Gottheimer,William R. Keating,2,"FI, MSFT"
+Julia Letlow,William R. Keating,3,"ACN, AMZN, MSFT"
+Julie Johnson,William R. Keating,1,PEP
+Lisa McClain,William R. Keating,7,"ACN, AMZN, ARMK, CSGP, FI, MSFT, PEP"
+Marjorie Taylor Greene,William R. Keating,3,"AMZN, MSFT, PEP"
+Richard Dean Dr McCormick,William R. Keating,2,"MSFT, PEP"
+Rob Bresnahan,William R. Keating,3,"AMZN, MSFT, PEP"
+Scott Scott Franklin,William R. Keating,1,AMZN
+Thomas H. Kean Jr,William R. Keating,3,"AMZN, FI, MSFT"
+Tim Walberg,William R. Keating,1,AMZN
+Valerie Hoyle,William R. Keating,3,"AMZN, KLAC, MSFT"
